@@ -6,10 +6,7 @@ from .models import CarStore, CarStoreImage
 class CarStoreImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = CarStoreImage
-        fields = [
-            'id',
-            'name'
-        ]
+        fields = ["id", "name"]
 
 
 class CarStoreSerializer(serializers.ModelSerializer):
@@ -19,19 +16,19 @@ class CarStoreSerializer(serializers.ModelSerializer):
     class Meta:
         model = CarStore
         fields = [
-            'id',
-            'brand',
-            'model',
-            'year',
-            'milage',
-            'body',
-            'displacement',
-            'complect',
-            'condition',
-            'price',
-            'status',
-            'imgs',
-            'images'
+            "id",
+            "brand",
+            "model",
+            "year",
+            "milage",
+            "body",
+            "displacement",
+            "complect",
+            "condition",
+            "price",
+            "status",
+            "imgs",
+            "images",
         ]
 
     def create(self, validated_data: dict):

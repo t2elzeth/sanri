@@ -7,19 +7,26 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Auction',
+            name="Auction",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=255)),
-                ('parkingPrice1', models.CharField(max_length=255)),
-                ('parkingPrice2', models.CharField(max_length=255)),
-                ('parkingPrice3', models.CharField(max_length=255)),
-                ('parkingPrice4', models.CharField(max_length=255)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=255)),
+                ("parkingPrice1", models.CharField(max_length=255)),
+                ("parkingPrice2", models.CharField(max_length=255)),
+                ("parkingPrice3", models.CharField(max_length=255)),
+                ("parkingPrice4", models.CharField(max_length=255)),
             ],
         ),
     ]

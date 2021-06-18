@@ -8,26 +8,26 @@ from .models import User
 class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
     confirmPassword = serializers.CharField(write_only=True)
-    login = serializers.CharField(source='username')
+    login = serializers.CharField(source="username")
 
     class Meta:
         model = User
         fields = [
-            'fullName',
-            'country',
-            'email',
-            'phoneNumber',
-            'service',
-            'atWhatPrice',
-            'sizeFOB',
-            'login',
-            'password',
-            'confirmPassword'
+            "fullName",
+            "country",
+            "email",
+            "phoneNumber",
+            "service",
+            "atWhatPrice",
+            "sizeFOB",
+            "login",
+            "password",
+            "confirmPassword",
         ]
 
     def create(self, validated_data: dict):
         """Create user"""
-        if validated_data['password'] != validated_data['confirmPassword']:
+        if validated_data["password"] != validated_data["confirmPassword"]:
             raise ValidationError("Passwords don't match")
 
         user = self.Meta.model.objects.create_user(**validated_data)

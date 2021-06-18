@@ -7,10 +7,10 @@ class AuctionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Auction
         fields = [
-            'id',
-            'name',
-            'parkingPrice1',
-            'parkingPrice2',
-            'parkingPrice3',
-            'parkingPrice4',
+            "id",
+            "name",
+            "parkingPrice1",
+            "parkingPrice2",
+            "parkingPrice3",
+            "parkingPrice4",
         ]

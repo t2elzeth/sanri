@@ -18,7 +18,9 @@ class CarStore(models.Model):
 
 
 class CarStoreImage(models.Model):
-    car_store = models.ForeignKey(CarStore, on_delete=models.CASCADE, related_name='images')
+    car_store = models.ForeignKey(
+        CarStore, on_delete=models.CASCADE, related_name="images"
+    )
     name = models.ImageField()
 
     def __str__(self):
