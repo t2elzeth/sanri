@@ -8,12 +8,10 @@ from rest_framework import permissions
 
 schema_view = get_schema_view(
     openapi.Info(
-        title="Dropmakers Backend",
+        title="Sanri Backend",
         default_version='v1',
-        description="This is backend for dropmakers",
-        terms_of_service="https://www.google.com/policies/terms/",
+        description="This is backend for Sanri",
         contact=openapi.Contact(url="https://telegram.me/t2elzeth"),
-        license=openapi.License(name="BSD License"),
     ),
     public=True,
     permission_classes=(permissions.AllowAny,),

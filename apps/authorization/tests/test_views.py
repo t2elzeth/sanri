@@ -37,7 +37,7 @@ class TestUserSignUp(APITestCase):
 class TestLogin(CreateUserAndSuperuserAndSetCredentialsMixin, APITestCase):
     def setUp(self):
         super().setUp()
-        self.url = reverse("token-auth-login")
+        self.url = reverse("authentication-login")
         self.valid_credentials = self.SUPERUSER_DATA
         self.invalid_credentials = {
             "username": "invalidcredentials",
