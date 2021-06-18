@@ -1,8 +1,8 @@
-from rest_framework import routers
+from django.urls import path
 
 from . import views
 
-router = routers.DefaultRouter()
-router.register("", views.AuthenticationViewSet, basename="authentication")
-
-urlpatterns = router.urls
+urlpatterns = [
+    path('register/', views.RegisterAPIView.as_view()),
+    path('login/', views.LoginAPIView.as_view()),
+]
