@@ -1,3 +1,9 @@
-from django.shortcuts import render
+from rest_framework.viewsets import ModelViewSet
 
-# Create your views here.
+from .models import CarOrder
+from .serializers import CarOrderSerializer
+
+
+class CarOrderViewSet(ModelViewSet):
+    queryset = CarOrder.objects.all()
+    serializer_class = CarOrderSerializer

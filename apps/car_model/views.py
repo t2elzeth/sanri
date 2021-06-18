@@ -1,3 +1,9 @@
-from django.shortcuts import render
+from rest_framework.viewsets import ModelViewSet
 
-# Create your views here.
+from .models import CarModel
+from .serializers import CarModelSerializer
+
+
+class CarModelViewSet(ModelViewSet):
+    queryset = CarModel.objects.all()
+    serializer_class = CarModelSerializer
