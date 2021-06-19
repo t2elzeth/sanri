@@ -42,17 +42,11 @@ class ContainerSerializer(serializers.ModelSerializer):
 
         container = super().create(validated_data)
         if wheelRecycling is not None:
-            data = {
-                'container': container,
-                **wheelRecycling
-            }
+            data = {"container": container, **wheelRecycling}
             ContainerWheelRecycling.objects.create(**data)
 
         if wheelSales is not None:
-            data = {
-                'container': container,
-                **wheelSales
-            }
+            data = {"container": container, **wheelSales}
             ContainerWheelSales.objects.create(**data)
 
         return container

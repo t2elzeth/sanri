@@ -4,7 +4,6 @@ from django.contrib.auth.models import Group
 
 from . import models
 
-
 # class UserAdmin(BaseUserAdmin):
 #     # ordering = ("is_staff",)
 #     #

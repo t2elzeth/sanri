@@ -28,7 +28,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data: dict):
         """Create user"""
-        confirmPassword = validated_data.pop('confirmPassword')
+        confirmPassword = validated_data.pop("confirmPassword")
         if validated_data["password"] != confirmPassword:
             raise ValidationError("Passwords don't match")
 
