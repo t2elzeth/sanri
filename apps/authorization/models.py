@@ -22,7 +22,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     createdAt = models.DateTimeField(auto_now_add=True)
 
     is_staff = models.BooleanField(default=False)
-    is_active = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
 
     USERNAME_FIELD = "username"
     REQUIRED_FIELDS = []
