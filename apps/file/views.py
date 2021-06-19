@@ -9,8 +9,9 @@ class FileModelAPIView(generics.CreateAPIView):
     serializer_class = FileModelSerializer
 
 
-class FileModelDetailAPIView(mixins.DestroyModelMixin,
-                             generics.GenericAPIView):
+class FileModelDetailAPIView(
+    mixins.DestroyModelMixin, generics.GenericAPIView
+):
     queryset = FileModel.objects.all()
     serializer_class = FileModelSerializer
 
