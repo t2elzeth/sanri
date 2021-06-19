@@ -6,13 +6,13 @@ from .models import Container, ContainerWheelRecycling, ContainerWheelSales
 class ContainerWheelRecyclingSerializer(serializers.ModelSerializer):
     class Meta:
         model = ContainerWheelRecycling
-        fields = ["count", "sum"]
+        fields = ["id", "count", "sum"]
 
 
 class ContainerWheelSalesSerializer(serializers.ModelSerializer):
     class Meta:
         model = ContainerWheelSales
-        fields = ["count", "sum"]
+        fields = ["id", "count", "sum"]
 
 
 class ContainerSerializer(serializers.ModelSerializer):
