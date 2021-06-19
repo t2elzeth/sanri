@@ -37,22 +37,22 @@ class ContainerSerializer(serializers.ModelSerializer):
         ]
 
     def create(self, validated_data: dict):
-        wheelRecycling = validated_data.pop('wheelRecycling', None)
+        wheelRecycling = validated_data.pop("wheelRecycling", None)
+        wheelSales = validated_data.pop("wheelSales", None)
+
+        container = super().create(validated_data)
         if wheelRecycling is not None:
-            serializer = ContainerWheelRecyclingSerializer(data=wheelRecycling)
-            serializer.is_valid()
-            wheelRecycling = serializer.save()
-            validated_data.update({
-                'wheelRecycling': wheelRecycling
-            })
+            data = {
+                'container': container,
+                **wheelRecycling
+            }
+            ContainerWheelRecycling.objects.create(**data)
 
-        wheelSales = validated_data.pop('wheelSales', None)
         if wheelSales is not None:
-            serializer = ContainerWheelSalesSerializer(data=wheelSales)
-            serializer.is_valid()
-            wheelSales = serializer.save()
-            validated_data.update({
-                'wheelSales': wheelSales
-            })
+            data = {
+                'container': container,
+                **wheelSales
+            }
+            ContainerWheelSales.objects.create(**data)
 
-        return super().create(validated_data)
+        return container
