@@ -1,3 +1,7 @@
 from django.contrib import admin
 
-# Register your models here.
+from . import models
+
+admin.site.register(models.Container)
+admin.site.register(models.ContainerWheelSales)
+admin.site.register(models.ContainerWheelRecycling)

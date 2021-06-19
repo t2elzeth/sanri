@@ -24,14 +24,14 @@ urlpatterns = [
         schema_view.with_ui("swagger", cache_timeout=0),
         name="schema-swagger-ui",
     ),
-    path("api/Authenticate/", include("authorization.urls")),
+    path("api/", include("authorization.urls")),
     path("api/Auction/", include("auction.urls")),
     path("api/CarModel/", include("car_model.urls")),
     path("api/CarOrder/", include("car_order.urls")),
     path("api/CarResale/", include("car_resale.urls")),
     path("api/CarSale/", include("car_sale.urls")),
     path("api/CarStore/", include("car_store.urls")),
-    path("api/Client/", include("client.urls")),
+    path("api/Container/", include("container.urls")),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

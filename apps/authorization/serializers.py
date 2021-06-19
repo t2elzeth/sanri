@@ -23,6 +23,7 @@ class UserSerializer(serializers.ModelSerializer):
             "login",
             "password",
             "confirmPassword",
+            "createdAt",
         ]
 
     def create(self, validated_data: dict):

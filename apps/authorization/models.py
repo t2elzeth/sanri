@@ -19,6 +19,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     atWhatPrice = models.CharField(max_length=255)
     sizeFOB = models.CharField(max_length=255)
     username = models.CharField(max_length=255, unique=True)
+    createdAt = models.DateTimeField(auto_now_add=True)
 
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=False)

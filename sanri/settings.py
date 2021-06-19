@@ -99,7 +99,6 @@ OWN_APPS = [
     "car_resale",
     "car_sale",
     "car_store",
-    "client",
     "container",
     "employee",
     "file",
