@@ -8,7 +8,6 @@ from .models import User
 class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
     confirmPassword = serializers.CharField(write_only=True)
-    login = serializers.CharField(source="username")
 
     class Meta:
         model = User
@@ -20,7 +19,7 @@ class UserSerializer(serializers.ModelSerializer):
             "service",
             "atWhatPrice",
             "sizeFOB",
-            "login",
+            "username",
             "password",
             "confirmPassword",
             "createdAt",
@@ -36,13 +35,13 @@ class UserSerializer(serializers.ModelSerializer):
         return user
 
     def update(self, instance, validated_data):
-        if "login" in validated_data:
-            raise ValidationError({"error": "Login cannot be updated!"})
+        if "username" in validated_data:
+            raise ValidationError({"error": "Username cannot be updated!"})
         return super().update(instance, validated_data)
 
 
 class TokenSerializer(serializers.Serializer):
-    login = serializers.CharField(write_only=True)
+    username = serializers.CharField(write_only=True)
     password = serializers.CharField(write_only=True)
     auth_token = serializers.CharField(source="key", read_only=True)
 
@@ -53,7 +52,7 @@ class TokenSerializer(serializers.Serializer):
 
     def validate(self, data):
         password = data.get("password")
-        params = {"username": data.get("login")}
+        params = {"username": data.get("username")}
         self.user = authenticate(
             request=self.context.get("request"), password=password, **params
         )
