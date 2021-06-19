@@ -1,9 +1,15 @@
-from rest_framework.viewsets import ModelViewSet
+from rest_framework import generics
 
+from utils.mixins import DetailAPIViewMixin
 from .models import CarOrder
 from .serializers import CarOrderSerializer
 
 
-class CarOrderViewSet(ModelViewSet):
+class CarOrderAPIView(generics.ListCreateAPIView):
+    queryset = CarOrder.objects.all()
+    serializer_class = CarOrderSerializer
+
+
+class CarOrderDetailAPIView(DetailAPIViewMixin):
     queryset = CarOrder.objects.all()
     serializer_class = CarOrderSerializer

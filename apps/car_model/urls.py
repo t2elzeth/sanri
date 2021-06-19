@@ -1,8 +1,8 @@
-from rest_framework import routers
+from django.urls import path
 
 from . import views
 
-router = routers.DefaultRouter()
-router.register("", views.CarModelViewSet, basename="car-model")
-
-urlpatterns = router.urls
+urlpatterns = [
+    path("", views.CarModelAPIView.as_view()),
+    path("<int:id>/", views.CarModelDetailAPIView.as_view()),
+]

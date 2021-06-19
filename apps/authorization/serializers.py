@@ -66,3 +66,32 @@ class TokenSerializer(serializers.Serializer):
 
     def create(self, validated_data):
         return self.user.login()
+
+
+class EmployeeSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True)
+    confirmPassword = serializers.CharField(write_only=True)
+
+    class Meta:
+        model = User
+        fields = [
+            "fullName",
+            "username",
+            "password",
+            "confirmPassword",
+            "role",
+        ]
+
+    def create(self, validated_data: dict):
+        """Create user"""
+        confirmPassword = validated_data.pop("confirmPassword")
+        if validated_data["password"] != confirmPassword:
+            raise ValidationError("Passwords don't match")
+
+        user = self.Meta.model.objects.create_user(**validated_data)
+        return user
+
+    def update(self, instance, validated_data):
+        if "username" in validated_data:
+            raise ValidationError({"error": "Username cannot be updated!"})
+        return super().update(instance, validated_data)

@@ -1,9 +1,9 @@
-from rest_framework import generics, mixins, status, views
-from rest_framework.decorators import action
-from rest_framework.viewsets import GenericViewSet
+from rest_framework import generics, mixins, status
+
+from utils.mixins import DetailAPIViewMixin
 
 from .models import User
-from .serializers import TokenSerializer, UserSerializer
+from .serializers import EmployeeSerializer, TokenSerializer, UserSerializer
 
 
 class RegisterAPIView(mixins.CreateModelMixin, generics.GenericAPIView):
@@ -26,33 +26,21 @@ class LoginAPIView(mixins.CreateModelMixin, generics.GenericAPIView):
         return response
 
 
-class ClientListAPIView(
-    mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView
-):
+class ClientListAPIView(generics.ListCreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
-    def get(self, request):
-        return self.list(request)
 
-    def post(self, request):
-        return self.create(request)
-
-
-class ClientAPIView(
-    mixins.RetrieveModelMixin,
-    mixins.UpdateModelMixin,
-    mixins.DestroyModelMixin,
-    generics.GenericAPIView,
-):
+class ClientAPIView(DetailAPIViewMixin):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
-    def get(self, request, *args, **kwargs):
-        return self.retrieve(request, *args, **kwargs)
 
-    def put(self, request, *args, **kwargs):
-        return self.update(request, *args, **kwargs)
+class EmployeeAPIView(generics.ListCreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = EmployeeSerializer
 
-    def delete(self, request, *args, **kwargs):
-        return self.delete(request, *args, **kwargs)
+
+class EmployeeDetailAPIView(DetailAPIViewMixin):
+    queryset = User.objects.all()
+    serializer_class = EmployeeSerializer
