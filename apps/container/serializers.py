@@ -1,23 +1,17 @@
 from rest_framework import serializers
 
-from .models import Container, ContainerWheelRecycling, ContainerWheelSales
+from .models import Container, CountAndSum
 
 
-class ContainerWheelRecyclingSerializer(serializers.ModelSerializer):
+class CountAndSumSerializer(serializers.ModelSerializer):
     class Meta:
-        model = ContainerWheelRecycling
-        fields = ["id", "count", "sum"]
-
-
-class ContainerWheelSalesSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ContainerWheelSales
+        model = CountAndSum
         fields = ["id", "count", "sum"]
 
 
 class ContainerSerializer(serializers.ModelSerializer):
-    wheelRecycling = ContainerWheelRecyclingSerializer()
-    wheelSales = ContainerWheelSalesSerializer()
+    wheelRecycling = CountAndSumSerializer()
+    wheelSales = CountAndSumSerializer()
 
     class Meta:
         model = Container
@@ -43,10 +37,10 @@ class ContainerSerializer(serializers.ModelSerializer):
         container = super().create(validated_data)
         if wheelRecycling is not None:
             data = {"container": container, **wheelRecycling}
-            ContainerWheelRecycling.objects.create(**data)
+            CountAndSum.objects.create(**data)
 
         if wheelSales is not None:
             data = {"container": container, **wheelSales}
-            ContainerWheelSales.objects.create(**data)
+            CountAndSum.objects.create(**data)
 
         return container

@@ -7,8 +7,8 @@ class CarSaleSerializer(serializers.ModelSerializer):
     class Meta:
         model = CarSale
         fields = [
-            "ownerClientId",
-            "auctionId",
+            "ownerClient",
+            "auction",
             "carModel",
             "vinNumber",
             "price",
@@ -17,4 +17,5 @@ class CarSaleSerializer(serializers.ModelSerializer):
             "salesFees",
             "status",
             "total",
+            'created_at'
         ]

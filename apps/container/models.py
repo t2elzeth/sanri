@@ -15,21 +15,19 @@ class Container(models.Model):
     packagingMaterials = models.IntegerField()
     transportation = models.IntegerField()
     loading = models.IntegerField()
-    status = models.IntegerField()
+
+    STATUS_GOING_TO = 'going_to'
+    STATUS_SHIPPED = 'shipped'
+    STATUS_CHOICES = ((STATUS_GOING_TO, STATUS_GOING_TO),
+                      (STATUS_SHIPPED, STATUS_SHIPPED))
+
+    status = models.CharField(max_length=255, choices=STATUS_CHOICES)
     totalAmount = models.IntegerField()
 
 
-class ContainerWheelRecycling(models.Model):
-    container = models.OneToOneField(
-        Container, on_delete=models.CASCADE, related_name="wheelRecycling"
-    )
-    count = models.IntegerField()
-    sum = models.IntegerField()
-
-
-class ContainerWheelSales(models.Model):
-    container = models.OneToOneField(
-        Container, on_delete=models.CASCADE, related_name="wheelSales"
+class CountAndSum(models.Model):
+    container = models.ForeignKey(
+        Container, on_delete=models.CASCADE, related_name="count_and_sum"
     )
     count = models.IntegerField()
     sum = models.IntegerField()

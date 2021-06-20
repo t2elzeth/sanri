@@ -7,8 +7,8 @@ class CarOrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = CarOrder
         fields = [
-            "clientId",
-            "auctionId",
+            "client",
+            "auction",
             "lotNumber",
             "carModel",
             "vinNumber",
@@ -24,4 +24,5 @@ class CarOrderSerializer(serializers.ModelSerializer):
             "carNumber",
             "total",
             "total_FOB",
+            'created_at'
         ]
