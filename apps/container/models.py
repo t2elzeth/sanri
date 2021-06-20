@@ -6,9 +6,9 @@ User = get_user_model()
 
 class Container(models.Model):
     client = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name="containers"
+        User, on_delete=models.CASCADE, related_name="containers", blank=True, null=True
     )
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, blank=True, null=True)
     dateOfSending = models.DateField()
     commission = models.IntegerField()
     containerTransportation = models.IntegerField()

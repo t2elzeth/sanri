@@ -2,16 +2,16 @@ from django.db import models
 
 
 class CarStore(models.Model):
-    brand = models.CharField(max_length=255)
-    model = models.CharField(max_length=255)
-    year = models.CharField(max_length=255)
-    milage = models.CharField(max_length=255)
-    body = models.CharField(max_length=255)
-    displacement = models.CharField(max_length=255)
-    complect = models.CharField(max_length=255)
-    condition = models.CharField(max_length=255)
-    price = models.CharField(max_length=255)
-    status = models.CharField(max_length=255)
+    brand = models.CharField(max_length=255, blank=True, null=True)
+    model = models.CharField(max_length=255, blank=True, null=True)
+    year = models.CharField(max_length=255, blank=True, null=True)
+    milage = models.CharField(max_length=255, blank=True, null=True)
+    body = models.CharField(max_length=255, blank=True, null=True)
+    displacement = models.CharField(max_length=255, blank=True, null=True)
+    complect = models.CharField(max_length=255, blank=True, null=True)
+    condition = models.CharField(max_length=255, blank=True, null=True)
+    price = models.CharField(max_length=255, blank=True, null=True)
+    status = models.CharField(max_length=255, blank=True, null=True)
 
     def __str__(self):
         return self.brand

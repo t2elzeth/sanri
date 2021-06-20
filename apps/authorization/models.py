@@ -18,7 +18,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     service = models.CharField(max_length=255, blank=True, null=True)
     atWhatPrice = models.CharField(max_length=255, blank=True, null=True)
     sizeFOB = models.CharField(max_length=255, blank=True, null=True)
-    username = models.CharField(max_length=255, unique=True)
+    username = models.CharField(max_length=16, unique=True)
     role = models.CharField(max_length=255, blank=True, null=True)
     createdAt = models.DateTimeField(auto_now_add=True)
 

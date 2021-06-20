@@ -11,7 +11,7 @@ class CarStoreImageSerializer(serializers.ModelSerializer):
 
 class CarStoreSerializer(serializers.ModelSerializer):
     images = CarStoreImageSerializer(many=True, read_only=True)
-    imgs = serializers.ListField(write_only=True)
+    imgs = serializers.ListField(write_only=True, required=False)
 
     class Meta:
         model = CarStore
