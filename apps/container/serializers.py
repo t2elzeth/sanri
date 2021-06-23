@@ -16,6 +16,7 @@ class ContainerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Container
         fields = [
+            "id",
             "client",
             "name",
             "dateOfSending",

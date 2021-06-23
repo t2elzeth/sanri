@@ -12,6 +12,7 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = [
+            "id",
             "fullName",
             "country",
             "email",
@@ -75,6 +76,7 @@ class EmployeeSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = [
+            "id",
             "fullName",
             "username",
             "password",

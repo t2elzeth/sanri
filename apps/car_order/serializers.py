@@ -7,6 +7,7 @@ class CarOrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = CarOrder
         fields = [
+            "id",
             "client",
             "auction",
             "lotNumber",
