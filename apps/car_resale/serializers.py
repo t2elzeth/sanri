@@ -13,5 +13,5 @@ class CarResaleSerializer(serializers.ModelSerializer):
             "newClient",
             "salePrice",
             "income",
-            'created_at'
+            "created_at",
         ]

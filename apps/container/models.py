@@ -6,7 +6,11 @@ User = get_user_model()
 
 class Container(models.Model):
     client = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name="containers", blank=True, null=True
+        User,
+        on_delete=models.CASCADE,
+        related_name="containers",
+        blank=True,
+        null=True,
     )
     name = models.CharField(max_length=255, blank=True, null=True)
     dateOfSending = models.DateField()
@@ -16,10 +20,12 @@ class Container(models.Model):
     transportation = models.IntegerField()
     loading = models.IntegerField()
 
-    STATUS_GOING_TO = 'going_to'
-    STATUS_SHIPPED = 'shipped'
-    STATUS_CHOICES = ((STATUS_GOING_TO, STATUS_GOING_TO),
-                      (STATUS_SHIPPED, STATUS_SHIPPED))
+    STATUS_GOING_TO = "going_to"
+    STATUS_SHIPPED = "shipped"
+    STATUS_CHOICES = (
+        (STATUS_GOING_TO, STATUS_GOING_TO),
+        (STATUS_SHIPPED, STATUS_SHIPPED),
+    )
 
     status = models.CharField(max_length=255, choices=STATUS_CHOICES)
     totalAmount = models.IntegerField()

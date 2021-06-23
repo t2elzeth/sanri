@@ -107,6 +107,9 @@ OWN_APPS = [
     "car_store",
     "container",
     "file",
+    'income',
+    'monthly_payment',
+    'staff'
 ]
 
 INSTALLED_APPS += THIRD_PARTY_APPS + OWN_APPS

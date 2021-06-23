@@ -1,10 +1,15 @@
+from auction.models import Auction
+from authorization.models import User
 from django.db import models
 
-from authorization.models import User
-from auction.models import Auction
+
 class CarSale(models.Model):
-    ownerClient = models.ForeignKey(User, on_delete=models.CASCADE, related_name='car_sales_as_owner')
-    auction = models.ForeignKey(Auction, on_delete=models.CASCADE, related_name='car_sales')
+    ownerClient = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="car_sales_as_owner"
+    )
+    auction = models.ForeignKey(
+        Auction, on_delete=models.CASCADE, related_name="car_sales"
+    )
     carModel = models.CharField(max_length=255, blank=True, null=True)
     vinNumber = models.CharField(max_length=255, blank=True, null=True)
     price = models.IntegerField()

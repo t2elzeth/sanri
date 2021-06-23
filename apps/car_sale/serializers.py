@@ -17,5 +17,5 @@ class CarSaleSerializer(serializers.ModelSerializer):
             "salesFees",
             "status",
             "total",
-            'created_at'
+            "created_at",
         ]

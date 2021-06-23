@@ -24,5 +24,5 @@ class CarOrderSerializer(serializers.ModelSerializer):
             "carNumber",
             "total",
             "total_FOB",
-            'created_at'
+            "created_at",
         ]
