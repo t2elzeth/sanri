@@ -8,8 +8,8 @@ urlpatterns = [
     path("Authenticate/login/", views.LoginAPIView.as_view()),
     # Client
     path("Client/", views.ClientListAPIView.as_view()),
-    path("Client/<int:id>/", views.ClientAPIView.as_view()),
+    path("Client/<int:pk>/", views.ClientAPIView.as_view()),
     # Employee
     path("Employee/", views.EmployeeAPIView.as_view()),
-    path("Employee/<int:id>/", views.EmployeeDetailAPIView.as_view()),
+    path("Employee/<int:pk>/", views.EmployeeDetailAPIView.as_view()),
 ]

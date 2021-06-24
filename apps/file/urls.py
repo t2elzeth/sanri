@@ -4,5 +4,5 @@ from . import views
 
 urlpatterns = [
     path("", views.FileModelAPIView.as_view()),
-    path("<int:id>/", views.FileModelDetailAPIView.as_view()),
+    path("<int:pk>/", views.FileModelDetailAPIView.as_view()),
 ]
