@@ -7,6 +7,7 @@ from .serializers import AuctionSerializer
 
 
 class AuctionAPIView(generics.ListCreateAPIView):
+    """Создать новый или получить список аукционов"""
     queryset = Auction.objects.all()
     serializer_class = AuctionSerializer
 
