@@ -13,5 +13,6 @@ class AuctionAPIView(generics.ListCreateAPIView):
 
 
 class AuctionDetailAPIView(DetailAPIViewMixin):
+    """Получить, изменить, удалить определенный аукцион"""
     queryset = Auction.objects.all()
     serializer_class = AuctionSerializer
