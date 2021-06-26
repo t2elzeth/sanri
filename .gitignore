@@ -2,6 +2,7 @@
 staticfiles/
 .idea/
 mediafiles/
+*.odt#
 
 # Django #
 *.log
