@@ -10,8 +10,8 @@ class CountAndSumSerializer(serializers.ModelSerializer):
 
 
 class ContainerSerializer(serializers.ModelSerializer):
-    wheelRecycling = CountAndSumSerializer()
-    wheelSales = CountAndSumSerializer()
+    wheelRecycling = CountAndSumSerializer(source="count_and_sum.first")
+    wheelSales = CountAndSumSerializer(source="count_and_sum.last")
 
     class Meta:
         model = Container
