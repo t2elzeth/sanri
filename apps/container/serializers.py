@@ -32,8 +32,9 @@ class ContainerSerializer(serializers.ModelSerializer):
         ]
 
     def create(self, validated_data: dict):
-        wheelRecycling = validated_data.pop("wheelRecycling", None)
-        wheelSales = validated_data.pop("wheelSales", None)
+        count_and_sum = validated_data.pop("count_and_sum", None) 
+        wheelRecycling = count_and_sum.pop("wheelRecycling", None)
+        wheelSales = count_and_sum.pop("wheelSales", None)
 
         container = super().create(validated_data)
         if wheelRecycling is not None:
