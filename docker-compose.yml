@@ -5,6 +5,7 @@ services:
     build: .
     container_name: ${PROJECT_NAME}Web
     volumes:
+      - ./:/app 
       - staticfiles:/app/staticfiles
       - mediafiles:/app/mediafiles
     environment:
