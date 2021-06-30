@@ -46,3 +46,29 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def logout(self):
         Token.objects.filter(user=self).delete()
+
+
+class Balance(models.Model):
+    client = models.ForeignKey(User, on_delete=models.CASCADE, related_name="balances")
+    name = models.CharField(max_length=255)
+    date = models.DateField()
+    sum_in_jpy = models.IntegerField()
+    sum_in_usa = models.IntegerField()
+    rate = models.IntegerField()
+
+    PAYMENT_TYPE_CASHLESS = 'cashless'
+    PAYMENT_TYPE_CASH = 'cash'
+    PAYMENT_TYPE_CHOICES = ((PAYMENT_TYPE_CASHLESS, PAYMENT_TYPE_CASHLESS ),
+                    (PAYMENT_TYPE_CASH, PAYMENT_TYPE_CASH ))
+    payment_type = models.CharField(max_length=255, choices=PAYMENT_TYPE_CHOICES)
+    sender_name = models.CharField(max_length=255)
+    comment = models.TextField()
+
+    BALANCE_ACTION_REPLENISHMENT = 'replenishment'
+    BALANCE_ACTION_WITHDRAWAL = 'withdrawal'
+    BALANCE_ACTION_CHOICES = ((BALANCE_ACTION_REPLENISHMENT, BALANCE_ACTION_REPLENISHMENT ),
+            ( BALANCE_ACTION_WITHDRAWAL, BALANCE_ACTION_WITHDRAWAL  ))
+    balance_action = models.CharField(max_length=255, choices=BALANCE_ACTION_CHOICES)
+
+    def __str__(self):
+        return f"{self.name}: {self.sum_in_usa}: {self.balance_action}"

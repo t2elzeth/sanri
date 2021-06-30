@@ -44,4 +44,5 @@ from . import models
 
 admin.site.register(models.User)
 
+admin.site.register(models.Balance)
 admin.site.unregister(Group)
