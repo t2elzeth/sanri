@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
-from .models import User
+from .models import Balance, User
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -48,6 +48,8 @@ class ClientSerializer(serializers.ModelSerializer):
     shipped_containers = serializers.SerializerMethodField(read_only=True)
     going_to_containers = serializers.SerializerMethodField(read_only=True)
     cars_for_sale = serializers.SerializerMethodField(read_only=True)
+    balance_replenishments = serializers.SerializerMethodField(read_only=True)
+    balance_withdrawals = serializers.SerializerMethodField(read_only=True)
 
     def get_shipped_containers(self, user):
         containers = user.containers.filter(status=Container.STATUS_SHIPPED)
@@ -77,6 +79,32 @@ class ClientSerializer(serializers.ModelSerializer):
             "totalAmount": sum(car.total for car in cars),
         }
 
+    def get_balance_replenishments(self, user):
+        balances = user.balances.filter(
+            balance_action=Balance.BALANCE_ACTION_REPLENISHMENT
+        )
+
+        return {
+            "number": len(balances),
+            "totalAmount": {
+                "jpy": sum(balance.sum_in_jpy for balance in balances),
+                "usa": sum(balance.sum_in_usa for balance in balances),
+            },
+        }
+
+    def get_balance_withdrawals(self, user):
+        balances = user.balances.filter(
+            balance_action=Balance.BALANCE_ACTION_WITHDRAWAL
+        )
+
+        return {
+            "number": len(balances),
+            "totalAmount": {
+                "jpy": sum(balance.sum_in_jpy for balance in balances),
+                "usa": sum(balance.sum_in_usa for balance in balances),
+            },
+        }
+
     class Meta:
         model = User
         fields = [
@@ -95,6 +123,8 @@ class ClientSerializer(serializers.ModelSerializer):
             "shipped_containers",
             "going_to_containers",
             "cars_for_sale",
+            "balance_replenishments",
+            "balance_withdrawals",
         ]
 
     def create(self, validated_data: dict):
@@ -168,3 +198,21 @@ class EmployeeSerializer(serializers.ModelSerializer):
         if "username" in validated_data:
             raise ValidationError({"error": "Username cannot be updated!"})
         return super().update(instance, validated_data)
+
+
+class BalanceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Balance
+        fields = [
+            "id",
+            "client",
+            "name",
+            "date",
+            "sum_in_jpy",
+            "sum_in_usa",
+            "rate",
+            "payment_type",
+            "sender_name",
+            "comment",
+            "balance_action",
+        ]

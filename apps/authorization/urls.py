@@ -12,4 +12,7 @@ urlpatterns = [
     # Employee
     path("Employee/", views.EmployeeAPIView.as_view()),
     path("Employee/<int:pk>/", views.EmployeeDetailAPIView.as_view()),
+    # Balance
+    path("Balance/", views.BalanceListAPIView.as_view()),
+    path("Balance/<int:pk>/", views.BalanceAPIView.as_view()),
 ]

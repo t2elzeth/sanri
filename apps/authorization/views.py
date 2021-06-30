@@ -2,9 +2,9 @@ from rest_framework import generics, mixins, status
 
 from utils.mixins import DetailAPIViewMixin
 
-from .models import User
-from .serializers import (ClientSerializer, EmployeeSerializer,
-                          TokenSerializer, UserSerializer)
+from .models import Balance, User
+from .serializers import (BalanceSerializer, ClientSerializer,
+                          EmployeeSerializer, TokenSerializer, UserSerializer)
 
 
 class RegisterAPIView(mixins.CreateModelMixin, generics.GenericAPIView):
@@ -45,3 +45,13 @@ class EmployeeAPIView(generics.ListCreateAPIView):
 class EmployeeDetailAPIView(DetailAPIViewMixin):
     queryset = User.objects.all()
     serializer_class = EmployeeSerializer
+
+
+class BalanceListAPIView(generics.ListCreateAPIView):
+    queryset = Balance.objects.all()
+    serializer_class = BalanceSerializer
+
+
+class BalanceAPIView(DetailAPIViewMixin):
+    queryset = Balance.objects.all()
+    serializer_class = BalanceSerializer
