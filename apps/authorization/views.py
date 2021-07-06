@@ -28,22 +28,22 @@ class LoginAPIView(mixins.CreateModelMixin, generics.GenericAPIView):
 
 
 class ClientListAPIView(generics.ListCreateAPIView):
-    queryset = User.objects.all()
+    queryset = User.objects.filter(user_type=User.USER_TYPE_CLIENT)
     serializer_class = ClientSerializer
 
 
 class ClientAPIView(DetailAPIViewMixin):
-    queryset = User.objects.all()
+    queryset = User.objects.filter(user_type=User.USER_TYPE_CLIENT)
     serializer_class = ClientSerializer
 
 
 class EmployeeAPIView(generics.ListCreateAPIView):
-    queryset = User.objects.all()
+    queryset = User.objects.filter(user_type=User.USER_TYPE_EMPLOYEE)
     serializer_class = EmployeeSerializer
 
 
 class EmployeeDetailAPIView(DetailAPIViewMixin):
-    queryset = User.objects.all()
+    queryset = User.objects.filter(user_type=User.USER_TYPE_EMPLOYEE)
     serializer_class = EmployeeSerializer
 
 
