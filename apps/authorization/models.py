@@ -22,6 +22,14 @@ class User(AbstractBaseUser, PermissionsMixin):
     role = models.CharField(max_length=255, blank=True, null=True)
     createdAt = models.DateTimeField(auto_now_add=True)
 
+    USER_TYPE_USER = 'user'
+    USER_TYPE_CLIENT = 'client'
+    USER_TYPE_EMPLOYEE = 'employee'
+    USER_TYPE_CHOICES = ((USER_TYPE_USER, USER_TYPE_USER),
+                         (USER_TYPE_CLIENT, USER_TYPE_CLIENT),
+                         (USER_TYPE_EMPLOYEE, USER_TYPE_EMPLOYEE))
+    user_type = models.CharField(max_length=255, choices=USER_TYPE_CHOICES, default=USER_TYPE_USER)
+
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
 
