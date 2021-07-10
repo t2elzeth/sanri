@@ -33,7 +33,7 @@ class UserSerializer(serializers.ModelSerializer):
         if validated_data["password"] != confirmPassword:
             raise ValidationError("Passwords don't match")
 
-        validated_data.update({'user_type': User.USER_TYPE_USER})
+        validated_data.update({"user_type": User.USER_TYPE_USER})
 
         user = self.Meta.model.objects.create_user(**validated_data)
         return user
@@ -135,8 +135,7 @@ class ClientSerializer(serializers.ModelSerializer):
         if validated_data["password"] != confirmPassword:
             raise ValidationError("Passwords don't match")
 
-        validated_data.update({'user_type': User.USER_TYPE_CLIENT})
-
+        validated_data.update({"user_type": User.USER_TYPE_CLIENT})
 
         user = self.Meta.model.objects.create_user(**validated_data)
         return user
@@ -196,7 +195,7 @@ class EmployeeSerializer(serializers.ModelSerializer):
         if validated_data["password"] != confirmPassword:
             raise ValidationError("Passwords don't match")
 
-        validated_data.update({'user_type': User.USER_TYPE_EMPLOYEE})
+        validated_data.update({"user_type": User.USER_TYPE_EMPLOYEE})
 
         user = self.Meta.model.objects.create_user(**validated_data)
         return user

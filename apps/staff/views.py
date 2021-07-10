@@ -3,8 +3,11 @@ from rest_framework import generics
 from utils.mixins import DetailAPIViewMixin
 
 from .models import StaffExpense, StaffExpenseType, StaffMember
-from .serializers import (StaffExpenseSerializer, StaffExpenseTypeSerializer,
-                          StaffMemberSerializer)
+from .serializers import (
+    StaffExpenseSerializer,
+    StaffExpenseTypeSerializer,
+    StaffMemberSerializer,
+)
 
 
 class StaffExpenseAPIView(generics.ListCreateAPIView):

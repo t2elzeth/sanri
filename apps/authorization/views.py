@@ -3,8 +3,13 @@ from rest_framework import generics, mixins, status
 from utils.mixins import DetailAPIViewMixin
 
 from .models import Balance, User
-from .serializers import (BalanceSerializer, ClientSerializer,
-                          EmployeeSerializer, TokenSerializer, UserSerializer)
+from .serializers import (
+    BalanceSerializer,
+    ClientSerializer,
+    EmployeeSerializer,
+    TokenSerializer,
+    UserSerializer,
+)
 
 
 class RegisterAPIView(mixins.CreateModelMixin, generics.GenericAPIView):
