@@ -9,7 +9,7 @@ class CarOrderSerializer(serializers.ModelSerializer):
     marka_name = serializers.SerializerMethodField(read_only=True)
 
     def get_marka_name(self, obj):
-        return obj.carModel.mark.name + obj.carModel.name
+        return f'{obj.carModel.mark.name} / {obj.carModel.name}'
 
     class Meta:
         model = CarOrder
