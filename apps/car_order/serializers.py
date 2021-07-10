@@ -6,6 +6,10 @@ from authorization.models import User
 
 class CarOrderSerializer(serializers.ModelSerializer):
     client_name = serializers.CharField(source='client.fullName', read_only=True)
+    marka_name = serializers.SerializerMethodField(read_only=True)
+
+    def get_marka_name(self, obj):
+        return obj.carModel.mark.name + obj.carModel.name
 
     class Meta:
         model = CarOrder
