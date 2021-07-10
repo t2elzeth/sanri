@@ -1,10 +1,9 @@
 from rest_framework import generics
 
 from utils.mixins import DetailAPIViewMixin
-
-from .models import CarModel
-from .serializers import CarModelSerializer
 from .filters import CarModelFilter
+from .models import CarModel, CarMark
+from .serializers import CarModelSerializer, CarMarkSerializer
 
 
 class CarModelAPIView(generics.ListCreateAPIView):
@@ -16,3 +15,8 @@ class CarModelAPIView(generics.ListCreateAPIView):
 class CarModelDetailAPIView(DetailAPIViewMixin):
     queryset = CarModel.objects.all()
     serializer_class = CarModelSerializer
+
+
+class CarMarkListAPIView(generics.ListAPIView):
+    queryset = CarMark.objects.all()
+    serializer_class = CarMarkSerializer

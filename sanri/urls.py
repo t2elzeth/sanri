@@ -26,7 +26,7 @@ urlpatterns = [
     ),
     path("api/", include("authorization.urls")),
     path("api/Auction/", include("auction.urls")),
-    path("api/CarModel/", include("car_model.urls")),
+    path("api/", include("car_model.urls")),
     path("api/CarOrder/", include("car_order.urls")),
     path("api/CarResale/", include("car_resale.urls")),
     path("api/CarSale/", include("car_sale.urls")),
