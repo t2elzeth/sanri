@@ -1,9 +1,18 @@
 from rest_framework import serializers
 
 from .models import CarOrder
+from authorization.models import User
+
+
+class ClientSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'fullname']
 
 
 class CarOrderSerializer(serializers.ModelSerializer):
+    client = ClientSerializer()
+
     class Meta:
         model = CarOrder
         fields = [
@@ -27,4 +36,3 @@ class CarOrderSerializer(serializers.ModelSerializer):
             "total_FOB",
             "created_at",
         ]
-        depth = 2
