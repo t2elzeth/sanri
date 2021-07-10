@@ -1,5 +1,6 @@
-from container.models import Container
 from django.db import models
+
+from container.models import Container
 
 
 class MonthlyPaymentType(models.Model):
