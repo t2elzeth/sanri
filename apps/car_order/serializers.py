@@ -24,6 +24,7 @@ class CarOrderSerializer(serializers.ModelSerializer):
     auction_name = serializers.CharField(source="auction.name", read_only=True)
     carOrderDetail = CarOrderModelSerializer(source='carModel', read_only=True)
 
+
     def get_marka_name(self, obj):
         return f'{obj.carModel.mark.name} / {obj.carModel.name}'
 
