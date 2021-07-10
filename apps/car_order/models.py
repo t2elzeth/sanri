@@ -32,4 +32,4 @@ class CarOrder(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.carModel
+        return f'CarOrder#{self.id} of {self.client.fullName}'
