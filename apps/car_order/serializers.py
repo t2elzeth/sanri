@@ -5,7 +5,7 @@ from car_model.models import CarModel
 from authorization.models import User
 
 
-class CarModelSerializer(CarModel):
+class CarModelSerializer(serializers.ModelSerializer):
     class Meta:
         model = CarModel
         fields = ['id', 'mark', 'name']
