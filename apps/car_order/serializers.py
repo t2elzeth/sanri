@@ -31,6 +31,3 @@ class CarOrderSerializer(serializers.ModelSerializer):
             "total_FOB",
             "created_at",
         ]
-        extra_kwargs = {
-            'client_name': {'read_only': True}
-        }
