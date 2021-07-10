@@ -27,3 +27,4 @@ class CarOrderSerializer(serializers.ModelSerializer):
             "total_FOB",
             "created_at",
         ]
+        depth = 2
