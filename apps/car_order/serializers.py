@@ -4,26 +4,25 @@ from car_model.models import CarModel, CarMark
 from .models import CarOrder
 
 
+class CarOrderMarkSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CarMark
+        fields = ['id', 'name']
+
+
 class CarOrderModelSerializer(serializers.ModelSerializer):
+    mark = CarOrderMarkSerializer()
+
     class Meta:
         model = CarModel
         fields = ['id', 'mark', 'name']
-        depth = 2
-
-
-class CarOrderMarkSerializer(serializers.ModelSerializer):
-    models = CarOrderModelSerializer(many=True)
-
-    class Meta:
-        model = CarMark
-        fields = ['id', 'name', 'models']
 
 
 class CarOrderSerializer(serializers.ModelSerializer):
     client_name = serializers.CharField(source='client.fullName', read_only=True)
     marka_name = serializers.SerializerMethodField(read_only=True)
     auction_name = serializers.CharField(source="auction.name", read_only=True)
-    carMarkDetail = CarOrderMarkSerializer('carModel.mark', read_only=True, many=True)
+    carOrderDetail = CarOrderModelSerializer('carModel', read_only=True)
 
     def get_marka_name(self, obj):
         return f'{obj.carModel.mark.name} / {obj.carModel.name}'
@@ -39,7 +38,7 @@ class CarOrderSerializer(serializers.ModelSerializer):
             "auction",
             "lotNumber",
             "carModel",
-            "carMarkDetail",
+            "carOrderDetail",
             "vinNumber",
             "year",
             "price",
