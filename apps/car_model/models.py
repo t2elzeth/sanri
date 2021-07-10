@@ -6,4 +6,4 @@ class CarModel(models.Model):
     model = models.CharField(max_length=255)
 
     def __str__(self):
-        return f'{self.mark}:{self.model}'
+        return f"{self.mark}:{self.model}"

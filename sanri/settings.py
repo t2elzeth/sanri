@@ -95,7 +95,7 @@ THIRD_PARTY_APPS = [
     "drf_yasg",
     "rest_framework.authtoken",
     "corsheaders",
-    'django_filters'
+    "django_filters",
 ]
 
 OWN_APPS = [
@@ -124,6 +124,9 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework.authentication.TokenAuthentication",
     ),
+    "DEFAULT_FILTER_BACKENDS": [
+        "django_filters.rest_framework.DjangoFilterBackend"
+    ],
 }
 AUTH_USER_MODEL = "authorization.User"
 CORS_ORIGIN_ALLOW_ALL = True
