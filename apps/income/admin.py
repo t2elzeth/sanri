@@ -3,11 +3,11 @@ from django.contrib import admin
 from .models import Income, IncomeType
 
 
-class IncomeTypeInline(admin.StackedInline):
-    model = IncomeType
+class IncomeInline(admin.StackedInline):
+    model = Income
     extra = 0
 
 
-@admin.register(Income)
-class IncomeAdmin(admin.ModelAdmin):
-    inlines = [IncomeTypeInline]
+@admin.register(IncomeType)
+class IncomeTypeAdmin(admin.ModelAdmin):
+    inlines = [IncomeInline]
