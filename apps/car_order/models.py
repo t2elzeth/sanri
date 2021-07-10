@@ -24,7 +24,7 @@ class CarOrder(models.Model):
     transport = models.IntegerField()
     fob = models.IntegerField()
     amount = models.IntegerField()
-    transportationCommission = models.IntegerField()
+    # transportationCommission = models.IntegerField()
     parking = models.IntegerField()
     carNumber = models.BooleanField()
     total = models.IntegerField()
