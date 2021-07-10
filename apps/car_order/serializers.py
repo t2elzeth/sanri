@@ -58,7 +58,7 @@ class CarOrderSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         carNumberBool = validated_data.pop('carNumber')
-        carNumber = CarOrder.CAR_NUMBER_NOT_GIVEN if not carNumberBool else CarOrder.CAR_NUMBER_NOT_REMOVED
+        carNumber = CarOrder.CAR_NUMBER_NOT_REMOVED if carNumberBool else CarOrder.CAR_NUMBER_NOT_GIVEN
 
         validated_data.update({'carNumber': carNumber})
         return super().create(validated_data)
