@@ -25,7 +25,18 @@ class User(AbstractBaseUser, PermissionsMixin):
     service = models.CharField(
         max_length=255, choices=SERVICE_CHOICES, default=SERVICE_ENTIRE
     )
-    atWhatPrice = models.CharField(max_length=255, blank=True, null=True)
+
+    AT_WHAT_PRICE_BY_FACT = "by_fact"
+    AT_WHAT_PRICE_BY_FOB = "by_fob"
+    AT_WHAT_PRICE_CHOICES = (
+        (AT_WHAT_PRICE_BY_FACT, AT_WHAT_PRICE_BY_FACT),
+        (AT_WHAT_PRICE_BY_FOB, AT_WHAT_PRICE_BY_FOB),
+    )
+    atWhatPrice = models.CharField(
+        max_length=255,
+        choices=AT_WHAT_PRICE_CHOICES,
+        default=AT_WHAT_PRICE_BY_FACT,
+    )
     sizeFOB = models.CharField(max_length=255, blank=True, null=True)
     username = models.CharField(max_length=16, unique=True)
     role = models.CharField(max_length=255, blank=True, null=True)

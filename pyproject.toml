@@ -28,7 +28,3 @@ line_length = 79
 
 [tool.isort]
 skip_gitignore = true
-
-[tool.autoflake]
-remove_unused_variables = true
-remove_all_unused_imports = true
