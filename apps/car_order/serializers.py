@@ -17,6 +17,7 @@ class CarOrderSerializer(serializers.ModelSerializer):
             "id",
             "client",
             'client_name',
+            'marka_name',
             "auction",
             "lotNumber",
             "carModel",
