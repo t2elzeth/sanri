@@ -1,6 +1,8 @@
-from auction.models import Auction
 from django.contrib.auth import get_user_model
 from django.db import models
+
+from auction.models import Auction
+from car_model.models import CarModel
 
 User = get_user_model()
 
@@ -13,7 +15,7 @@ class CarOrder(models.Model):
         Auction, on_delete=models.CASCADE, related_name="auctions"
     )
     lotNumber = models.CharField(max_length=255, blank=True, null=True)
-    carModel = models.CharField(max_length=255, blank=True, null=True)
+    carModel = models.ForeignKey(CarModel, on_delete=models.CASCADE, related_name='car_orders')
     vinNumber = models.CharField(max_length=255, blank=True, null=True)
     year = models.CharField(max_length=255, blank=True, null=True)
     price = models.IntegerField()
