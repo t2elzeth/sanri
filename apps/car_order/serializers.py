@@ -22,6 +22,7 @@ class CarOrderSerializer(serializers.ModelSerializer):
     client_name = serializers.CharField(source='client.fullName', read_only=True)
     marka_name = serializers.SerializerMethodField(read_only=True)
     auction_name = serializers.CharField(source="auction.name", read_only=True)
+    carModel = serializers.BooleanField()
     carModelDetail = CarOrderModelSerializer(source='carModel', read_only=True)
 
     def get_marka_name(self, obj):
@@ -54,3 +55,10 @@ class CarOrderSerializer(serializers.ModelSerializer):
             "total_FOB",
             "created_at",
         ]
+
+    def create(self, validated_data):
+        carModelBool = validated_data.pop('carModel')
+        carModel = CarOrder.CAR_NUMBER_NOT_GIVEN if not carModelBool else CarOrder.CAR_NUMBER_NOT_REMOVED
+
+        validated_data.update({'carModel': carModel})
+        return super().create(validated_data)
