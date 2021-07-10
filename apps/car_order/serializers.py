@@ -4,20 +4,15 @@ from .models import CarOrder
 from authorization.models import User
 
 
-class ClientSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ['id', 'fullname']
-
-
 class CarOrderSerializer(serializers.ModelSerializer):
-    client = ClientSerializer()
+    client_name = serializers.CharField(source='client.fullName', read_only=True)
 
     class Meta:
         model = CarOrder
         fields = [
             "id",
             "client",
+            'client_name',
             "auction",
             "lotNumber",
             "carModel",
@@ -36,3 +31,6 @@ class CarOrderSerializer(serializers.ModelSerializer):
             "total_FOB",
             "created_at",
         ]
+        extra_kwargs = {
+            'client_name': {'read_only': True}
+        }
