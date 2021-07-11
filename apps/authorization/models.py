@@ -2,7 +2,7 @@ from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
 from django.db import models
 from rest_framework.authtoken.models import Token
-
+from django.utils import timezone
 from . import managers
 
 
@@ -84,7 +84,7 @@ class Balance(models.Model):
     client = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="balances"
     )
-    date = models.DateField()
+    date = models.DateField(default=timezone.now)
     sum_in_jpy = models.IntegerField()
     sum_in_usa = models.IntegerField()
     rate = models.IntegerField()
