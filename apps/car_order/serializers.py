@@ -54,9 +54,6 @@ class CarOrderSerializer(serializers.ModelSerializer):
     auction = AuctionSerializer(read_only=True)
     carModel = CarModelSerializer(read_only=True)
 
-    def get_marka_name(self, obj):
-        return f'{obj.carModel.mark.name} / {obj.carModel.name}'
-
     class Meta:
         model = CarOrder
         fields = [
