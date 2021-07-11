@@ -4,7 +4,7 @@ from django.dispatch import receiver
 from authorization.models import Balance
 from car_order.models import CarOrder
 from .models import CarResale
-
+from income.models import Income, IncomeType
 
 @receiver(pre_save, sender=CarResale)
 def update_stock(instance: CarResale, **kwargs):
@@ -41,4 +41,5 @@ def post_save_car_resale(instance: CarResale, created, **kwargs):
         )
 
         if instance.ownerClient.username == 'sanrijp':
-            pass
+            income_type, created = IncomeType.objects.get_or_create(name='car_resale')
+            income_type.incomes.create(amount=instance.salePrice - instance.startingPrice)
