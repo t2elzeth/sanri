@@ -39,6 +39,7 @@ class CarOrderSerializer(serializers.ModelSerializer):
             "lotNumber",
             "carModel",
             "carModelDetail",
+            'documentsGiven',
             "vinNumber",
             "year",
             "price",

@@ -34,6 +34,7 @@ class CarOrder(models.Model):
                                  (CAR_NUMBER_NOT_REMOVED, CAR_NUMBER_NOT_REMOVED),
                                  (CAR_NUMBER_NOT_GIVEN, CAR_NUMBER_NOT_GIVEN))
     carNumber = models.CharField(max_length=255, choices=CAR_NUMBER_STATUS_CHOICES)
+    documentsGiven = models.BooleanField(default=False)
     total = models.IntegerField()
     total_FOB = models.IntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
