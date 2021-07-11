@@ -12,7 +12,7 @@ class Income(models.Model):
         IncomeType, on_delete=models.CASCADE, related_name="incomes"
     )
     date = models.DateField(default=timezone.now)
-    amount = models.CharField(max_length=255)
+    amount = models.IntegerField()
     comment = models.TextField(default="")
 
     def __str__(self):

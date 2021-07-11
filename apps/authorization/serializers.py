@@ -4,7 +4,7 @@ from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
 from .models import Balance, User
-
+from income.models import Income
 
 class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
@@ -111,6 +111,10 @@ class ClientSerializer(serializers.ModelSerializer):
         withdrawals = sum(balance.sum_in_jpy for balance in user.balances.filter(
             balance_action=Balance.BALANCE_ACTION_WITHDRAWAL
         ))
+
+        if user.username == 'sanrijp':
+            replenishments += sum(income.amount for income in Income.objects.all())
+
         return replenishments - withdrawals
 
     class Meta:
