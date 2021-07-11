@@ -22,7 +22,6 @@ class CarResale(models.Model):
 
     def calculate_income(self):
         self.income = self.salePrice - self.startingPrice
-        self.save()
 
     def __str__(self):
-        return self.income
+        return f'{self.income}'
