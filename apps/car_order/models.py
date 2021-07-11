@@ -37,7 +37,6 @@ class CarOrder(models.Model):
     total = models.IntegerField()
     total_FOB = models.IntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
-
     def calculate_totals(self):
         transport = self.transport * (self.transport > 0)
         self.total = self.price + self.price * 0.1 + self.auctionFees + self.recycle + transport
