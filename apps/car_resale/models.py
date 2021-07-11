@@ -10,15 +10,19 @@ class CarResale(models.Model):
     carOrder = models.ForeignKey(
         CarOrder, on_delete=models.CASCADE, related_name="car_resales"
     )
-    startingPrice = models.CharField(max_length=255, blank=True, null=True)
+    startingPrice = models.IntegerField()
     newClient = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
         related_name="car_resales_as_new_client",
     )
-    salePrice = models.CharField(max_length=255, blank=True, null=True)
-    income = models.CharField(max_length=255, blank=True, null=True)
+    salePrice = models.IntegerField()
+    income = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def calculate_income(self):
+        self.income = self.salePrice - self.startingPrice
+        self.save()
 
     def __str__(self):
         return self.income
