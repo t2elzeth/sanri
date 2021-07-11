@@ -20,8 +20,5 @@ class CarResale(models.Model):
     income = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
 
-    def calculate_income(self):
-        self.income = self.salePrice - self.startingPrice
-
     def __str__(self):
         return f'{self.income}'
