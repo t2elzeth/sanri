@@ -212,7 +212,6 @@ class BalanceSerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "client",
-            "name",
             "date",
             "sum_in_jpy",
             "sum_in_usa",

@@ -84,7 +84,6 @@ class Balance(models.Model):
     client = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="balances"
     )
-    name = models.CharField(max_length=255)
     date = models.DateField()
     sum_in_jpy = models.IntegerField()
     sum_in_usa = models.IntegerField()
