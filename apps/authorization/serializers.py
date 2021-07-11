@@ -26,6 +26,7 @@ class UserSerializer(serializers.ModelSerializer):
             "confirmPassword",
             "createdAt",
         ]
+        ref_name = "main"
 
     def create(self, validated_data: dict):
         """Create user"""
@@ -128,6 +129,7 @@ class ClientSerializer(serializers.ModelSerializer):
             "balance_replenishments",
             "balance_withdrawals",
         ]
+        ref_name = "main"
 
     def create(self, validated_data: dict):
         """Create user"""
@@ -188,6 +190,7 @@ class EmployeeSerializer(serializers.ModelSerializer):
             "confirmPassword",
             "role",
         ]
+        ref_name = "main"
 
     def create(self, validated_data: dict):
         """Create user"""
@@ -221,3 +224,4 @@ class BalanceSerializer(serializers.ModelSerializer):
             "comment",
             "balance_action",
         ]
+        ref_name = "main"

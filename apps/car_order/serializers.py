@@ -10,33 +10,34 @@ class ClientSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'fullName']
+        ref_name = "car_order"
 
 
-class CarOrderMarkSerializer(serializers.ModelSerializer):
+class CarMarkSerializer(serializers.ModelSerializer):
     class Meta:
         model = CarMark
         fields = ['id', 'name']
+        ref_name = "car_order"
 
 
-class CarOrderModelSerializer(serializers.ModelSerializer):
-    mark = CarOrderMarkSerializer()
+
+class CarModelSerializer(serializers.ModelSerializer):
+    mark = CarMarkSerializer()
 
     class Meta:
         model = CarModel
         fields = ['id', 'mark', 'name']
+        ref_name = "car_order"
 
 
 class AuctionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Auction
         fields = ['id', 'name']
+        ref_name = "car_order"
 
 
 class CarOrderSerializer(serializers.ModelSerializer):
-    client_name = serializers.CharField(source='client.fullName', read_only=True)
-    marka_name = serializers.SerializerMethodField(read_only=True)
-    auction_name = serializers.CharField(source="auction.name", read_only=True)
-    carModelDetail = CarOrderModelSerializer(source='carModel', read_only=True)
     carModel_id = serializers.PrimaryKeyRelatedField(source='carModel',
                                                      write_only=True,
                                                      queryset=CarModel.objects.all())
@@ -51,7 +52,7 @@ class CarOrderSerializer(serializers.ModelSerializer):
 
     client = ClientSerializer(read_only=True)
     auction = AuctionSerializer(read_only=True)
-    carModel = CarOrderModelSerializer(read_only=True)
+    carModel = CarModelSerializer(read_only=True)
 
     def get_marka_name(self, obj):
         return f'{obj.carModel.mark.name} / {obj.carModel.name}'
@@ -62,15 +63,11 @@ class CarOrderSerializer(serializers.ModelSerializer):
             "id",
             "client",
             'client_id',
-            'client_name',
             'auction_id',
             'carModel',
-            'marka_name',
-            'auction_name',
             "auction",
             "lotNumber",
             "carModel_id",
-            "carModelDetail",
             'documentsGiven',
             "vinNumber",
             "year",

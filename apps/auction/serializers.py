@@ -14,3 +14,4 @@ class AuctionSerializer(serializers.ModelSerializer):
             "parkingPrice3",
             "parkingPrice4",
         ]
+        ref_name = "main"
