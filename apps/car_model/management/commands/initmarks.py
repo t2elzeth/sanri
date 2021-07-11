@@ -55,7 +55,12 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         counter = 0
         for mark in marks:
-            car_mark = CarMark.objects.create(name=mark)
+            car_mark, created = CarMark.objects.get_or_create(name=mark)
+
+            if not created:
+                print(f'Mark {car_mark.name} already exists')
+                continue
+
             print(f'Created CarMark: {car_mark.name}')
             counter += 1
 
