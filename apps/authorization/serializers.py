@@ -210,11 +210,17 @@ class EmployeeSerializer(serializers.ModelSerializer):
 
 
 class BalanceSerializer(serializers.ModelSerializer):
+    client = ClientSerializer(read_only=True)
+    client_id = serializers.PrimaryKeyRelatedField(source="client",
+                                                   write_only=True,
+                                                   queryset=User.objects.all())
+
     class Meta:
         model = Balance
         fields = [
             "id",
             "client",
+            "client_id",
             "date",
             "sum_in_jpy",
             "sum_in_usa",
