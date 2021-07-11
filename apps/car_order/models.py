@@ -23,7 +23,7 @@ class CarOrder(models.Model):
     auctionFees = models.IntegerField()
     transport = models.IntegerField()
     fob = models.IntegerField()
-    amount = models.IntegerField()
+    amount = models.IntegerField(blank=True, null=True)
     # transportationCommission = models.IntegerField()
     parking = models.IntegerField()
 
