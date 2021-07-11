@@ -46,6 +46,7 @@ class ContainerSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data: dict):
         count_and_sum = validated_data.pop("count_and_sum", None)
+        print(validated_data)
         wheelRecycling = count_and_sum.pop("wheelRecycling", None)
         wheelSales = count_and_sum.pop("wheelSales", None)
 
