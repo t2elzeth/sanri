@@ -77,7 +77,6 @@ class CarOrderSerializer(serializers.ModelSerializer):
             "transport",
             "fob",
             "amount",
-            # "transportationCommission",
             "parking",
             "carNumber",
             "total",
