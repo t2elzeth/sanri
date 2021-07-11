@@ -10,6 +10,13 @@ def update_stock(instance: CarResale, **kwargs):
 
 
 @receiver(post_save, sender=CarResale)
-def post_save_car_resale(instance, created, **kwargs):
+def post_save_car_resale(instance: CarResale, created, **kwargs):
     if created:
-        instance.save()
+        car_order = instance.carOrder
+        car_order.price = instance.salePrice
+        car_order.client = instance.newClient
+        if instance.newClient.atWhatPrice == instance.newClient.AT_WHAT_PRICE_BY_FOB:
+            car_order.fob = instance.newClient.sizeFOB
+        else:
+            car_order.fob = 0
+        car_order.save()

@@ -17,8 +17,7 @@ class CarResale(models.Model):
         related_name="car_resales_as_new_client",
     )
     salePrice = models.IntegerField()
-    income = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f'{self.income}'
+        return f'{self.ownerClient.username} -> {self.newClient.username} for {self.salePrice}'

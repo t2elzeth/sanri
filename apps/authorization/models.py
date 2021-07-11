@@ -37,7 +37,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         choices=AT_WHAT_PRICE_CHOICES,
         default=AT_WHAT_PRICE_BY_FACT,
     )
-    sizeFOB = models.CharField(max_length=255, blank=True, null=True)
+    sizeFOB = models.IntegerField(default=0)
     username = models.CharField(max_length=16, unique=True)
     role = models.CharField(max_length=255, blank=True, null=True)
     createdAt = models.DateTimeField(auto_now_add=True)
