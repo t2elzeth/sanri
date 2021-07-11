@@ -53,6 +53,7 @@ class ClientSerializer(serializers.ModelSerializer):
     cars_for_sale = serializers.SerializerMethodField(read_only=True)
     balance_replenishments = serializers.SerializerMethodField(read_only=True)
     balance_withdrawals = serializers.SerializerMethodField(read_only=True)
+    balance = serializers.SerializerMethodField(read_only=True)
 
     def get_shipped_containers(self, user):
         containers = user.containers.filter(status=Container.STATUS_SHIPPED)
@@ -102,6 +103,16 @@ class ClientSerializer(serializers.ModelSerializer):
             "totalAmount": sum(balance.sum_in_jpy for balance in balances)
         }
 
+    def get_balance(self, user):
+        replenishments = sum(balance.sum_in_jpy for balance in user.balances.filter(
+            balance_action=Balance.BALANCE_ACTION_REPLENISHMENT
+        ))
+
+        withdrawals = sum(balance.sum_in_jpy for balance in user.balances.filter(
+            balance_action=Balance.BALANCE_ACTION_WITHDRAWAL
+        ))
+        return replenishments - withdrawals
+
     class Meta:
         model = User
         fields = [
@@ -122,6 +133,7 @@ class ClientSerializer(serializers.ModelSerializer):
             "cars_for_sale",
             "balance_replenishments",
             "balance_withdrawals",
+            'balance'
         ]
         ref_name = "main"
 
