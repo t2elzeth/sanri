@@ -89,10 +89,7 @@ class ClientSerializer(serializers.ModelSerializer):
 
         return {
             "number": len(balances),
-            "totalAmount": {
-                "jpy": sum(balance.sum_in_jpy for balance in balances),
-                "usa": sum(balance.sum_in_usa for balance in balances),
-            },
+            "totalAmount": sum(balance.sum_in_jpy for balance in balances)
         }
 
     def get_balance_withdrawals(self, user):
@@ -102,10 +99,7 @@ class ClientSerializer(serializers.ModelSerializer):
 
         return {
             "number": len(balances),
-            "totalAmount": {
-                "jpy": sum(balance.sum_in_jpy for balance in balances),
-                "usa": sum(balance.sum_in_usa for balance in balances),
-            },
+            "totalAmount": sum(balance.sum_in_jpy for balance in balances)
         }
 
     class Meta:
