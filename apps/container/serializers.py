@@ -1,6 +1,14 @@
 from rest_framework import serializers
 
+from authorization.models import User
 from .models import Container, CountAndSum
+
+
+class ClientSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'fullName']
+        ref_name = "car_order"
 
 
 class CountAndSumSerializer(serializers.ModelSerializer):
@@ -10,6 +18,10 @@ class CountAndSumSerializer(serializers.ModelSerializer):
 
 
 class ContainerSerializer(serializers.ModelSerializer):
+    client_id = serializers.PrimaryKeyRelatedField(source='client',
+                                                   write_only=True,
+                                                   queryset=User.objects.all())
+    client = ClientSerializer(read_only=True)
     wheelRecycling = CountAndSumSerializer(source="count_and_sum.first")
     wheelSales = CountAndSumSerializer(source="count_and_sum.last")
 
@@ -18,6 +30,7 @@ class ContainerSerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "client",
+            "client_id",
             "name",
             "dateOfSending",
             "commission",
