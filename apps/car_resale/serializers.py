@@ -65,6 +65,5 @@ class CarResaleSerializer(serializers.ModelSerializer):
             "newClient",
             "newClient_id",
             "salePrice",
-            "income",
             "created_at",
         ]
