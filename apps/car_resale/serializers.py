@@ -43,8 +43,8 @@ class CarResaleSerializer(serializers.ModelSerializer):
                                                         write_only=True,
                                                         queryset=User.objects.all())
     newClient_id = serializers.PrimaryKeyRelatedField(source='newClient',
-                                                        write_only=True,
-                                                        queryset=User.objects.all())
+                                                      write_only=True,
+                                                      queryset=User.objects.all())
     carOrder_id = serializers.PrimaryKeyRelatedField(source="carOrder",
                                                      write_only=True,
                                                      queryset=CarOrder.objects.all())

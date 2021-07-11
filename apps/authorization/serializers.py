@@ -76,7 +76,7 @@ class ClientSerializer(serializers.ModelSerializer):
         }
 
     def get_cars_for_sale(self, user):
-        cars = user.car_sales_as_owner.all()
+        cars = user.car_orders.all()
 
         return {
             "number": len(cars),

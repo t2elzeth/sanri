@@ -39,3 +39,6 @@ def post_save_car_resale(instance: CarResale, created, **kwargs):
             payment_type=Balance.PAYMENT_TYPE_CASHLESS,
             balance_action=Balance.BALANCE_ACTION_WITHDRAWAL
         )
+
+        if instance.ownerClient.username == 'sanrijp':
+            pass
