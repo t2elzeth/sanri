@@ -30,9 +30,9 @@ class CarSaleSerializer(serializers.ModelSerializer):
     ownerClient = ClientSerializer(read_only=True)
     auction = AuctionSerializer(read_only=True)
 
-    carOrder_id = serializers.PrimaryKeyRelatedField(source="carOrder",
-                                                     write_only=True,
-                                                     queryset=CarOrder.objects.all())
+    carOrder_id = serializers.PrimaryKeyRelatedField(
+        source="carOrder", write_only=True, queryset=CarOrder.objects.all()
+    )
     carOrder = CarOrderSerializer(read_only=True)
 
     class Meta:
@@ -45,7 +45,6 @@ class CarSaleSerializer(serializers.ModelSerializer):
             "auction_id",
             "carOrder",
             "carOrder_id",
-            "vinNumber",
             "price",
             "recycle",
             "auctionFees",

@@ -10,7 +10,7 @@ User = get_user_model()
 
 class CarOrder(models.Model):
     client = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name="car_orders"
+        User, on_delete=models.CASCADE, related_name="car_orders", null=True
     )
     auction = models.ForeignKey(
         Auction, on_delete=models.CASCADE, related_name="auctions"

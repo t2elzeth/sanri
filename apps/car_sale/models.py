@@ -1,8 +1,10 @@
+from django.db import models
+
 from auction.models import Auction
 from authorization.models import User
-from django.db import models
-from .formulas import calculate_total
 from car_order.models import CarOrder
+from .formulas import calculate_total
+
 
 class CarSale(models.Model):
     ownerClient = models.ForeignKey(
@@ -11,7 +13,9 @@ class CarSale(models.Model):
     auction = models.ForeignKey(
         Auction, on_delete=models.CASCADE, related_name="car_sales"
     )
-    carOrder = models.ForeignKey(CarOrder,on_delete=models.CASCADE, related_name='car_sales')
+    carOrder = models.ForeignKey(
+        CarOrder, on_delete=models.PROTECT, related_name="car_sales"
+    )
     price = models.IntegerField(default=0)
     recycle = models.IntegerField(default=0)
     auctionFees = models.IntegerField()

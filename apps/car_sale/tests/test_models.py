@@ -98,3 +98,6 @@ class CreateCarSale(TestCase):
             self.car_sale.salesFees,
         )
         self.assertEqual(self.car_sale.total, new_total)
+
+        self.carOrder.refresh_from_db()
+        self.assertIsNone(self.carOrder.client)
