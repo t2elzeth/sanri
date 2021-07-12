@@ -30,7 +30,7 @@ def post_save_car_resale(instance: CarResale, created, **kwargs):
 
         # Calculate balances
         car_order.refresh_from_db()
-        instance.ownerClient.balances.create(
+        instance.oldClient.balances.create(
             sum_in_jpy=car_order.total,
             rate=1,
             sum_in_usa=car_order.total,
@@ -46,7 +46,7 @@ def post_save_car_resale(instance: CarResale, created, **kwargs):
             balance_action=Balance.BALANCE_ACTION_WITHDRAWAL,
         )
 
-        if instance.ownerClient.username == settings.SANRI_USERNAME:
+        if instance.oldClient.username == settings.SANRI_USERNAME:
             income_type, created = IncomeType.objects.get_or_create(
                 name="car_resale"
             )

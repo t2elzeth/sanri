@@ -39,8 +39,8 @@ class CarOrderSerializer(serializers.ModelSerializer):
 
 
 class CarResaleSerializer(serializers.ModelSerializer):
-    ownerClient_id = serializers.PrimaryKeyRelatedField(
-        source="ownerClient", write_only=True, queryset=User.objects.all()
+    oldClient_id = serializers.PrimaryKeyRelatedField(
+        source="oldClient", write_only=True, queryset=User.objects.all()
     )
     newClient_id = serializers.PrimaryKeyRelatedField(
         source="newClient", write_only=True, queryset=User.objects.all()
@@ -50,15 +50,15 @@ class CarResaleSerializer(serializers.ModelSerializer):
     )
 
     carOrder = CarOrderSerializer(read_only=True)
-    ownerClient = ClientSerializer(read_only=True)
+    oldClient = ClientSerializer(read_only=True)
     newClient = ClientSerializer(read_only=True)
 
     class Meta:
         model = CarResale
         fields = [
             "id",
-            "ownerClient",
-            "ownerClient_id",
+            "oldClient",
+            "oldClient_id",
             "carOrder",
             "carOrder_id",
             "startingPrice",

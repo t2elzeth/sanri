@@ -4,7 +4,7 @@ from django.db import models
 
 
 class CarResale(models.Model):
-    ownerClient = models.ForeignKey(
+    oldClient = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="car_resales_as_owner"
     )
     carOrder = models.ForeignKey(
@@ -20,4 +20,4 @@ class CarResale(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.ownerClient.username} -> {self.newClient.username} for {self.salePrice}"
+        return f"{self.oldClient.username} -> {self.newClient.username} for {self.salePrice}"

@@ -15,11 +15,11 @@ from income.models import IncomeType
 class CreateNewCarResaleTest(APITestCase):
     def setUp(self) -> None:
         self.url = reverse("car-resale-list-create")
-        self.ownerClient = User.objects.create_user(
+        self.oldClient = User.objects.create_user(
             password="123",
             fullName="My owner client",
             country="KG",
-            email="ownerclient@gmail.com",
+            email="oldClient@gmail.com",
             phoneNumber="+996771221103",
             service=User.SERVICE_ENTIRE,
             atWhatPrice=User.AT_WHAT_PRICE_BY_FACT,
@@ -49,13 +49,13 @@ class CreateNewCarResaleTest(APITestCase):
         self.car_model = self.car_mark.models.create(name="FIT")
 
         self.carOrder = CarOrder.objects.create(
-            client=self.ownerClient,
+            client=self.oldClient,
             auction=self.auction,
             lotNumber=25000,
             carModel=self.car_model,
             vinNumber=25000,
             year=2019,
-            fob=self.ownerClient.sizeFOB,
+            fob=self.oldClient.sizeFOB,
             price=50000,
             recycle=20000,
             auctionFees=25000,
@@ -66,7 +66,7 @@ class CreateNewCarResaleTest(APITestCase):
     def _make_request_and_get_car_resale_object(self):
         self.sale_price = self.carOrder.price + 20000
         payload = {
-            "ownerClient_id": self.ownerClient.id,
+            "oldClient_id": self.oldClient.id,
             "newClient_id": self.newClient.id,
             "carOrder_id": self.carOrder.id,
             "startingPrice": self.carOrder.price,
@@ -111,7 +111,7 @@ class CreateNewCarResaleTest(APITestCase):
     def check_balance_action(self):
         self.assertTrue(
             Balance.objects.filter(
-                client=self.ownerClient,
+                client=self.oldClient,
                 sum_in_jpy=self.carOrder.total,
                 rate=1,
                 sum_in_usa=self.carOrder.total,
@@ -150,10 +150,10 @@ class CreateNewCarResaleTest(APITestCase):
         self._check_car_sales_deletion()
 
     def test_create_new_car_resale_as_sanrijp(self):
-        self.ownerClient.username = settings.SANRI_USERNAME
-        self.ownerClient.sizeFOB = 0
-        self.ownerClient.atWhatPrice = User.AT_WHAT_PRICE_BY_FACT
-        self.ownerClient.save()
+        self.oldClient.username = settings.SANRI_USERNAME
+        self.oldClient.sizeFOB = 0
+        self.oldClient.atWhatPrice = User.AT_WHAT_PRICE_BY_FACT
+        self.oldClient.save()
 
         self._make_request_and_get_car_resale_object()
         self._check_car_order()

@@ -54,12 +54,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "sanri.wsgi.application"
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-    }
-}
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -133,13 +127,20 @@ CORS_ORIGIN_ALLOW_ALL = True
 
 # DATABASES = {
 #     "default": {
-#         "ENGINE": "django.db.backends.postgresql",
-#         "NAME": "postgres",
-#         "USER": "t2elzeth",
-#         "PASSWORD": "postgres",
-#         "HOST": "213.139.209.59",
-#         "PORT": 5432,
+#         "ENGINE": "django.db.backends.sqlite3",
+#         "NAME": BASE_DIR / "db.sqlite3",
 #     }
 # }
+
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "postgres",
+        "USER": "t2elzeth",
+        "PASSWORD": "postgres",
+        "HOST": "213.139.209.59",
+        "PORT": 5432,
+    }
+}
 
 SANRI_USERNAME = "sanrijp"
