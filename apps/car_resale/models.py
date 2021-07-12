@@ -20,4 +20,4 @@ class CarResale(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f'{self.ownerClient.username} -> {self.newClient.username} for {self.salePrice}'
+        return f"{self.ownerClient.username} -> {self.newClient.username} for {self.salePrice}"

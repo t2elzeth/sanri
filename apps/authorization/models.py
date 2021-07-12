@@ -112,4 +112,6 @@ class Balance(models.Model):
     )
 
     def __str__(self):
-        return f"{self.client.fullName}: {self.sum_in_usa}: {self.balance_action}"
+        return (
+            f"{self.client.fullName}: {self.sum_in_usa}: {self.balance_action}"
+        )

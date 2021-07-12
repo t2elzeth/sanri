@@ -12,10 +12,10 @@ class IncomeTypeSerializer(serializers.ModelSerializer):
 class IncomeSerializer(serializers.ModelSerializer):
     type = IncomeTypeSerializer(read_only=True)
 
-    type_id = serializers.PrimaryKeyRelatedField(source='type',
-                                                 write_only=True,
-                                                 queryset=IncomeType.objects.all())
+    type_id = serializers.PrimaryKeyRelatedField(
+        source="type", write_only=True, queryset=IncomeType.objects.all()
+    )
 
     class Meta:
         model = Income
-        fields = ["id", "type", 'type_id', "date", "amount", "comment"]
+        fields = ["id", "type", "type_id", "date", "amount", "comment"]

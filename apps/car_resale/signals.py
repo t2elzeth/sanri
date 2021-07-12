@@ -5,6 +5,8 @@ from authorization.models import Balance
 from car_order.models import CarOrder
 from .models import CarResale
 from income.models import Income, IncomeType
+from django.conf import settings
+
 
 @receiver(pre_save, sender=CarResale)
 def update_stock(instance: CarResale, **kwargs):
@@ -18,7 +20,10 @@ def post_save_car_resale(instance: CarResale, created, **kwargs):
         car_order.price = instance.salePrice
         car_order.client = instance.newClient
 
-        newClientWorksByFOB = instance.newClient.atWhatPrice == instance.newClient.AT_WHAT_PRICE_BY_FOB
+        newClientWorksByFOB = (
+            instance.newClient.atWhatPrice
+            == instance.newClient.AT_WHAT_PRICE_BY_FOB
+        )
         car_order.fob = instance.newClient.sizeFOB * newClientWorksByFOB
         car_order.save()
 
@@ -29,7 +34,7 @@ def post_save_car_resale(instance: CarResale, created, **kwargs):
             rate=1,
             sum_in_usa=car_order.total,
             payment_type=Balance.PAYMENT_TYPE_CASHLESS,
-            balance_action=Balance.BALANCE_ACTION_REPLENISHMENT
+            balance_action=Balance.BALANCE_ACTION_REPLENISHMENT,
         )
 
         instance.newClient.balances.create(
@@ -37,9 +42,13 @@ def post_save_car_resale(instance: CarResale, created, **kwargs):
             rate=1,
             sum_in_usa=car_order.total,
             payment_type=Balance.PAYMENT_TYPE_CASHLESS,
-            balance_action=Balance.BALANCE_ACTION_WITHDRAWAL
+            balance_action=Balance.BALANCE_ACTION_WITHDRAWAL,
         )
 
-        if instance.ownerClient.username == 'sanrijp':
-            income_type, created = IncomeType.objects.get_or_create(name='car_resale')
-            income_type.incomes.create(amount=instance.salePrice - instance.startingPrice)
+        if instance.ownerClient.username == settings.SANRI_USERNAME:
+            income_type, created = IncomeType.objects.get_or_create(
+                name="car_resale"
+            )
+            income_type.incomes.create(
+                amount=instance.salePrice - instance.startingPrice
+            )

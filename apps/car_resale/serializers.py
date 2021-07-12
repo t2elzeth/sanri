@@ -9,14 +9,14 @@ from .models import CarResale
 class ClientSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'fullName']
-        ref_name = 'car_resale'
+        fields = ["id", "fullName"]
+        ref_name = "car_resale"
 
 
 class CarMarkSerializer(serializers.ModelSerializer):
     class Meta:
         model = CarMark
-        fields = ['id', 'name']
+        fields = ["id", "name"]
         ref_name = "car_resale"
 
 
@@ -25,7 +25,7 @@ class CarModelSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CarModel
-        fields = ['id', 'mark', 'name']
+        fields = ["id", "mark", "name"]
         ref_name = "car_resale"
 
 
@@ -34,20 +34,20 @@ class CarOrderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CarOrder
-        fields = ['id', 'carModel']
+        fields = ["id", "carModel"]
         ref_name = "car_resale"
 
 
 class CarResaleSerializer(serializers.ModelSerializer):
-    ownerClient_id = serializers.PrimaryKeyRelatedField(source='ownerClient',
-                                                        write_only=True,
-                                                        queryset=User.objects.all())
-    newClient_id = serializers.PrimaryKeyRelatedField(source='newClient',
-                                                      write_only=True,
-                                                      queryset=User.objects.all())
-    carOrder_id = serializers.PrimaryKeyRelatedField(source="carOrder",
-                                                     write_only=True,
-                                                     queryset=CarOrder.objects.all())
+    ownerClient_id = serializers.PrimaryKeyRelatedField(
+        source="ownerClient", write_only=True, queryset=User.objects.all()
+    )
+    newClient_id = serializers.PrimaryKeyRelatedField(
+        source="newClient", write_only=True, queryset=User.objects.all()
+    )
+    carOrder_id = serializers.PrimaryKeyRelatedField(
+        source="carOrder", write_only=True, queryset=CarOrder.objects.all()
+    )
 
     carOrder = CarOrderSerializer(read_only=True)
     ownerClient = ClientSerializer(read_only=True)

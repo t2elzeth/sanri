@@ -6,24 +6,24 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('car_resale', '0001_initial'),
+        ("car_resale", "0001_initial"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='carresale',
-            name='income',
+            model_name="carresale",
+            name="income",
             field=models.IntegerField(default=0),
         ),
         migrations.AlterField(
-            model_name='carresale',
-            name='salePrice',
+            model_name="carresale",
+            name="salePrice",
             field=models.IntegerField(default=10000),
             preserve_default=False,
         ),
         migrations.AlterField(
-            model_name='carresale',
-            name='startingPrice',
+            model_name="carresale",
+            name="startingPrice",
             field=models.IntegerField(default=50000),
             preserve_default=False,
         ),

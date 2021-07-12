@@ -8,5 +8,5 @@ class CarResaleConfig(AppConfig):
     name = "car_resale"
 
     def ready(self):
-        importlib.import_module('.signals', 'car_resale')
+        importlib.import_module(".signals", "car_resale")
         return super().ready()

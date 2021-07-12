@@ -7,13 +7,13 @@ import django.utils.timezone
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('authorization', '0002_remove_balance_name'),
+        ("authorization", "0002_remove_balance_name"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='balance',
-            name='date',
+            model_name="balance",
+            name="date",
             field=models.DateField(default=django.utils.timezone.now),
         ),
     ]

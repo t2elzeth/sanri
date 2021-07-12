@@ -7,18 +7,18 @@ import django.utils.timezone
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('income', '0001_initial'),
+        ("income", "0001_initial"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='income',
-            name='comment',
-            field=models.TextField(default=''),
+            model_name="income",
+            name="comment",
+            field=models.TextField(default=""),
         ),
         migrations.AlterField(
-            model_name='income',
-            name='date',
+            model_name="income",
+            name="date",
             field=models.DateField(default=django.utils.timezone.now),
         ),
     ]

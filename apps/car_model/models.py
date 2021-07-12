@@ -9,7 +9,9 @@ class CarMark(models.Model):
 
 
 class CarModel(models.Model):
-    mark = models.ForeignKey(CarMark, on_delete=models.CASCADE, related_name='models')
+    mark = models.ForeignKey(
+        CarMark, on_delete=models.CASCADE, related_name="models"
+    )
     name = models.CharField(max_length=255)
 
     def __str__(self):

@@ -6,6 +6,7 @@ from rest_framework.exceptions import ValidationError
 from .models import Balance, User
 from income.models import Income
 
+
 class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
     confirmPassword = serializers.CharField(write_only=True)
@@ -90,7 +91,7 @@ class ClientSerializer(serializers.ModelSerializer):
 
         return {
             "number": len(balances),
-            "totalAmount": sum(balance.sum_in_jpy for balance in balances)
+            "totalAmount": sum(balance.sum_in_jpy for balance in balances),
         }
 
     def get_balance_withdrawals(self, user):
@@ -100,20 +101,28 @@ class ClientSerializer(serializers.ModelSerializer):
 
         return {
             "number": len(balances),
-            "totalAmount": sum(balance.sum_in_jpy for balance in balances)
+            "totalAmount": sum(balance.sum_in_jpy for balance in balances),
         }
 
     def get_balance(self, user):
-        replenishments = sum(balance.sum_in_jpy for balance in user.balances.filter(
-            balance_action=Balance.BALANCE_ACTION_REPLENISHMENT
-        ))
+        replenishments = sum(
+            balance.sum_in_jpy
+            for balance in user.balances.filter(
+                balance_action=Balance.BALANCE_ACTION_REPLENISHMENT
+            )
+        )
 
-        withdrawals = sum(balance.sum_in_jpy for balance in user.balances.filter(
-            balance_action=Balance.BALANCE_ACTION_WITHDRAWAL
-        ))
+        withdrawals = sum(
+            balance.sum_in_jpy
+            for balance in user.balances.filter(
+                balance_action=Balance.BALANCE_ACTION_WITHDRAWAL
+            )
+        )
 
-        if user.username == 'sanrijp':
-            replenishments += sum(income.amount for income in Income.objects.all())
+        if user.username == "sanrijp":
+            replenishments += sum(
+                income.amount for income in Income.objects.all()
+            )
 
         return replenishments - withdrawals
 
@@ -137,7 +146,7 @@ class ClientSerializer(serializers.ModelSerializer):
             "cars_for_sale",
             "balance_replenishments",
             "balance_withdrawals",
-            'balance'
+            "balance",
         ]
         ref_name = "main"
 
@@ -221,9 +230,9 @@ class EmployeeSerializer(serializers.ModelSerializer):
 
 class BalanceSerializer(serializers.ModelSerializer):
     client = ClientSerializer(read_only=True)
-    client_id = serializers.PrimaryKeyRelatedField(source="client",
-                                                   write_only=True,
-                                                   queryset=User.objects.all())
+    client_id = serializers.PrimaryKeyRelatedField(
+        source="client", write_only=True, queryset=User.objects.all()
+    )
 
     class Meta:
         model = Balance

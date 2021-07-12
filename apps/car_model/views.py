@@ -18,5 +18,5 @@ class CarModelDetailAPIView(DetailAPIViewMixin):
 
 
 class CarMarkListAPIView(generics.ListAPIView):
-    queryset = CarMark.objects.all().order_by('name')
+    queryset = CarMark.objects.all().order_by("name")
     serializer_class = CarMarkSerializer

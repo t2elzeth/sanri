@@ -7,13 +7,13 @@ import django.utils.timezone
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('authorization', '0005_alter_user_sizefob'),
+        ("authorization", "0005_alter_user_sizefob"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='balance',
-            name='date',
+            model_name="balance",
+            name="date",
             field=models.DateField(default=django.utils.timezone.now),
         ),
     ]
