@@ -3,7 +3,7 @@ from rest_framework.reverse import reverse
 from rest_framework.test import APITestCase
 
 from auction.models import Auction
-from authorization.models import User
+from authorization.models import User, Balance
 from car_model.models import CarMark
 from car_order.models import CarOrder
 from car_sale.models import CarSale
@@ -75,7 +75,16 @@ class TestCreateNewCarSale(APITestCase):
 
         payload = {"price": 60_000, "recycle": 10_000, "status": True}
         response = self.client.patch(self.url, payload)
+
         self.carSale.refresh_from_db()
         self.assertEqual(response.data["price"], 60_000)
         self.assertEqual(response.data["recycle"], 10_000)
         self.assertEqual(response.data["status"], True)
+        self.assertTrue(Balance.objects.filter(
+            client=self.carSale.ownerClient,
+            sum_in_jpy=self.carSale.total,
+            sum_in_usa=self.carSale.total,
+            rate=1,
+            payment_type=Balance.PAYMENT_TYPE_CASHLESS,
+            balance_action=Balance.BALANCE_ACTION_REPLENISHMENT
+        ).exists())
