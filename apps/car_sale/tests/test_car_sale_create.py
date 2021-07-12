@@ -80,11 +80,30 @@ class TestCreateNewCarSale(APITestCase):
         self.assertEqual(response.data["price"], 60_000)
         self.assertEqual(response.data["recycle"], 10_000)
         self.assertEqual(response.data["status"], True)
-        self.assertTrue(Balance.objects.filter(
-            client=self.carSale.ownerClient,
-            sum_in_jpy=self.carSale.total,
-            sum_in_usa=self.carSale.total,
-            rate=1,
-            payment_type=Balance.PAYMENT_TYPE_CASHLESS,
-            balance_action=Balance.BALANCE_ACTION_REPLENISHMENT
-        ).exists())
+        self.assertTrue(
+            Balance.objects.filter(
+                client=self.carSale.ownerClient,
+                sum_in_jpy=self.carSale.total,
+                sum_in_usa=self.carSale.total,
+                rate=1,
+                payment_type=Balance.PAYMENT_TYPE_CASHLESS,
+                balance_action=Balance.BALANCE_ACTION_REPLENISHMENT,
+            ).exists()
+        )
+
+    def test_update_set_to_true_with_no_price_and_recycle(self):
+        self.url = reverse("car-sale-detail", kwargs={"pk": self.carSale.id})
+
+        # Empty payload
+        payload = {"status": True}
+        response = self.client.patch(self.url, payload)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+        # Half empty payload
+        payload = {"status": True, "price": 25000}
+        response = self.client.patch(self.url, payload)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+        payload = {"status": True, "recycle": 5000}
+        response = self.client.patch(self.url, payload)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)

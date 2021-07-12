@@ -29,5 +29,5 @@ def post_save_car_resale(instance: CarSale, created, **kwargs):
             sum_in_usa=instance.total,
             rate=1,
             payment_type=Balance.PAYMENT_TYPE_CASHLESS,
-            balance_action=Balance.BALANCE_ACTION_REPLENISHMENT
+            balance_action=Balance.BALANCE_ACTION_REPLENISHMENT,
         )

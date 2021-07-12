@@ -53,3 +53,15 @@ class CarSaleSerializer(serializers.ModelSerializer):
             "total",
             "created_at",
         ]
+
+    def validate(self, data):
+        status = data["status"]
+        if self.instance and status:
+            price = data.get("price", 0)
+            recycle = data.get("recycle", 0)
+            if price == 0 or recycle == 0:
+                raise serializers.ValidationError(
+                    "Recycle and price must be specified"
+                )
+
+        return super().validate(data)
