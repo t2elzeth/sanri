@@ -8,6 +8,7 @@ from car_model.models import CarMark
 from car_order.formulas import calculate_total, calculate_total_fob
 from car_order.models import CarOrder
 from car_resale.models import CarResale
+from car_sale.models import CarSale
 from income.models import IncomeType
 
 
@@ -129,10 +130,14 @@ class CreateNewCarResaleTest(APITestCase):
             ).exists()
         )
 
+    def _check_car_sales_deletion(self):
+        self.assertFalse(CarSale.objects.filter(carOrder=self.carOrder).exists())
+
     def test_create_new_car_resale_sell_to_user_working_by_fact(self):
         self._make_request_and_get_car_resale_object()
         self._check_car_order()
         self.check_balance_action()
+        self._check_car_sales_deletion()
 
     def test_create_new_car_resale_sell_to_user_working_by_fob(self):
         self.newClient.sizeFOB = 65000
@@ -142,6 +147,7 @@ class CreateNewCarResaleTest(APITestCase):
         self._make_request_and_get_car_resale_object()
         self._check_car_order()
         self.check_balance_action()
+        self._check_car_sales_deletion()
 
     def test_create_new_car_resale_as_sanrijp(self):
         self.ownerClient.username = settings.SANRI_USERNAME
@@ -152,6 +158,7 @@ class CreateNewCarResaleTest(APITestCase):
         self._make_request_and_get_car_resale_object()
         self._check_car_order()
         self.check_balance_action()
+        self._check_car_sales_deletion()
 
         income_type = IncomeType.objects.get(name="car_resale")
         self.assertTrue(

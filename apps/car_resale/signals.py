@@ -54,5 +54,4 @@ def post_save_car_resale(instance: CarResale, created, **kwargs):
                 amount=instance.salePrice - instance.startingPrice
             )
 
-        # TODO: Test CarSale Deletion
         CarSale.objects.filter(carOrder=car_order).delete()
