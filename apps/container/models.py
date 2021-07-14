@@ -3,7 +3,6 @@ from django.db import models
 
 from car_order.models import CarOrder
 from .formulas import calculate_total
-
 User = get_user_model()
 
 
@@ -34,9 +33,8 @@ class Container(models.Model):
     totalAmount = models.IntegerField(default=0)
 
     def calculate_total(self):
-        wheel_recycling = self.count_and_sum.first()
-
-        wheel_sales = self.count_and_sum.last()
+        wheel_recycling = getattr(self, 'wheel_recycling', None)
+        wheel_sales = getattr(self, 'wheel_sales', None)
         self.totalAmount = calculate_total(
             self.commission,
             self.containerTransportation,
@@ -44,6 +42,18 @@ class Container(models.Model):
             getattr(wheel_recycling, 'sum', 0),
             getattr(wheel_sales, 'sum', 0),
         )
+
+
+class WheelRecycling(models.Model):
+    container = models.OneToOneField(Container, on_delete=models.CASCADE, related_name='wheel_recycling')
+    count = models.IntegerField()
+    sum = models.IntegerField()
+
+
+class WheelSales(models.Model):
+    container = models.OneToOneField(Container, on_delete=models.CASCADE, related_name='wheel_sales')
+    count = models.IntegerField()
+    sum = models.IntegerField()
 
 
 class CountAndSum(models.Model):

@@ -3,7 +3,7 @@ from rest_framework import serializers
 from authorization.models import User
 from car_order.models import CarOrder
 from car_order.serializers import CarOrderSerializer
-from .models import Container, CountAndSum, ContainerCar
+from .models import Container, CountAndSum, ContainerCar, WheelRecycling, WheelSales
 
 
 class ClientSerializer(serializers.ModelSerializer):
@@ -16,6 +16,18 @@ class ClientSerializer(serializers.ModelSerializer):
 class CountAndSumSerializer(serializers.ModelSerializer):
     class Meta:
         model = CountAndSum
+        fields = ["count", "sum"]
+
+
+class WheelRecyclingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = WheelRecycling
+        fields = ["count", "sum"]
+
+
+class WheelSalesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = WheelSales
         fields = ["count", "sum"]
 
 
@@ -33,8 +45,8 @@ class ContainerSerializer(serializers.ModelSerializer):
         source="client", write_only=True, queryset=User.objects.all()
     )
     client = ClientSerializer(read_only=True)
-    wheelRecycling = CountAndSumSerializer(source="count_and_sum.first")
-    wheelSales = CountAndSumSerializer(source="count_and_sum.last")
+    wheelRecycling = WheelRecyclingSerializer(source="wheel_recycling")
+    wheelSales = WheelSalesSerializer(source="wheel_sales")
     car_ids = serializers.ListSerializer(
         child=serializers.IntegerField(), write_only=True
     )
@@ -65,20 +77,19 @@ class ContainerSerializer(serializers.ModelSerializer):
         extra_kwargs = {"totalAmount": {"read_only": True}}
 
     def create(self, validated_data: dict):
-        # print("This is validated_data", validated_data)
-        count_and_sum = validated_data.pop("count_and_sum", None)
+        print("This is validated_data", validated_data)
         cars = validated_data.pop("car_ids", None)
-        wheelRecycling = count_and_sum.pop("first", None)
-        wheelSales = count_and_sum.pop("last", None)
+        wheelRecycling = validated_data.pop("wheel_recycling", None)
+        wheelSales = validated_data.pop("wheel_sales", None)
 
         container = super().create(validated_data)
         if wheelRecycling is not None:
             data = {"container": container, **wheelRecycling}
-            CountAndSum.objects.create(**data)
+            WheelRecycling.objects.create(**data)
 
         if wheelSales is not None:
             data = {"container": container, **wheelSales}
-            CountAndSum.objects.create(**data)
+            WheelSales.objects.create(**data)
 
         for car in cars:
             container.container_cars.create(car=CarOrder.objects.get(id=car))

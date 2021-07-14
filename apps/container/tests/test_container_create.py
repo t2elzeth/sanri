@@ -7,7 +7,7 @@ from authorization.models import User
 from car_model.models import CarMark
 from car_order.models import CarOrder
 from container.formulas import calculate_total
-from container.models import Container, CountAndSum
+from container.models import Container, CountAndSum, WheelRecycling, WheelSales
 
 
 class CreateContainerTest(APITestCase):
@@ -85,10 +85,8 @@ class CreateContainerTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
         container = Container.objects.get(id=response.data["id"])
-        wheel_recycling = CountAndSum.objects.filter(
-            container=container
-        ).first()
-        wheel_sales = CountAndSum.objects.filter(container=container).last()
+        wheel_recycling = container.wheel_recycling
+        wheel_sales = container.wheel_sales
         self.assertEqual(wheel_recycling.count, 25)
         self.assertEqual(wheel_recycling.sum, 200)
         self.assertEqual(wheel_sales.count, 20)
@@ -100,4 +98,5 @@ class CreateContainerTest(APITestCase):
             wheel_recycling.sum,
             wheel_sales.sum
         ))
+        print('This is cars list: ', response.data['cars'])
         self.assertEqual(len(response.data['cars']), 2)
