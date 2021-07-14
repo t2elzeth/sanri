@@ -1,6 +1,8 @@
 from django.contrib.auth import get_user_model
 from django.db import models
 
+from car_order.models import CarOrder
+
 User = get_user_model()
 
 
@@ -37,3 +39,11 @@ class CountAndSum(models.Model):
     )
     count = models.IntegerField()
     sum = models.IntegerField()
+
+
+class ContainerCar(models.Model):
+    container = models.ForeignKey(Container, on_delete=models.CASCADE, related_name='container_cars')
+    car = models.ForeignKey(CarOrder, on_delete=models.CASCADE, related_name='container_cars')
+
+    def __str__(self):
+        return f'{self.container.name}: {self.car.carModel.name}'

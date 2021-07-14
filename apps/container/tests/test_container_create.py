@@ -1,7 +1,11 @@
 from rest_framework.reverse import reverse
 from rest_framework.test import APITestCase
 from rest_framework import status
+
+from auction.models import Auction
 from authorization.models import User
+from car_model.models import CarMark
+from car_order.models import CarOrder
 from container.models import Container, CountAndSum
 
 class CreateContainerTest(APITestCase):
@@ -16,6 +20,48 @@ class CreateContainerTest(APITestCase):
             service=User.SERVICE_ENTIRE,
             atWhatPrice=User.AT_WHAT_PRICE_BY_FACT,
             username="owner_client",
+        )
+
+        self.auction = Auction.objects.create(
+            name="AuctionName",
+            parkingPrice1=25000,
+            parkingPrice2=20000,
+            parkingPrice3=15000,
+            parkingPrice4=10000,
+        )
+
+        self.car_mark = CarMark.objects.create(name="HONDA")
+        self.car_model_FIT = self.car_mark.models.create(name="FIT")
+        self.car_model_ODYSSEI = self.car_mark.models.create(name="ODYSSEI")
+
+        self.carOrder_1 = CarOrder.objects.create(
+            client=self.container_client,
+            auction=self.auction,
+            lotNumber=25000,
+            carModel=self.car_model_FIT,
+            vinNumber=25000,
+            year=2019,
+            fob=self.container_client.sizeFOB,
+            price=50000,
+            recycle=20000,
+            auctionFees=25000,
+            transport=3000,
+            carNumber=CarOrder.CAR_NUMBER_NOT_GIVEN,
+        )
+
+        self.carOrder_2 = CarOrder.objects.create(
+            client=self.container_client,
+            auction=self.auction,
+            lotNumber=25000,
+            carModel=self.car_model_ODYSSEI,
+            vinNumber=25000,
+            year=2019,
+            fob=self.container_client.sizeFOB,
+            price=50000,
+            recycle=20000,
+            auctionFees=25000,
+            transport=3000,
+            carNumber=CarOrder.CAR_NUMBER_NOT_GIVEN,
         )
 
     def test_container_create_with_valid_data(self):
@@ -37,7 +83,11 @@ class CreateContainerTest(APITestCase):
                 'sum': 2000
             },
             'status': Container.STATUS_GOING_TO,
-            'totalAmount': 2000
+            'totalAmount': 2000,
+            'car_ids': [
+                self.car_model_FIT.id,
+                self.car_model_ODYSSEI.id
+            ]
         }
         response = self.client.post(self.url, payload, format="json")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -49,3 +99,4 @@ class CreateContainerTest(APITestCase):
         self.assertEqual(wheel_recycling.sum, 200)
         self.assertEqual(wheel_sales.count, 20)
         self.assertEqual(wheel_sales.sum, 2000)
+        print(response.data['cars'])
