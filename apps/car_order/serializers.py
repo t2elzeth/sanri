@@ -52,6 +52,8 @@ class CarOrderSerializer(serializers.ModelSerializer):
     client = ClientSerializer(read_only=True)
     auction = AuctionSerializer(read_only=True)
     carModel = CarModelSerializer(read_only=True)
+    total = serializers.IntegerField(read_only=True)
+    total_FOB = serializers.IntegerField(read_only=True)
 
     class Meta:
         model = CarOrder

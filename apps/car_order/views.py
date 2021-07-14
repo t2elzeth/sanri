@@ -7,7 +7,7 @@ from .serializers import CarOrderSerializer
 
 
 class CarOrderAPIView(generics.ListCreateAPIView):
-    queryset = CarOrder.objects.all()
+    queryset = CarOrder.objects.exclude(client=None)
     serializer_class = CarOrderSerializer
     filterset_class = CarModelFilter
 
