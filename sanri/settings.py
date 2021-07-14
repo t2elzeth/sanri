@@ -1,6 +1,7 @@
 import os
 import sys
 from pathlib import Path
+
 import dotenv
 
 dotenv.load_dotenv()
@@ -13,7 +14,7 @@ SECRET_KEY = (
     "django-insecure-x=rjvpp_@0x-r-@02m2zp6+xl5gzukts&-jhzgy_xd)76nyu*_"
 )
 
-DEBUG = bool(os.getenv('DEBUG'), False)
+DEBUG = False
 
 ALLOWED_HOSTS = ["*"]
 
@@ -127,24 +128,24 @@ REST_FRAMEWORK = {
 AUTH_USER_MODEL = "authorization.User"
 CORS_ORIGIN_ALLOW_ALL = True
 
-
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "postgres",
+        "USER": "t2elzeth",
+        "PASSWORD": "postgres",
+        "HOST": "213.139.209.59",
+        "PORT": 5432,
     }
 }
 
-if not DEBUG:
+SANRI_USERNAME = "sanrijp"
+
+TEST = bool(os.getenv('TEST_DB', False))
+if TEST:
     DATABASES = {
         "default": {
-            "ENGINE": "django.db.backends.postgresql",
-            "NAME": "postgres",
-            "USER": "t2elzeth",
-            "PASSWORD": "postgres",
-            "HOST": "213.139.209.59",
-            "PORT": 5432,
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
         }
     }
-
-SANRI_USERNAME = "sanrijp"
