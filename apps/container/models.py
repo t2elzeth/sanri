@@ -56,14 +56,6 @@ class WheelSales(models.Model):
     sum = models.IntegerField()
 
 
-class CountAndSum(models.Model):
-    container = models.ForeignKey(
-        Container, on_delete=models.CASCADE, related_name="count_and_sum"
-    )
-    count = models.IntegerField()
-    sum = models.IntegerField()
-
-
 class ContainerCar(models.Model):
     container = models.ForeignKey(
         Container, on_delete=models.CASCADE, related_name="container_cars"

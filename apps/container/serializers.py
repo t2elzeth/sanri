@@ -3,7 +3,7 @@ from rest_framework import serializers
 from authorization.models import User
 from car_order.models import CarOrder
 from car_order.serializers import CarOrderSerializer
-from .models import Container, CountAndSum, ContainerCar, WheelRecycling, WheelSales
+from .models import Container,ContainerCar, WheelRecycling, WheelSales
 
 
 class ClientSerializer(serializers.ModelSerializer):
@@ -11,12 +11,6 @@ class ClientSerializer(serializers.ModelSerializer):
         model = User
         fields = ["id", "fullName", "atWhatPrice"]
         ref_name = "container"
-
-
-class CountAndSumSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = CountAndSum
-        fields = ["count", "sum"]
 
 
 class WheelRecyclingSerializer(serializers.ModelSerializer):
