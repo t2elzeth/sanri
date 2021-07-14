@@ -2,6 +2,7 @@ from django.contrib.auth import get_user_model
 from django.db import models
 
 from car_order.models import CarOrder
+from .formulas import calculate_total
 
 User = get_user_model()
 
@@ -30,7 +31,19 @@ class Container(models.Model):
     )
 
     status = models.CharField(max_length=255, choices=STATUS_CHOICES)
-    totalAmount = models.IntegerField()
+    totalAmount = models.IntegerField(default=0)
+
+    def calculate_total(self):
+        wheel_recycling = self.count_and_sum.first()
+
+        wheel_sales = self.count_and_sum.last()
+        self.totalAmount = calculate_total(
+            self.commission,
+            self.containerTransportation,
+            self.packagingMaterials,
+            getattr(wheel_recycling, 'sum', 0),
+            getattr(wheel_sales, 'sum', 0),
+        )
 
 
 class CountAndSum(models.Model):
@@ -42,8 +55,12 @@ class CountAndSum(models.Model):
 
 
 class ContainerCar(models.Model):
-    container = models.ForeignKey(Container, on_delete=models.CASCADE, related_name='container_cars')
-    car = models.ForeignKey(CarOrder, on_delete=models.CASCADE, related_name='container_cars')
+    container = models.ForeignKey(
+        Container, on_delete=models.CASCADE, related_name="container_cars"
+    )
+    car = models.ForeignKey(
+        CarOrder, on_delete=models.CASCADE, related_name="container_cars"
+    )
 
     def __str__(self):
-        return f'{self.container.name}: {self.car.carModel.name}'
+        return f"{self.container.name}: {self.car.carModel.name}"

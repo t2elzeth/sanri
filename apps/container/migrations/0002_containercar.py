@@ -7,17 +7,39 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('car_order', '0006_alter_carorder_client'),
-        ('container', '0001_initial'),
+        ("car_order", "0006_alter_carorder_client"),
+        ("container", "0001_initial"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='ContainerCar',
+            name="ContainerCar",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('car', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='container_cars', to='car_order.carorder')),
-                ('container', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='container_cars', to='container.container')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "car",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="container_cars",
+                        to="car_order.carorder",
+                    ),
+                ),
+                (
+                    "container",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="container_cars",
+                        to="container.container",
+                    ),
+                ),
             ],
         ),
     ]

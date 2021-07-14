@@ -55,7 +55,7 @@ class CarSaleSerializer(serializers.ModelSerializer):
         ]
 
     def validate(self, data):
-        status = data.get('status', False)
+        status = data.get("status", False)
         if self.instance and status:
             price = data.get("price", 0)
             recycle = data.get("recycle", 0)

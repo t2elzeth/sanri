@@ -9,8 +9,8 @@ from .models import Container, CountAndSum, ContainerCar
 class ClientSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ["id", "fullName"]
-        ref_name = "car_order"
+        fields = ["id", "fullName", "atWhatPrice"]
+        ref_name = "container"
 
 
 class CountAndSumSerializer(serializers.ModelSerializer):
@@ -24,7 +24,8 @@ class ContainerCarSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ContainerCar
-        fields = ['container', 'car']
+        fields = ["container", "car"]
+        ref_name = "container"
 
 
 class ContainerSerializer(serializers.ModelSerializer):
@@ -34,8 +35,12 @@ class ContainerSerializer(serializers.ModelSerializer):
     client = ClientSerializer(read_only=True)
     wheelRecycling = CountAndSumSerializer(source="count_and_sum.first")
     wheelSales = CountAndSumSerializer(source="count_and_sum.last")
-    car_ids = serializers.ListSerializer(child=serializers.IntegerField(), write_only=True)
-    cars = ContainerCarSerializer(read_only=True, many=True, source="container_cars")
+    car_ids = serializers.ListSerializer(
+        child=serializers.IntegerField(), write_only=True
+    )
+    cars = ContainerCarSerializer(
+        read_only=True, many=True, source="container_cars"
+    )
 
     class Meta:
         model = Container
@@ -57,11 +62,12 @@ class ContainerSerializer(serializers.ModelSerializer):
             "cars",
             "car_ids",
         ]
+        extra_kwargs = {"totalAmount": {"read_only": True}}
 
     def create(self, validated_data: dict):
         # print("This is validated_data", validated_data)
         count_and_sum = validated_data.pop("count_and_sum", None)
-        cars = validated_data.pop('car_ids', None)
+        cars = validated_data.pop("car_ids", None)
         wheelRecycling = count_and_sum.pop("first", None)
         wheelSales = count_and_sum.pop("last", None)
 
@@ -75,8 +81,6 @@ class ContainerSerializer(serializers.ModelSerializer):
             CountAndSum.objects.create(**data)
 
         for car in cars:
-            container.container_cars.create(
-                car=CarOrder.objects.get(id=car)
-            )
+            container.container_cars.create(car=CarOrder.objects.get(id=car))
 
         return container

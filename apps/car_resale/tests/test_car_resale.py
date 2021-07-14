@@ -131,7 +131,9 @@ class CreateNewCarResaleTest(APITestCase):
         )
 
     def _check_car_sales_deletion(self):
-        self.assertFalse(CarSale.objects.filter(carOrder=self.carOrder).exists())
+        self.assertFalse(
+            CarSale.objects.filter(carOrder=self.carOrder).exists()
+        )
 
     def test_create_new_car_resale_sell_to_user_working_by_fact(self):
         self._make_request_and_get_car_resale_object()
