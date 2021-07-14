@@ -14,7 +14,7 @@ class ClientSerializer(serializers.ModelSerializer):
 class CountAndSumSerializer(serializers.ModelSerializer):
     class Meta:
         model = CountAndSum
-        fields = ["id", "count", "sum"]
+        fields = ["count", "sum"]
 
 
 class ContainerSerializer(serializers.ModelSerializer):
@@ -45,10 +45,10 @@ class ContainerSerializer(serializers.ModelSerializer):
         ]
 
     def create(self, validated_data: dict):
+        # print("This is validated_data", validated_data)
         count_and_sum = validated_data.pop("count_and_sum", None)
-        print(validated_data)
-        wheelRecycling = count_and_sum.pop("wheelRecycling", None)
-        wheelSales = count_and_sum.pop("wheelSales", None)
+        wheelRecycling = count_and_sum.pop("first", None)
+        wheelSales = count_and_sum.pop("last", None)
 
         container = super().create(validated_data)
         if wheelRecycling is not None:
