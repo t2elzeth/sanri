@@ -102,9 +102,11 @@ class ContainerSerializer(serializers.ModelSerializer):
             "count", wheelRecycling.count
         )
         wheelRecycling.sum = wheelRecycle_data.get("sum", wheelRecycling.sum)
+        wheelRecycling.save()
 
         wheelSales.count = wheelSales_data.get("count", wheelSales.count)
         wheelSales.sum = wheelSales_data.get("sum", wheelSales.sum)
+        wheelSales.save()
 
         instance.container_cars.all().delete()
         for car in cars:
