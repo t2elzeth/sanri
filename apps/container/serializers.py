@@ -3,7 +3,7 @@ from rest_framework import serializers
 from authorization.models import User
 from car_order.models import CarOrder
 from car_order.serializers import CarOrderSerializer
-from .models import Container,ContainerCar, WheelRecycling, WheelSales
+from .models import Container, ContainerCar, WheelRecycling, WheelSales
 
 
 class ClientSerializer(serializers.ModelSerializer):
@@ -89,3 +89,23 @@ class ContainerSerializer(serializers.ModelSerializer):
             container.container_cars.create(car=CarOrder.objects.get(id=car))
 
         return container
+
+    def update(self, instance, validated_data):
+        wheelRecycling = instance.wheel_recycling
+        wheelSales = instance.wheel_sales
+
+        wheelRecycle_data = validated_data.pop('wheel_recycling', {})
+        wheelSales_data = validated_data.pop('wheel_sales', {})
+        cars = validated_data.pop('car_ids', [])
+
+        wheelRecycling.count = wheelRecycle_data.get('count', wheelRecycling.count)
+        wheelRecycling.sum = wheelRecycle_data.get('sum', wheelRecycling.sum)
+
+        wheelSales.count = wheelSales_data.get('count', wheelSales.count)
+        wheelSales.sum = wheelSales_data.get('sum', wheelSales.sum)
+
+        instance.container_cars.all().delete()
+        for car in cars:
+            instance.container_cars.get_or_create(car=CarOrder.objects.get(id=car))
+
+        return super().update(instance, validated_data)

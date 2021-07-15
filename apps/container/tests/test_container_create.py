@@ -7,7 +7,7 @@ from authorization.models import User
 from car_model.models import CarMark
 from car_order.models import CarOrder
 from container.formulas import calculate_total
-from container.models import Container, WheelRecycling, WheelSales
+from container.models import Container
 
 
 class CreateContainerTest(APITestCase):
@@ -100,3 +100,9 @@ class CreateContainerTest(APITestCase):
         ))
         print('This is cars list: ', response.data['cars'])
         self.assertEqual(len(response.data['cars']), 2)
+
+        response = self.client.patch(f'/api/Container/{container.id}/', {'packagingMaterials': 287, 'wheelSales': {
+            'count': 259
+        }, 'car_ids': [self.car_model_FIT.id]}, format='json')
+        self.assertEqual(response.data['packagingMaterials'], 287)
+        self.assertEqual(len(response.data['cars']), 1)
