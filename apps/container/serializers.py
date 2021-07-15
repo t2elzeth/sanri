@@ -94,18 +94,22 @@ class ContainerSerializer(serializers.ModelSerializer):
         wheelRecycling = instance.wheel_recycling
         wheelSales = instance.wheel_sales
 
-        wheelRecycle_data = validated_data.pop('wheel_recycling', {})
-        wheelSales_data = validated_data.pop('wheel_sales', {})
-        cars = validated_data.pop('car_ids', [])
+        wheelRecycle_data = validated_data.pop("wheel_recycling", {})
+        wheelSales_data = validated_data.pop("wheel_sales", {})
+        cars = validated_data.pop("car_ids", [])
 
-        wheelRecycling.count = wheelRecycle_data.get('count', wheelRecycling.count)
-        wheelRecycling.sum = wheelRecycle_data.get('sum', wheelRecycling.sum)
+        wheelRecycling.count = wheelRecycle_data.get(
+            "count", wheelRecycling.count
+        )
+        wheelRecycling.sum = wheelRecycle_data.get("sum", wheelRecycling.sum)
 
-        wheelSales.count = wheelSales_data.get('count', wheelSales.count)
-        wheelSales.sum = wheelSales_data.get('sum', wheelSales.sum)
+        wheelSales.count = wheelSales_data.get("count", wheelSales.count)
+        wheelSales.sum = wheelSales_data.get("sum", wheelSales.sum)
 
         instance.container_cars.all().delete()
         for car in cars:
-            instance.container_cars.get_or_create(car=CarOrder.objects.get(id=car))
+            instance.container_cars.get_or_create(
+                car=CarOrder.objects.get(id=car)
+            )
 
         return super().update(instance, validated_data)

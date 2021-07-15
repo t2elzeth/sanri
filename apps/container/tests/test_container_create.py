@@ -1,9 +1,8 @@
 from rest_framework import status
 from rest_framework.reverse import reverse
 from rest_framework.test import APITestCase
-
 from auction.models import Auction
-from authorization.models import User
+from authorization.models import User, Balance
 from car_model.models import CarMark
 from car_order.models import CarOrder
 from container.formulas import calculate_total
@@ -91,17 +90,41 @@ class CreateContainerTest(APITestCase):
         self.assertEqual(wheel_recycling.sum, 200)
         self.assertEqual(wheel_sales.count, 20)
         self.assertEqual(wheel_sales.sum, 2000)
-        self.assertEqual(container.totalAmount, calculate_total(
-            container.commission,
-            container.containerTransportation,
-            container.packagingMaterials,
-            wheel_recycling.sum,
-            wheel_sales.sum
-        ))
-        self.assertEqual(len(response.data['cars']), 2)
+        self.assertEqual(
+            container.totalAmount,
+            calculate_total(
+                container.commission,
+                container.containerTransportation,
+                container.packagingMaterials,
+                wheel_recycling.sum,
+                wheel_sales.sum,
+            ),
+        )
+        self.assertEqual(len(response.data["cars"]), 2)
 
-        response = self.client.patch(f'/api/Container/{container.id}/', {'packagingMaterials': 287, 'wheelSales': {
-            'count': 259
-        }, 'car_ids': [self.car_model_FIT.id]}, format='json')
-        self.assertEqual(response.data['packagingMaterials'], 287)
-        self.assertEqual(len(response.data['cars']), 1)
+        response = self.client.patch(
+            f"/api/Container/{container.id}/",
+            {
+                "packagingMaterials": 287,
+                "wheelSales": {"count": 259},
+                "car_ids": [self.car_model_FIT.id],
+            },
+            format="json",
+        )
+        self.assertEqual(response.data["packagingMaterials"], 287)
+        self.assertEqual(len(response.data["cars"]), 1)
+
+        response = self.client.patch(
+            f"/api/Container/{container.id}/",
+            {"status": Container.STATUS_SHIPPED},
+        )
+        container.refresh_from_db()
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(
+            Balance.objects.filter(
+                client=container.client,
+                sum_in_jpy=container.totalAmount,
+                balance_action=Balance.BALANCE_ACTION_WITHDRAWAL,
+            ).count(),
+            1,
+        )

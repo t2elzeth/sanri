@@ -7,31 +7,61 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('container', '0002_containercar'),
+        ("container", "0002_containercar"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='container',
-            name='totalAmount',
+            model_name="container",
+            name="totalAmount",
             field=models.IntegerField(default=0),
         ),
         migrations.CreateModel(
-            name='WheelSales',
+            name="WheelSales",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('count', models.IntegerField()),
-                ('sum', models.IntegerField()),
-                ('container', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='wheel_sales', to='container.container')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("count", models.IntegerField()),
+                ("sum", models.IntegerField()),
+                (
+                    "container",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="wheel_sales",
+                        to="container.container",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='WheelRecycling',
+            name="WheelRecycling",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('count', models.IntegerField()),
-                ('sum', models.IntegerField()),
-                ('container', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='wheel_recycling', to='container.container')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("count", models.IntegerField()),
+                ("sum", models.IntegerField()),
+                (
+                    "container",
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="wheel_recycling",
+                        to="container.container",
+                    ),
+                ),
             ],
         ),
     ]
