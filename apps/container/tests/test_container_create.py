@@ -98,7 +98,6 @@ class CreateContainerTest(APITestCase):
             wheel_recycling.sum,
             wheel_sales.sum
         ))
-        print('This is cars list: ', response.data['cars'])
         self.assertEqual(len(response.data['cars']), 2)
 
         response = self.client.patch(f'/api/Container/{container.id}/', {'packagingMaterials': 287, 'wheelSales': {
