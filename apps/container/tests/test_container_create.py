@@ -7,7 +7,7 @@ from authorization.models import User
 from car_model.models import CarMark
 from car_order.models import CarOrder
 from container.formulas import calculate_total
-from container.models import Container, CountAndSum, WheelRecycling, WheelSales
+from container.models import Container, WheelRecycling, WheelSales
 
 
 class CreateContainerTest(APITestCase):
