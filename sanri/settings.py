@@ -139,13 +139,11 @@ DATABASES = {
     }
 }
 
-SANRI_USERNAME = "sanrijp"
-
-# TEST = bool(os.getenv('TEST_DB', False))
-# if TEST:
 # DATABASES = {
 #     "default": {
 #         "ENGINE": "django.db.backends.sqlite3",
 #         "NAME": BASE_DIR / "db.sqlite3",
 #     }
 # }
+
+SANRI_USERNAME = "sanrijp"
