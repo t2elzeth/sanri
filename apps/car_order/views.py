@@ -3,7 +3,7 @@ from rest_framework import generics
 from utils.mixins import DetailAPIViewMixin
 from .filters import CarModelFilter
 from .models import CarOrder
-from .serializers import CarOrderSerializer
+from .serializers import CarOrderSerializer, ParkingSerializer
 from container.models import ContainerCar
 
 
@@ -19,7 +19,7 @@ class CarOrderDetailAPIView(DetailAPIViewMixin):
 
 
 class ParkingAPIView(generics.ListAPIView):
-    serializer_class = CarOrderSerializer
+    serializer_class = ParkingSerializer
 
     def get_queryset(self):
         car_ids = list([el['car__id'] for el in ContainerCar.objects.all().values('car__id')])
