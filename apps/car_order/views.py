@@ -4,6 +4,7 @@ from utils.mixins import DetailAPIViewMixin
 from .filters import CarModelFilter
 from .models import CarOrder
 from .serializers import CarOrderSerializer
+from container.models import ContainerCar
 
 
 class CarOrderAPIView(generics.ListCreateAPIView):
@@ -15,3 +16,13 @@ class CarOrderAPIView(generics.ListCreateAPIView):
 class CarOrderDetailAPIView(DetailAPIViewMixin):
     queryset = CarOrder.objects.all()
     serializer_class = CarOrderSerializer
+
+
+class ParkingAPIView(generics.ListAPIView):
+    serializer_class = CarOrderSerializer
+
+    def get_queryset(self):
+        car_ids = list([el['car__id'] for el in ContainerCar.objects.all().values('car__id')])
+        queryset = CarOrder.objects.exclude(id__in=car_ids).exclude(client=None)
+        print(queryset)
+        return queryset

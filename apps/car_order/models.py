@@ -54,4 +54,4 @@ class CarOrder(models.Model):
         )
 
     def __str__(self):
-        return f"CarOrder#{self.id}"
+        return f"CarOrder#{self.id} of {self.client}"

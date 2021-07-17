@@ -34,4 +34,4 @@ class ContainerCarsInline(admin.StackedInline):
 class ContainerAdmin(admin.ModelAdmin):
     list_display = ("id", "name")
 
-    inlines = [WheelRecyclingInline, WheelSalesInline]
+    inlines = [WheelRecyclingInline, WheelSalesInline, ContainerCarsInline]
