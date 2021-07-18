@@ -7,6 +7,7 @@ from auction.models import Auction
 from authorization.models import User
 from car_model.models import CarModel, CarMark
 from .models import CarOrder
+from transport_companies.models import TransportCompany
 
 
 class ClientSerializer(serializers.ModelSerializer):
@@ -39,6 +40,13 @@ class AuctionSerializer(serializers.ModelSerializer):
         ref_name = "car_order"
 
 
+class TransportCompanySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TransportCompany
+        fields = ['id', 'name']
+        ref_name = 'car_order'
+
+
 class CarOrderSerializer(serializers.ModelSerializer):
     carModel_id = serializers.PrimaryKeyRelatedField(
         source="carModel", write_only=True, queryset=CarModel.objects.all()
@@ -52,11 +60,16 @@ class CarOrderSerializer(serializers.ModelSerializer):
         source="auction", write_only=True, queryset=Auction.objects.all()
     )
 
+    transportCompany_id = serializers.PrimaryKeyRelatedField(
+        source="transportCompany", write_only=True, queryset=TransportCompany.objects.all()
+    )
+
     client = ClientSerializer(read_only=True)
     auction = AuctionSerializer(read_only=True)
     carModel = CarModelSerializer(read_only=True)
     total = serializers.IntegerField(read_only=True)
     total_FOB = serializers.IntegerField(read_only=True)
+    transportCompany = TransportCompanySerializer(read_only=True)
 
     class Meta:
         model = CarOrder
@@ -82,6 +95,8 @@ class CarOrderSerializer(serializers.ModelSerializer):
             "total",
             "total_FOB",
             "created_at",
+            "transportCompany",
+            "transportCompany_id"
         ]
 
 
