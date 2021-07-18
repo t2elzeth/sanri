@@ -4,7 +4,7 @@ from django.db import models
 from auction.models import Auction
 from car_model.models import CarModel
 from .formulas import calculate_total, calculate_total_fob
-
+from transport_companies.models import TransportCompany
 User = get_user_model()
 
 
@@ -27,7 +27,7 @@ class CarOrder(models.Model):
     transport = models.IntegerField()
     fob = models.IntegerField()
     amount = models.IntegerField(default=0)
-    # transportationCommission = models.IntegerField()
+    transportCompany = models.ForeignKey(TransportCompany, on_delete=models.CASCADE, related_name='car_orders')
 
     CAR_NUMBER_REMOVED = "removed"
     CAR_NUMBER_NOT_REMOVED = "not_removed"
