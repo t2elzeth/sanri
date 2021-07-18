@@ -14,6 +14,7 @@ class Income(models.Model):
     date = models.DateField(default=timezone.now)
     amount = models.IntegerField()
     comment = models.TextField(default="")
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"{self.amount}"
