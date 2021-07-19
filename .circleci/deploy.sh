@@ -1,5 +1,5 @@
 cd /home/t2elzeth/sanri/backend_sanri || exit
 
-git pull origin master
+git pull origin dev
 
 docker-compose up --build -d
