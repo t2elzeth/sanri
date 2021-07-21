@@ -12,7 +12,7 @@ class UserAdmin(BaseUserAdmin):
 
     list_filter = ("is_staff",)
 
-    readonly_fields = ("id", "is_superuser", "is_staff")
+    readonly_fields = ("id", "is_superuser", "is_staff", "createdAt")
     add_fieldsets = (
         ("Personal data", {
            "fields": ("fullName", "country", "phoneNumber")
