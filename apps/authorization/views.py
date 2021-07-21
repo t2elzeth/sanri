@@ -10,6 +10,7 @@ from .serializers import (
     TokenSerializer,
     UserSerializer,
 )
+from rest_framework.permissions import IsAuthenticated
 
 
 class RegisterAPIView(mixins.CreateModelMixin, generics.GenericAPIView):
@@ -35,6 +36,14 @@ class LoginAPIView(mixins.CreateModelMixin, generics.GenericAPIView):
 class ClientListAPIView(generics.ListCreateAPIView):
     queryset = User.objects.filter(user_type=User.USER_TYPE_CLIENT)
     serializer_class = ClientSerializer
+    permission_classes = [IsAuthenticated]
+
+    # def get_queryset(self):
+    #     user_type = self.request.user.user_type
+    #     if user_type == User.USER_TYPE_CLIENT:
+    #         self.queryset = self.queryset.filter(id=self.request.user.id)
+    #
+    #     return super().get_queryset()
 
 
 class ClientAPIView(DetailAPIViewMixin):
@@ -55,6 +64,13 @@ class EmployeeDetailAPIView(DetailAPIViewMixin):
 class BalanceListAPIView(generics.ListCreateAPIView):
     queryset = Balance.objects.all()
     serializer_class = BalanceSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user_type = self.request.user.user_type
+        if user_type == User.USER_TYPE_CLIENT:
+            self.queryset = self.queryset.filter(client=self.request.user)
+        return super().get_queryset()
 
 
 class BalanceAPIView(DetailAPIViewMixin):

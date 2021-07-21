@@ -171,6 +171,8 @@ class TokenSerializer(serializers.Serializer):
     username = serializers.CharField(write_only=True)
     password = serializers.CharField(write_only=True)
     auth_token = serializers.CharField(source="key", read_only=True)
+    user_type = serializers.CharField(source="user.user_type", read_only=True)
+    user = UserSerializer(read_only=True)
 
     default_error_messages = {
         "invalid_credentials": "Unable to log in with provided credentials.",
