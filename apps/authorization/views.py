@@ -38,12 +38,12 @@ class ClientListAPIView(generics.ListCreateAPIView):
     serializer_class = ClientSerializer
     permission_classes = [IsAuthenticated]
 
-    def get_queryset(self):
-        user_type = self.request.user.user_type
-        if user_type == User.USER_TYPE_CLIENT:
-            self.queryset = self.queryset.filter(id=self.request.user.id)
-
-        return super().get_queryset()
+    # def get_queryset(self):
+    #     user_type = self.request.user.user_type
+    #     if user_type == User.USER_TYPE_CLIENT:
+    #         self.queryset = self.queryset.filter(id=self.request.user.id)
+    #
+    #     return super().get_queryset()
 
 
 class ClientAPIView(DetailAPIViewMixin):
