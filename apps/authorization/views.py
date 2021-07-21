@@ -64,6 +64,7 @@ class EmployeeDetailAPIView(DetailAPIViewMixin):
 class BalanceListAPIView(generics.ListCreateAPIView):
     queryset = Balance.objects.all()
     serializer_class = BalanceSerializer
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         user_type = self.request.user.user_type
