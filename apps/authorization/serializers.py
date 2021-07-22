@@ -224,7 +224,7 @@ class BalanceSerializer(serializers.ModelSerializer):
 
 
 class ManagedUserSerializer(serializers.ModelSerializer):
-    user = UserSerializer()
+    user = ClientSerializer()
 
     class Meta:
         model = ManagedUser
