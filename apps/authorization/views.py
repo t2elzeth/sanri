@@ -8,7 +8,7 @@ from .serializers import (
     ClientSerializer,
     TokenSerializer,
     UserSerializer,
-    ManagerSerializer
+    ManagerSerializer,
 )
 
 

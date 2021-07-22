@@ -126,5 +126,9 @@ class Balance(models.Model):
 
 
 class ManagedUser(models.Model):
-    manager = models.ForeignKey(User, on_delete=models.CASCADE, related_name='managed_users_as_manager')
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='managed_users_as_user')
+    manager = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="managed_users_as_manager"
+    )
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="managed_users_as_user"
+    )
