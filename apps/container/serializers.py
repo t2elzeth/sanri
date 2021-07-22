@@ -110,8 +110,6 @@ class ContainerSerializer(serializers.ModelSerializer):
 
         instance.container_cars.all().delete()
         for car in cars:
-            instance.container_cars.create(
-                car=CarOrder.objects.get(id=car)
-            )
+            instance.container_cars.create(car=CarOrder.objects.get(id=car))
 
         return super().update(instance, validated_data)

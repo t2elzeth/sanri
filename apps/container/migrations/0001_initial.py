@@ -10,53 +10,134 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('car_order', '0001_initial'),
+        ("car_order", "0001_initial"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Container',
+            name="Container",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(blank=True, max_length=255, null=True)),
-                ('dateOfSending', models.DateField()),
-                ('commission', models.IntegerField()),
-                ('containerTransportation', models.IntegerField()),
-                ('packagingMaterials', models.IntegerField()),
-                ('transportation', models.IntegerField()),
-                ('loading', models.IntegerField()),
-                ('status', models.CharField(choices=[('going_to', 'going_to'), ('shipped', 'shipped')], max_length=255)),
-                ('totalAmount', models.IntegerField(default=0)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('client', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='containers', to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "name",
+                    models.CharField(blank=True, max_length=255, null=True),
+                ),
+                ("dateOfSending", models.DateField()),
+                ("commission", models.IntegerField()),
+                ("containerTransportation", models.IntegerField()),
+                ("packagingMaterials", models.IntegerField()),
+                ("transportation", models.IntegerField()),
+                ("loading", models.IntegerField()),
+                (
+                    "status",
+                    models.CharField(
+                        choices=[
+                            ("going_to", "going_to"),
+                            ("shipped", "shipped"),
+                        ],
+                        max_length=255,
+                    ),
+                ),
+                ("totalAmount", models.IntegerField(default=0)),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                (
+                    "client",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="containers",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='WheelSales',
+            name="WheelSales",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('count', models.IntegerField()),
-                ('sum', models.IntegerField()),
-                ('container', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='wheel_sales', to='container.container')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("count", models.IntegerField()),
+                ("sum", models.IntegerField()),
+                (
+                    "container",
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="wheel_sales",
+                        to="container.container",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='WheelRecycling',
+            name="WheelRecycling",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('count', models.IntegerField()),
-                ('sum', models.IntegerField()),
-                ('container', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='wheel_recycling', to='container.container')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("count", models.IntegerField()),
+                ("sum", models.IntegerField()),
+                (
+                    "container",
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="wheel_recycling",
+                        to="container.container",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='ContainerCar',
+            name="ContainerCar",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('car', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='container_cars', to='car_order.carorder')),
-                ('container', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='container_cars', to='container.container')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                (
+                    "car",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="container_cars",
+                        to="car_order.carorder",
+                    ),
+                ),
+                (
+                    "container",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="container_cars",
+                        to="container.container",
+                    ),
+                ),
             ],
         ),
     ]

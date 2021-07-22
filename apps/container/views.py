@@ -5,7 +5,7 @@ from authorization.models import User
 
 from .models import Container
 from .serializers import ContainerSerializer
-from rest_framework.permissions import  IsAuthenticated
+from rest_framework.permissions import IsAuthenticated
 
 
 class ContainerAPIView(generics.ListCreateAPIView):

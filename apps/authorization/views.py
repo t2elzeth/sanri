@@ -1,16 +1,15 @@
 from rest_framework import generics, mixins, status
+from rest_framework.permissions import IsAuthenticated
 
 from utils.mixins import DetailAPIViewMixin
-
 from .models import Balance, User
 from .serializers import (
     BalanceSerializer,
     ClientSerializer,
-    EmployeeSerializer,
     TokenSerializer,
     UserSerializer,
+    ManagerSerializer
 )
-from rest_framework.permissions import IsAuthenticated
 
 
 class RegisterAPIView(mixins.CreateModelMixin, generics.GenericAPIView):
@@ -52,13 +51,35 @@ class ClientAPIView(DetailAPIViewMixin):
 
 
 class EmployeeAPIView(generics.ListCreateAPIView):
-    queryset = User.objects.filter(user_type=User.USER_TYPE_EMPLOYEE)
-    serializer_class = EmployeeSerializer
+    queryset = User.objects.filter(
+        user_type=User.USER_TYPE_EMPLOYEE,
+    )
+    serializer_class = UserSerializer
 
 
 class EmployeeDetailAPIView(DetailAPIViewMixin):
     queryset = User.objects.filter(user_type=User.USER_TYPE_EMPLOYEE)
-    serializer_class = EmployeeSerializer
+    serializer_class = UserSerializer
+
+
+class ManagerAPIView(generics.ListCreateAPIView):
+    queryset = User.objects.filter(
+        user_type__in=(
+            User.USER_TYPE_SALES_MANAGER,
+            User.USER_TYPE_YARD_MANAGER,
+        )
+    )
+    serializer_class = ManagerSerializer
+
+
+class ManagerDetailAPIView(DetailAPIViewMixin):
+    queryset = User.objects.filter(
+        user_type__in=(
+            User.USER_TYPE_SALES_MANAGER,
+            User.USER_TYPE_YARD_MANAGER,
+        )
+    )
+    serializer_class = ManagerSerializer
 
 
 class BalanceListAPIView(generics.ListCreateAPIView):
