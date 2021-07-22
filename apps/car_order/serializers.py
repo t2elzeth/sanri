@@ -43,8 +43,8 @@ class AuctionSerializer(serializers.ModelSerializer):
 class TransportCompanySerializer(serializers.ModelSerializer):
     class Meta:
         model = TransportCompany
-        fields = ['id', 'name']
-        ref_name = 'car_order'
+        fields = ["id", "name"]
+        ref_name = "car_order"
 
 
 class CarOrderSerializer(serializers.ModelSerializer):
@@ -61,7 +61,9 @@ class CarOrderSerializer(serializers.ModelSerializer):
     )
 
     transportCompany_id = serializers.PrimaryKeyRelatedField(
-        source="transportCompany", write_only=True, queryset=TransportCompany.objects.all()
+        source="transportCompany",
+        write_only=True,
+        queryset=TransportCompany.objects.all(),
     )
 
     client = ClientSerializer(read_only=True)
@@ -96,7 +98,7 @@ class CarOrderSerializer(serializers.ModelSerializer):
             "total_FOB",
             "created_at",
             "transportCompany",
-            "transportCompany_id"
+            "transportCompany_id",
         ]
 
 
@@ -111,4 +113,7 @@ class ParkingSerializer(CarOrderSerializer):
         return (timezone.now() - car.created_at).days
 
     class Meta(CarOrderSerializer.Meta):
-        fields = CarOrderSerializer.Meta.fields + ['parked_until', 'parked_for']
+        fields = CarOrderSerializer.Meta.fields + [
+            "parked_until",
+            "parked_for",
+        ]

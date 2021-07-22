@@ -30,12 +30,18 @@ class CarOrderDetailAPIView(DetailAPIViewMixin):
 class ParkingAPIView(generics.ListAPIView):
     queryset = CarOrder.objects.exclude(client=None)
     serializer_class = ParkingSerializer
+    filterset_class = CarModelFilter
 
     def get_queryset(self):
         user_type = self.request.user.user_type
         if user_type == User.USER_TYPE_CLIENT:
             self.queryset = self.queryset.filter(client=self.request.user)
 
-        car_ids = list([el['car__id'] for el in ContainerCar.objects.all().values('car__id')])
+        car_ids = list(
+            [
+                el["car__id"]
+                for el in ContainerCar.objects.all().values("car__id")
+            ]
+        )
         self.queryset = self.queryset.exclude(id__in=car_ids)
         return super().get_queryset()

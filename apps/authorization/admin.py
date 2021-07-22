@@ -14,14 +14,18 @@ class UserAdmin(BaseUserAdmin):
 
     readonly_fields = ("id", "is_superuser", "is_staff", "createdAt")
     add_fieldsets = (
-        ("Personal data", {
-           "fields": ("fullName", "country", "phoneNumber")
-        }),
+        ("Personal data", {"fields": ("fullName", "country", "phoneNumber")}),
         (
             "Authentication data",
             {
                 "classes": ("wide",),
-                "fields": ("username", "email", "password1", "password2", "user_type"),
+                "fields": (
+                    "username",
+                    "email",
+                    "password1",
+                    "password2",
+                    "user_type",
+                ),
             },
         ),
     )
@@ -46,7 +50,7 @@ class UserAdmin(BaseUserAdmin):
                     "is_superuser",
                     "is_staff",
                     "is_active",
-                    "password"
+                    "password",
                 )
             },
         ),
@@ -56,4 +60,5 @@ class UserAdmin(BaseUserAdmin):
 admin.site.register(models.User, UserAdmin)
 
 admin.site.register(models.Balance)
+admin.site.register(models.ManagedUser)
 admin.site.unregister(Group)

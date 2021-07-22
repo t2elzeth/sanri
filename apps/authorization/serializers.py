@@ -1,10 +1,10 @@
-from container.models import Container
 from django.contrib.auth import authenticate
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
-from .models import Balance, User
+from container.models import Container
 from income.models import Income
+from .models import Balance, User, ManagedUser
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -26,6 +26,7 @@ class UserSerializer(serializers.ModelSerializer):
             "password",
             "confirmPassword",
             "createdAt",
+            "user_type",
         ]
         ref_name = "main"
 
@@ -35,15 +36,16 @@ class UserSerializer(serializers.ModelSerializer):
         if validated_data["password"] != confirmPassword:
             raise ValidationError("Passwords don't match")
 
-        validated_data.update({"user_type": User.USER_TYPE_USER})
+        validated_data.update(
+            {
+                "user_type": validated_data.pop(
+                    "user_type", User.USER_TYPE_EMPLOYEE
+                )
+            }
+        )
 
         user = self.Meta.model.objects.create_user(**validated_data)
         return user
-
-    def update(self, instance, validated_data):
-        if "username" in validated_data:
-            raise ValidationError({"error": "Username cannot be updated!"})
-        return super().update(instance, validated_data)
 
 
 class ClientSerializer(serializers.ModelSerializer):
@@ -197,39 +199,6 @@ class TokenSerializer(serializers.Serializer):
         return self.user.login()
 
 
-class EmployeeSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(write_only=True)
-    confirmPassword = serializers.CharField(write_only=True)
-
-    class Meta:
-        model = User
-        fields = [
-            "id",
-            "fullName",
-            "username",
-            "password",
-            "confirmPassword",
-            "role",
-        ]
-        ref_name = "main"
-
-    def create(self, validated_data: dict):
-        """Create user"""
-        confirmPassword = validated_data.pop("confirmPassword")
-        if validated_data["password"] != confirmPassword:
-            raise ValidationError("Passwords don't match")
-
-        validated_data.update({"user_type": User.USER_TYPE_EMPLOYEE})
-
-        user = self.Meta.model.objects.create_user(**validated_data)
-        return user
-
-    def update(self, instance, validated_data):
-        if "username" in validated_data:
-            raise ValidationError({"error": "Username cannot be updated!"})
-        return super().update(instance, validated_data)
-
-
 class BalanceSerializer(serializers.ModelSerializer):
     client = ClientSerializer(read_only=True)
     client_id = serializers.PrimaryKeyRelatedField(
@@ -252,3 +221,51 @@ class BalanceSerializer(serializers.ModelSerializer):
             "balance_action",
         ]
         ref_name = "main"
+
+
+class ManagedUserSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
+
+    class Meta:
+        model = ManagedUser
+        fields = ["user"]
+
+
+class ManagerSerializer(UserSerializer):
+    managed_users_ids = serializers.ListSerializer(
+        child=serializers.IntegerField(), write_only=True, required=False
+    )
+    managed_users = ManagedUserSerializer(
+        source="managed_users_as_manager", read_only=True, many=True
+    )
+
+    class Meta(UserSerializer.Meta):
+        fields = UserSerializer.Meta.fields + [
+            "managed_users_ids",
+            "managed_users",
+        ]
+
+    def create(self, validated_data: dict):
+        print(validated_data)
+        managed_user_ids = validated_data.pop("managed_users_ids", [])
+        print(managed_user_ids)
+        manager = super().create(validated_data)
+        for user_id in managed_user_ids:
+            manager.managed_users_as_manager.create(
+                user=User.objects.get(id=user_id)
+            )
+
+        return manager
+
+    def update(self, instance, validated_data):
+        managed_user_ids = validated_data.pop("managed_users_ids", [])
+
+        manager = super().update(instance, validated_data)
+
+        manager.managed_users_as_manager.all().delete()
+        for user_id in managed_user_ids:
+            manager.managed_users_as_manager.create(
+                user=User.objects.get(id=user_id)
+            )
+
+        return manager

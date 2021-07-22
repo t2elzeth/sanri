@@ -1,8 +1,9 @@
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
 from django.db import models
-from rest_framework.authtoken.models import Token
 from django.utils import timezone
+from rest_framework.authtoken.models import Token
+
 from . import managers
 
 
@@ -122,3 +123,12 @@ class Balance(models.Model):
         return (
             f"{self.client.fullName}: {self.sum_in_usa}: {self.balance_action}"
         )
+
+
+class ManagedUser(models.Model):
+    manager = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="managed_users_as_manager"
+    )
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="managed_users_as_user"
+    )

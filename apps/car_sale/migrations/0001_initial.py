@@ -10,26 +10,55 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('car_order', '0001_initial'),
+        ("car_order", "0001_initial"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('auction', '0001_initial'),
+        ("auction", "0001_initial"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='CarSale',
+            name="CarSale",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('price', models.IntegerField(default=0)),
-                ('recycle', models.IntegerField(default=0)),
-                ('auctionFees', models.IntegerField()),
-                ('salesFees', models.IntegerField()),
-                ('status', models.BooleanField(default=False)),
-                ('total', models.IntegerField(default=0)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('auction', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='car_sales', to='auction.auction')),
-                ('carOrder', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='car_sales', to='car_order.carorder')),
-                ('ownerClient', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='car_sales_as_owner', to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("price", models.IntegerField(default=0)),
+                ("recycle", models.IntegerField(default=0)),
+                ("auctionFees", models.IntegerField()),
+                ("salesFees", models.IntegerField()),
+                ("status", models.BooleanField(default=False)),
+                ("total", models.IntegerField(default=0)),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                (
+                    "auction",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="car_sales",
+                        to="auction.auction",
+                    ),
+                ),
+                (
+                    "carOrder",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.PROTECT,
+                        related_name="car_sales",
+                        to="car_order.carorder",
+                    ),
+                ),
+                (
+                    "ownerClient",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="car_sales_as_owner",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
     ]

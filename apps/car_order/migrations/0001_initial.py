@@ -10,35 +10,91 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('transport_companies', '0001_initial'),
+        ("transport_companies", "0001_initial"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('car_model', '0001_initial'),
-        ('auction', '0001_initial'),
+        ("car_model", "0001_initial"),
+        ("auction", "0001_initial"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='CarOrder',
+            name="CarOrder",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('lotNumber', models.CharField(blank=True, max_length=255, null=True)),
-                ('vinNumber', models.CharField(blank=True, max_length=255, null=True)),
-                ('year', models.CharField(blank=True, max_length=255, null=True)),
-                ('price', models.IntegerField()),
-                ('recycle', models.IntegerField()),
-                ('auctionFees', models.IntegerField()),
-                ('transport', models.IntegerField()),
-                ('fob', models.IntegerField()),
-                ('amount', models.IntegerField(default=0)),
-                ('carNumber', models.CharField(choices=[('removed', 'removed'), ('not_removed', 'not_removed'), ('not_given', 'not_given')], max_length=255)),
-                ('documentsGiven', models.BooleanField(default=False)),
-                ('total', models.IntegerField()),
-                ('total_FOB', models.IntegerField()),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('auction', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='auctions', to='auction.auction')),
-                ('carModel', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='car_orders', to='car_model.carmodel')),
-                ('client', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='car_orders', to=settings.AUTH_USER_MODEL)),
-                ('transportCompany', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='car_orders', to='transport_companies.transportcompany')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "lotNumber",
+                    models.CharField(blank=True, max_length=255, null=True),
+                ),
+                (
+                    "vinNumber",
+                    models.CharField(blank=True, max_length=255, null=True),
+                ),
+                (
+                    "year",
+                    models.CharField(blank=True, max_length=255, null=True),
+                ),
+                ("price", models.IntegerField()),
+                ("recycle", models.IntegerField()),
+                ("auctionFees", models.IntegerField()),
+                ("transport", models.IntegerField()),
+                ("fob", models.IntegerField()),
+                ("amount", models.IntegerField(default=0)),
+                (
+                    "carNumber",
+                    models.CharField(
+                        choices=[
+                            ("removed", "removed"),
+                            ("not_removed", "not_removed"),
+                            ("not_given", "not_given"),
+                        ],
+                        max_length=255,
+                    ),
+                ),
+                ("documentsGiven", models.BooleanField(default=False)),
+                ("total", models.IntegerField()),
+                ("total_FOB", models.IntegerField()),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                (
+                    "auction",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="auctions",
+                        to="auction.auction",
+                    ),
+                ),
+                (
+                    "carModel",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="car_orders",
+                        to="car_model.carmodel",
+                    ),
+                ),
+                (
+                    "client",
+                    models.ForeignKey(
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="car_orders",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
+                (
+                    "transportCompany",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="car_orders",
+                        to="transport_companies.transportcompany",
+                    ),
+                ),
             ],
         ),
     ]

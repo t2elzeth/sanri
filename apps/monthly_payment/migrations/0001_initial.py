@@ -9,26 +9,56 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('container', '0001_initial'),
+        ("container", "0001_initial"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='MonthlyPaymentType',
+            name="MonthlyPaymentType",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=255)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=255)),
             ],
         ),
         migrations.CreateModel(
-            name='MonthlyPayment',
+            name="MonthlyPayment",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('date', models.DateField()),
-                ('amount', models.CharField(max_length=255)),
-                ('comment', models.TextField()),
-                ('from_container', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='monthly_payments', to='container.container')),
-                ('type', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='monthly_payments', to='monthly_payment.monthlypaymenttype')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("date", models.DateField()),
+                ("amount", models.CharField(max_length=255)),
+                ("comment", models.TextField()),
+                (
+                    "from_container",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="monthly_payments",
+                        to="container.container",
+                    ),
+                ),
+                (
+                    "type",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="monthly_payments",
+                        to="monthly_payment.monthlypaymenttype",
+                    ),
+                ),
             ],
         ),
     ]

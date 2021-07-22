@@ -11,6 +11,8 @@ urlpatterns = [
     path("Client/<int:pk>/", views.ClientAPIView.as_view()),
     # Employee
     path("Employee/", views.EmployeeAPIView.as_view()),
+    path("Manager/", views.ManagerAPIView.as_view()),
+    path("Manager/<int:pk>/", views.ManagerDetailAPIView.as_view()),
     path("Employee/<int:pk>/", views.EmployeeDetailAPIView.as_view()),
     # Balance
     path("Balance/", views.BalanceListAPIView.as_view()),
