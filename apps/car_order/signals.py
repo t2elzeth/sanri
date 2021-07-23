@@ -24,5 +24,5 @@ def post_save_car_resale(instance: CarOrder, created, **kwargs):
         BalanceWithdrawal.objects.create(balance=balance, car_order=instance)
         instance.save()
 
-    instance.replenishment.calculate_amount()
-    instance.replenishment.save()
+    instance.withdrawal.calculate_amount()
+    instance.withdrawal.save()
