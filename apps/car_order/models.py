@@ -47,6 +47,7 @@ class CarOrder(models.Model):
     total = models.IntegerField()
     total_FOB = models.IntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
+    analysis = models.JSONField(default=dict)
 
     def calculate_totals(self):
         self.total = calculate_total(
@@ -73,11 +74,3 @@ class BalanceWithdrawal(models.Model):
     def calculate_amount(self):
         self.balance.sum_in_jpy = self.car_order.total
         self.balance.save()
-
-
-class Analysis(models.Model):
-    car_order = models.OneToOneField(CarOrder, on_delete=models.CASCADE, related_name='analysis')
-    car_hood = models.JSONField()
-
-    def __str__(self):
-        return f'Analysis of #{self.car_order.id}'

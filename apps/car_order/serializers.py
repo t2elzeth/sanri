@@ -99,6 +99,7 @@ class CarOrderSerializer(serializers.ModelSerializer):
             "created_at",
             "transportCompany",
             "transportCompany_id",
+            "analysis"
         ]
 
 
