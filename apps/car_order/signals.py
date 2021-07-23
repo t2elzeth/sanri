@@ -25,4 +25,3 @@ def post_save_car_resale(instance: CarOrder, created, **kwargs):
         instance.save()
 
     instance.withdrawal.calculate_amount()
-    instance.withdrawal.save()

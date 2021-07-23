@@ -26,6 +26,15 @@ def post_save_car_resale(instance: CarResale, created, **kwargs):
             == instance.newClient.AT_WHAT_PRICE_BY_FOB
         )
         car_order.fob = instance.newClient.sizeFOB * newClientWorksByFOB
+
+        balance = instance.newClient.balances.create(
+            sum_in_jpy=car_order.total,
+            payment_type=Balance.PAYMENT_TYPE_CASHLESS,
+            balance_action=Balance.BALANCE_ACTION_WITHDRAWAL,
+            sender_name="CarResale",
+            comment=f"Withdrawal for resaling car #{car_order.id}"
+        )
+        car_order.withdrawal.balance = balance
         car_order.save()
 
         # Calculate balances
@@ -36,20 +45,10 @@ def post_save_car_resale(instance: CarResale, created, **kwargs):
             sum_in_usa=car_order.total,
             payment_type=Balance.PAYMENT_TYPE_CASHLESS,
             balance_action=Balance.BALANCE_ACTION_REPLENISHMENT,
+            sender_name="CarResale",
+            comment=f"Replenishment for resaling car#{car_order.id}"
         )
         CarResaleOldClientReplenishment.objects.create(
-            balance=balance,
-            car_resale=instance
-        )
-
-        balance = instance.newClient.balances.create(
-            sum_in_jpy=car_order.total,
-            rate=1,
-            sum_in_usa=car_order.total,
-            payment_type=Balance.PAYMENT_TYPE_CASHLESS,
-            balance_action=Balance.BALANCE_ACTION_WITHDRAWAL,
-        )
-        CarResaleNewClientWithdrawal.objects.create(
             balance=balance,
             car_resale=instance
         )
@@ -64,5 +63,4 @@ def post_save_car_resale(instance: CarResale, created, **kwargs):
 
         CarSale.objects.filter(carOrder=car_order).delete()
 
-    instance.new_client_withdrawal.calculate()
     instance.old_client_replenishment.calculate()
