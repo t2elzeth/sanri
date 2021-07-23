@@ -60,9 +60,16 @@ class CarOrder(models.Model):
         return f"CarOrder#{self.id} of {self.client}"
 
 
-class BalanceReplenishment(models.Model):
-    car_order = models.OneToOneField(CarOrder, on_delete=models.CASCADE, related_name='replenishment')
-    amount = models.IntegerField(default=0)
+class BalanceWithdrawal(models.Model):
+    balance = models.OneToOneField(
+        "authorization.Balance",
+        on_delete=models.CASCADE,
+        related_name="car_order_withdrawals",
+    )
+    car_order = models.OneToOneField(
+        CarOrder, on_delete=models.CASCADE, related_name="withdrawal"
+    )
 
     def calculate_amount(self):
-        self.amount = self.car_order.total
+        self.balance.sum_in_jpy = self.car_order.total
+        self.balance.save()

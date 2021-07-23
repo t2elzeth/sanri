@@ -5,7 +5,6 @@ from rest_framework.exceptions import ValidationError
 from container.models import Container
 from income.models import Income
 from .models import Balance, User, ManagedUser
-from car_order.models import BalanceReplenishment
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -121,7 +120,6 @@ class ClientSerializer(serializers.ModelSerializer):
                 balance_action=Balance.BALANCE_ACTION_WITHDRAWAL
             )
         )
-        withdrawals += sum(r.amount for r in BalanceReplenishment.objects.all())
 
         if user.username == "sanrijp":
             replenishments += sum(

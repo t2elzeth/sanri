@@ -39,8 +39,14 @@ class ClientListAPIView(generics.ListCreateAPIView):
 
     def get_queryset(self):
         user_type = self.request.user.user_type
-        if user_type in (User.USER_TYPE_SALES_MANAGER, User.USER_TYPE_YARD_MANAGER):
-            self.queryset = [managed_user.user for managed_user in self.request.user.managed_users_as_manager.all()]
+        if user_type in (
+            User.USER_TYPE_SALES_MANAGER,
+            User.USER_TYPE_YARD_MANAGER,
+        ):
+            self.queryset = [
+                managed_user.user
+                for managed_user in self.request.user.managed_users_as_manager.all()
+            ]
 
         return super().get_queryset()
 

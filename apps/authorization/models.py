@@ -93,8 +93,8 @@ class Balance(models.Model):
     )
     date = models.DateField(default=timezone.now)
     sum_in_jpy = models.IntegerField()
-    sum_in_usa = models.IntegerField()
-    rate = models.IntegerField()
+    sum_in_usa = models.IntegerField(default=0)
+    rate = models.IntegerField(default=1)
 
     PAYMENT_TYPE_CASHLESS = "cashless"
     PAYMENT_TYPE_CASH = "cash"
