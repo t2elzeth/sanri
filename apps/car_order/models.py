@@ -3,8 +3,8 @@ from django.db import models
 
 from auction.models import Auction
 from car_model.models import CarModel
-from .formulas import calculate_total, calculate_total_fob
 from transport_companies.models import TransportCompany
+from .formulas import calculate_total, calculate_total_fob
 
 User = get_user_model()
 
@@ -58,3 +58,11 @@ class CarOrder(models.Model):
 
     def __str__(self):
         return f"CarOrder#{self.id} of {self.client}"
+
+
+class BalanceReplenishment(models.Model):
+    car_order = models.OneToOneField(CarOrder, on_delete=models.CASCADE, related_name='replenishment')
+    amount = models.IntegerField(default=0)
+
+    def calculate_amount(self):
+        self.amount = self.car_order.total
