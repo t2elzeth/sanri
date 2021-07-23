@@ -73,3 +73,11 @@ class BalanceWithdrawal(models.Model):
     def calculate_amount(self):
         self.balance.sum_in_jpy = self.car_order.total
         self.balance.save()
+
+
+class Analysis(models.Model):
+    car_order = models.OneToOneField(CarOrder, on_delete=models.CASCADE, related_name='analysis')
+    car_hood = models.JSONField()
+
+    def __str__(self):
+        return f'Analysis of #{self.car_order.id}'
