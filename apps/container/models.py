@@ -73,3 +73,20 @@ class ContainerCar(models.Model):
 
     def __str__(self):
         return f"{self.container.name}: {self.car.carModel.name}"
+
+
+class ContainerBalanceWithdrawal(models.Model):
+    balance = models.OneToOneField(
+        "authorization.Balance",
+        on_delete=models.CASCADE,
+        related_name="container_withdrawal",
+    )
+    container = models.OneToOneField(
+        Container,
+        on_delete=models.CASCADE,
+        related_name="container_withdrawal",
+    )
+
+    def calculate(self):
+        self.balance.sum_in_jpy = self.container.totalAmount
+        self.balance.save()

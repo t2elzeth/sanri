@@ -6,18 +6,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('authorization', '0003_manageduser'),
+        ("authorization", "0003_manageduser"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='balance',
-            name='rate',
+            model_name="balance",
+            name="rate",
             field=models.IntegerField(default=1),
         ),
         migrations.AlterField(
-            model_name='balance',
-            name='sum_in_usa',
+            model_name="balance",
+            name="sum_in_usa",
             field=models.IntegerField(default=0),
         ),
     ]
