@@ -11,3 +11,5 @@ class CarModelFilter(django_filters.rest_framework.FilterSet):
     model = django_filters.CharFilter(field_name="carModel__name", lookup_expr="istartswith")
     vinNumber = django_filters.CharFilter(field_name="vinNumber", lookup_expr="istartswith")
     lotNumber = django_filters.CharFilter(field_name="lotNumber", lookup_expr="istartswith")
+    date_from = django_filters.DateFilter(field_name="created_at", lookup_expr="gte")
+    date_to = django_filters.DateFilter(field_name="created_at", lookup_expr="lte")
