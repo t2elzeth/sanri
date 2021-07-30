@@ -35,6 +35,7 @@ JEEP
 OPEL
 TESLA
 VOLVO
+FORKLIFT
 """
 
 marks = [mark for mark in marks.split() if len(mark) > 1]
