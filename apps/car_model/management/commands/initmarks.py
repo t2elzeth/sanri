@@ -1,57 +1,157 @@
 from django.core.management.base import BaseCommand
+
 from car_model.models import CarMark
 
-marks = """
-TOYOTA
-HONDA
-NISSAN
-SUBARU
-AUDI
-VOLKSWAGEN
-MERCEDES BENZ
-BMW
-MAZDA
-MITSUBISHI
-SUZUKI
-ISUZU
-TADANO
-TCM
-YANMAR
-DAIHATSU
-MITSUOKA
-KAWASAKI
-KOMATSU
-LEXUS
-CHEVROLET
-RENAULT
-DODGE
-FERRARI
-FIAT
-FORD
-GMC
-HINO
-INFINITI
-JEEP
-OPEL
-TESLA
-VOLVO
-FORKLIFT
-"""
-
-marks = [mark for mark in marks.split() if len(mark) > 1]
+marks = {
+    "TOYOTA": (
+        "ALLEX",
+        "ALLION",
+        "ALPHARD",
+        "ALTEZZA",
+        "AQUA",
+        "ARISTO",
+        "AURIS",
+        "AVENSIS",
+        "BELTA",
+        "BLADE",
+        "C-HR",
+        "WINDOM",
+        "WISH",
+        "VOXY",
+        "VITZ",
+        "RAV4",
+        "RAUM",
+        "TOWN",
+        "ACE",
+        "PRIUS",
+        "NOAH",
+        "PASSO",
+        "LITE",
+        "ACE",
+        "MARK",
+        "II",
+        "MARK",
+        "HILUX",
+        "SURF",
+        "IPSUM",
+        "IST",
+        "KLUGER",
+        "LAND",
+        "CRUISER",
+        "PRADO",
+        "LAND",
+        "CRUISER",
+        "PRADO",
+        "HARRIER",
+        "ESTIMA",
+        "CAMRY",
+        "CALDINA",
+        "CAMI",
+        "CAMROAD",
+        "CARINA",
+        "CELICA",
+        "CELSIOR",
+        "CENTURY",
+        "CHASER",
+        "COASTER",
+        "COMFORT",
+        "COROLLA",
+        "CORONA",
+        "CROWN",
+        "CURREN",
+        "DUET",
+        "DYNA",
+        "E-S",
+        "TRUCK",
+        "ESQUIRE",
+        "FJ",
+        "CRUISER",
+        "FORKLIFT",
+        "FUNCARGO",
+        "GAIA",
+        "GR",
+        "YARIS",
+        "GRANACE",
+        "GRAND",
+        "ASH",
+        "ES",
+        "GRANVIA",
+        "HIACE",
+        "MIRAI",
+        "OPA",
+        "ORIGIN",
+        "PREMIO",
+        "PROBOX",
+        "QUICK",
+        "DELIVERY",
+        "RACTIS",
+        "RAIZE",
+        "RUSH",
+        "SAI",
+        "SEQUOIA",
+        "SPARKY",
+        "SPRINTER",
+        "SUPRA",
+        "VANGUARD",
+        "VEROSSA",
+        "WILL",
+        "YARIS",
+    ),
+    "HONDA": [],
+    "NISSAN": [],
+    "SUBARU": [],
+    "AUDI": [],
+    "VOLKSWAGEN": [],
+    "MERCEDES": [],
+    "BENZ": [],
+    "BMW": [],
+    "MAZDA": [],
+    "MITSUBISHI": [],
+    "SUZUKI": [],
+    "ISUZU": [],
+    "TADANO": [],
+    "TCM": [],
+    "YANMAR": [],
+    "DAIHATSU": [],
+    "MITSUOKA": [],
+    "KAWASAKI": [],
+    "KOMATSU": [],
+    "LEXUS": [],
+    "CHEVROLET": [],
+    "RENAULT": [],
+    "DODGE": [],
+    "FERRARI": [],
+    "FIAT": [],
+    "FORD": [],
+    "GMC": [],
+    "HINO": [],
+    "INFINITI": [],
+    "JEEP": [],
+    "OPEL": [],
+    "TESLA": [],
+    "VOLVO": [],
+    "FORKLIFT": [],
+}
 
 
 class Command(BaseCommand):
     def handle(self, *args, **options):
         counter = 0
-        for mark in marks:
+        for mark, models in marks.items():
             car_mark, created = CarMark.objects.get_or_create(name=mark)
 
             if not created:
                 print(f"Mark {car_mark.name} already exists")
-                continue
+            else:
+                print(f"Created CarMark: {car_mark.name}")
 
-            print(f"Created CarMark: {car_mark.name}")
+            for model in models:
+                car_model, created = car_mark.models.get_or_create(name=model)
+                if created:
+                    print(f"CarModel {model} created!")
+                else:
+                    print(f"CarModel {model} already exists")
+
             counter += 1
 
         print(f"Created {counter} marks in total")
