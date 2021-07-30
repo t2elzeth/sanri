@@ -6,16 +6,16 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('car_order', '0005_analysis'),
+        ("car_order", "0005_analysis"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='carorder',
-            name='analysis',
+            model_name="carorder",
+            name="analysis",
             field=models.JSONField(default=dict),
         ),
         migrations.DeleteModel(
-            name='Analysis',
+            name="Analysis",
         ),
     ]

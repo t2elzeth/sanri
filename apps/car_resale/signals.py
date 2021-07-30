@@ -3,7 +3,11 @@ from django.dispatch import receiver
 
 from authorization.models import Balance
 from car_order.models import CarOrder
-from .models import CarResale, CarResaleOldClientReplenishment, CarResaleNewClientWithdrawal
+from .models import (
+    CarResale,
+    CarResaleOldClientReplenishment,
+    CarResaleNewClientWithdrawal,
+)
 from income.models import Income, IncomeType
 from django.conf import settings
 from car_sale.models import CarSale
@@ -32,7 +36,7 @@ def post_save_car_resale(instance: CarResale, created, **kwargs):
             payment_type=Balance.PAYMENT_TYPE_CASHLESS,
             balance_action=Balance.BALANCE_ACTION_WITHDRAWAL,
             sender_name="CarResale",
-            comment=f"Withdrawal for resaling car #{car_order.id}"
+            comment=f"Withdrawal for resaling car #{car_order.id}",
         )
         car_order.withdrawal.balance = balance
         car_order.save()
@@ -46,11 +50,10 @@ def post_save_car_resale(instance: CarResale, created, **kwargs):
             payment_type=Balance.PAYMENT_TYPE_CASHLESS,
             balance_action=Balance.BALANCE_ACTION_REPLENISHMENT,
             sender_name="CarResale",
-            comment=f"Replenishment for resaling car#{car_order.id}"
+            comment=f"Replenishment for resaling car#{car_order.id}",
         )
         CarResaleOldClientReplenishment.objects.create(
-            balance=balance,
-            car_resale=instance
+            balance=balance, car_resale=instance
         )
 
         if instance.oldClient.username == settings.SANRI_USERNAME:

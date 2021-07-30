@@ -7,16 +7,31 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('car_order', '0004_alter_balancewithdrawal_car_order'),
+        ("car_order", "0004_alter_balancewithdrawal_car_order"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Analysis',
+            name="Analysis",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('car_hood', models.JSONField()),
-                ('car_order', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='analysis', to='car_order.carorder')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("car_hood", models.JSONField()),
+                (
+                    "car_order",
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="analysis",
+                        to="car_order.carorder",
+                    ),
+                ),
             ],
         ),
     ]

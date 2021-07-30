@@ -6,6 +6,7 @@ from car_model.models import CarMark
 from car_order.models import CarOrder
 from car_sale.formulas import calculate_total
 from car_sale.models import CarSale
+from transport_companies.models import TransportCompany
 
 
 class CreateCarSale(TestCase):
@@ -32,6 +33,10 @@ class CreateCarSale(TestCase):
         self.car_mark = CarMark.objects.create(name="HONDA")
         self.car_model = self.car_mark.models.create(name="FIT")
 
+        self.transport_company = TransportCompany.objects.create(
+            name="My transport company"
+        )
+
         self.carOrder = CarOrder.objects.create(
             client=self.ownerClient,
             auction=self.auction,
@@ -45,6 +50,7 @@ class CreateCarSale(TestCase):
             auctionFees=25000,
             transport=3000,
             carNumber=CarOrder.CAR_NUMBER_NOT_GIVEN,
+            transportCompany=self.transport_company,
         )
 
         self.car_sale = CarSale.objects.create(

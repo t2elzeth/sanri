@@ -8,7 +8,10 @@ from . import models
 class UserAdmin(BaseUserAdmin):
     ordering = ("is_staff",)
 
-    list_display = ("id", "email",)
+    list_display = (
+        "id",
+        "email",
+    )
 
     list_filter = ("is_staff",)
 

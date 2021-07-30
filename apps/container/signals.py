@@ -16,7 +16,7 @@ def update_stock(instance: Container, **kwargs):
 
 
 @receiver(post_save, sender=Container)
-def post_save_car_resale(instance: Container, created, **kwargs):
+def post_save_container(instance: Container, created, **kwargs):
     if created:
         instance.save()
 
@@ -35,7 +35,8 @@ def post_save_car_resale(instance: Container, created, **kwargs):
             balance=balance, container=instance
         )
 
-    instance.container_withdrawal.calculate()
+    if hasattr(instance, "container_withdrawal"):
+        instance.container_withdrawal.calculate()
 
 
 @receiver(post_save, sender=WheelRecycling)

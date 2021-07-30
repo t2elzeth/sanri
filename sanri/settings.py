@@ -130,22 +130,22 @@ REST_FRAMEWORK = {
 AUTH_USER_MODEL = "authorization.User"
 CORS_ORIGIN_ALLOW_ALL = True
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": "postgres",
-        "USER": "t2elzeth",
-        "PASSWORD": "postgres",
-        "HOST": "213.139.209.59",
-        "PORT": 5432,
-    }
-}
-
 # DATABASES = {
 #     "default": {
-#         "ENGINE": "django.db.backends.sqlite3",
-#         "NAME": BASE_DIR / "db.sqlite3",
+#         "ENGINE": "django.db.backends.postgresql",
+#         "NAME": "postgres",
+#         "USER": "t2elzeth",
+#         "PASSWORD": "postgres",
+#         "HOST": "213.139.209.59",
+#         "PORT": 5432,
 #     }
 # }
+
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
+    }
+}
 
 SANRI_USERNAME = "sanrijp"

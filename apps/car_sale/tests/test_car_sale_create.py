@@ -7,9 +7,11 @@ from authorization.models import User, Balance
 from car_model.models import CarMark
 from car_order.models import CarOrder
 from car_sale.models import CarSale
+from transport_companies.models import TransportCompany
+from utils.tests import Authenticate
 
 
-class TestCreateNewCarSale(APITestCase):
+class TestCreateNewCarSale(Authenticate, APITestCase):
     def setUp(self) -> None:
         self.url = reverse("car-sale-list-create")
         self.ownerClient = User.objects.create_user(
@@ -22,6 +24,7 @@ class TestCreateNewCarSale(APITestCase):
             atWhatPrice=User.AT_WHAT_PRICE_BY_FACT,
             username="owner_client",
         )
+        self.token = self.create_token(self.ownerClient)
 
         self.auction = Auction.objects.create(
             name="AuctionName",
@@ -33,6 +36,9 @@ class TestCreateNewCarSale(APITestCase):
 
         self.car_mark = CarMark.objects.create(name="HONDA")
         self.car_model = self.car_mark.models.create(name="FIT")
+        self.transport_company = TransportCompany.objects.create(
+            name="My transport company"
+        )
 
         self.carOrder = CarOrder.objects.create(
             client=self.ownerClient,
@@ -47,6 +53,7 @@ class TestCreateNewCarSale(APITestCase):
             auctionFees=25000,
             transport=3000,
             carNumber=CarOrder.CAR_NUMBER_NOT_GIVEN,
+            transportCompany=self.transport_company,
         )
 
         self.carSale = CarSale.objects.create(
@@ -58,6 +65,7 @@ class TestCreateNewCarSale(APITestCase):
         )
 
     def test_create(self):
+        self.set_credentials(self.token)
         payload = {
             "ownerClient_id": self.ownerClient.id,
             "auction_id": self.auction.id,

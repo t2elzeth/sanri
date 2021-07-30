@@ -59,6 +59,7 @@ class WheelRecycling(models.Model):
     class Meta:
         ordering = ("id",)
 
+
 class WheelSales(models.Model):
     container = models.OneToOneField(
         Container, on_delete=models.CASCADE, related_name="wheel_sales"

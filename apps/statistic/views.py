@@ -29,9 +29,7 @@ class StatisticAPIView(APIView):
             payment_type=Balance.PAYMENT_TYPE_CASHLESS
         )
         if from_:
-            cashless_payments = cashless_payments.filter(
-                created_at__gte=from_
-            )
+            cashless_payments = cashless_payments.filter(created_at__gte=from_)
         if to_:
             cashless_payments = cashless_payments.filter(created_at__lte=to_)
         cashless_payments_number = cashless_payments.count()
@@ -57,9 +55,7 @@ class StatisticAPIView(APIView):
         # Количество загруженных машин в контейнеры
         loaded_cars = ContainerCar.objects.all()
         if from_:
-            loaded_cars = loaded_cars.filter(
-                created_at__gte=from_
-            )
+            loaded_cars = loaded_cars.filter(created_at__gte=from_)
         if to_:
             loaded_cars = loaded_cars.filter(created_at__lte=to_)
         loaded_cars_number = loaded_cars.count()
@@ -68,9 +64,7 @@ class StatisticAPIView(APIView):
         # Количество проданных машин на аукционах
         sold_cars = CarSale.objects.filter(status=True)
         if from_:
-            sold_cars = sold_cars.filter(
-                created_at__gte=from_
-            )
+            sold_cars = sold_cars.filter(created_at__gte=from_)
         if to_:
             sold_cars = sold_cars.filter(created_at__lte=to_)
         sold_cars_number = sold_cars.count()
@@ -79,9 +73,7 @@ class StatisticAPIView(APIView):
         # Количество перепроданных машин
         car_resale = CarResale.objects.all()
         if from_:
-            car_resale = car_resale.filter(
-                created_at__gte=from_
-            )
+            car_resale = car_resale.filter(created_at__gte=from_)
         if to_:
             car_resale = car_resale.filter(created_at__lte=to_)
         car_resale_number = car_resale.count()
@@ -99,9 +91,7 @@ class StatisticAPIView(APIView):
         # Количество всех доходов
         incomes = Income.objects.all()
         if from_:
-            incomes = incomes.filter(
-                created_at__gte=from_
-            )
+            incomes = incomes.filter(created_at__gte=from_)
         if to_:
             incomes = incomes.filter(created_at__lte=to_)
         incomes_number = incomes.count()

@@ -71,7 +71,7 @@ class ContainerSerializer(serializers.ModelSerializer):
         extra_kwargs = {"totalAmount": {"read_only": True}}
 
     def create(self, validated_data: dict):
-        print("This is validated_data", validated_data)
+
         cars = validated_data.pop("car_ids", None)
         wheelRecycling = validated_data.pop("wheel_recycling", None)
         wheelSales = validated_data.pop("wheel_sales", None)
