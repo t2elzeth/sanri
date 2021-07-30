@@ -1,7 +1,7 @@
-from authorization.models import Balance
-from django.db.models.signals import post_save, pre_save
+from django.db.models.signals import post_save, pre_save, post_delete
 from django.dispatch import receiver
 
+from authorization.models import Balance
 from .models import BalanceWithdrawal, CarOrder
 
 
@@ -25,3 +25,8 @@ def post_save_car_resale(instance: CarOrder, created, **kwargs):
         instance.save()
 
     instance.withdrawal.calculate_amount()
+
+
+@receiver(post_delete, sender=BalanceWithdrawal)
+def post_delete_balance_withdrawal(instance: BalanceWithdrawal, **kwargs):
+    instance.balance.delete()
