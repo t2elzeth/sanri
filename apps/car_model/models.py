@@ -8,7 +8,7 @@ class CarMark(models.Model):
         return self.name
 
     class Meta:
-        ordering = ("name",)
+        ordering = ("id",)
 
 
 class CarModel(models.Model):
