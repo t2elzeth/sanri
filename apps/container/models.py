@@ -1,7 +1,7 @@
+from car_order.models import CarOrder
 from django.contrib.auth import get_user_model
 from django.db import models
 
-from car_order.models import CarOrder
 from .formulas import calculate_total
 
 User = get_user_model()

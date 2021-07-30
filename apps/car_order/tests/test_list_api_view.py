@@ -1,11 +1,10 @@
-from rest_framework.authtoken.models import Token
-from rest_framework.reverse import reverse
-from rest_framework.test import APITestCase
-
 from auction.models import Auction
 from authorization.models import User
 from car_model.models import CarMark
 from car_order.models import CarOrder
+from rest_framework.authtoken.models import Token
+from rest_framework.reverse import reverse
+from rest_framework.test import APITestCase
 from transport_companies.models import TransportCompany
 
 

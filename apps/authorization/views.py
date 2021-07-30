@@ -2,13 +2,14 @@ from rest_framework import generics, mixins, status
 from rest_framework.permissions import IsAuthenticated
 
 from utils.mixins import DetailAPIViewMixin
-from .models import Balance, User, ManagedUser
+
+from .models import Balance, ManagedUser, User
 from .serializers import (
     BalanceSerializer,
     ClientSerializer,
+    ManagerSerializer,
     TokenSerializer,
     UserSerializer,
-    ManagerSerializer,
 )
 
 

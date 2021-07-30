@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import CarOrder, BalanceWithdrawal
+from .models import BalanceWithdrawal, CarOrder
 
 
 class BalanceReplenishmentInline(admin.StackedInline):

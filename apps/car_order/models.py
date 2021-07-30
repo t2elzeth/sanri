@@ -1,9 +1,9 @@
-from django.contrib.auth import get_user_model
-from django.db import models
-
 from auction.models import Auction
 from car_model.models import CarModel
+from django.contrib.auth import get_user_model
+from django.db import models
 from transport_companies.models import TransportCompany
+
 from .formulas import calculate_total, calculate_total_fob
 
 User = get_user_model()

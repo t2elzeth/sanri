@@ -1,10 +1,10 @@
+from container.models import Container
 from django.contrib.auth import authenticate
+from income.models import Income
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
-from container.models import Container
-from income.models import Income
-from .models import Balance, User, ManagedUser
+from .models import Balance, ManagedUser, User
 
 
 class UserSerializer(serializers.ModelSerializer):

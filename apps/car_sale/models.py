@@ -1,8 +1,8 @@
-from django.db import models
-
 from auction.models import Auction
 from authorization.models import User
 from car_order.models import CarOrder
+from django.db import models
+
 from .formulas import calculate_total
 
 

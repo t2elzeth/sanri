@@ -1,6 +1,5 @@
-from rest_framework.authtoken.models import Token
-
 from authorization.models import User
+from rest_framework.authtoken.models import Token
 
 
 class Authenticate:

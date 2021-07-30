@@ -1,13 +1,13 @@
 from datetime import timedelta
 
-from django.utils import timezone
-from rest_framework import serializers
-
 from auction.models import Auction
 from authorization.models import User
-from car_model.models import CarModel, CarMark
-from .models import CarOrder
+from car_model.models import CarMark, CarModel
+from django.utils import timezone
+from rest_framework import serializers
 from transport_companies.models import TransportCompany
+
+from .models import CarOrder
 
 
 class ClientSerializer(serializers.ModelSerializer):

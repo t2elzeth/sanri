@@ -1,8 +1,8 @@
-from django.db.models.signals import pre_save, post_save
+from authorization.models import Balance
+from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 
 from .models import CarSale
-from authorization.models import Balance
 
 
 @receiver(pre_save, sender=CarSale)

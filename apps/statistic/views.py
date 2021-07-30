@@ -1,12 +1,11 @@
-from rest_framework.response import Response
-from rest_framework.views import APIView
-
 from authorization.models import Balance
 from car_order.models import CarOrder
 from car_resale.models import CarResale
 from car_sale.models import CarSale
 from container.models import Container, ContainerCar
 from income.models import Income
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 
 class StatisticAPIView(APIView):
