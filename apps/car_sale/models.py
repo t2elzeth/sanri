@@ -31,3 +31,6 @@ class CarSale(models.Model):
 
     def __str__(self):
         return self.price
+
+    class Meta:
+        ordering = ("id",)

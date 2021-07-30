@@ -86,6 +86,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     def logout(self):
         Token.objects.filter(user=self).delete()
 
+    class Meta:
+        ordering = ("id",)
+
 
 class Balance(models.Model):
     client = models.ForeignKey(
@@ -124,6 +127,9 @@ class Balance(models.Model):
             f"{self.client.fullName}: {self.sum_in_usa}: {self.balance_action}"
         )
 
+    class Meta:
+        ordering = ("id",)
+
 
 class ManagedUser(models.Model):
     manager = models.ForeignKey(
@@ -132,3 +138,6 @@ class ManagedUser(models.Model):
     user = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="managed_users_as_user"
     )
+
+    class Meta:
+        ordering = ("id",)

@@ -7,6 +7,9 @@ class CarMark(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        ordering = ("name",)
+
 
 class CarModel(models.Model):
     mark = models.ForeignKey(
@@ -16,3 +19,6 @@ class CarModel(models.Model):
 
     def __str__(self):
         return f"{self.mark}:{self.name}"
+
+    class Meta:
+        ordering = ("id",)

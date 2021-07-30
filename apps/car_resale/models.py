@@ -23,6 +23,9 @@ class CarResale(models.Model):
     def __str__(self):
         return f"{self.oldClient.username} -> {self.newClient.username} for {self.salePrice}"
 
+    class Meta:
+        ordering = ("id",)
+
 
 class CarResaleOldClientReplenishment(models.Model):
     car_resale = models.OneToOneField(CarResale, on_delete=models.CASCADE, related_name='old_client_replenishment')
@@ -33,6 +36,9 @@ class CarResaleOldClientReplenishment(models.Model):
         self.balance.sum_in_jpy = self.car_resale.carOrder.total
         self.balance.save()
 
+    class Meta:
+        ordering = ("id",)
+
 
 class CarResaleNewClientWithdrawal(models.Model):
     car_resale = models.OneToOneField(CarResale, on_delete=models.CASCADE, related_name='new_client_withdrawal')
@@ -42,3 +48,6 @@ class CarResaleNewClientWithdrawal(models.Model):
     def calculate(self):
         self.balance.sum_in_jpy = self.car_resale.carOrder.total
         self.balance.save()
+
+    class Meta:
+        ordering = ("id",)

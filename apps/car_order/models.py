@@ -60,6 +60,9 @@ class CarOrder(models.Model):
     def __str__(self):
         return f"CarOrder#{self.id} of {self.client}"
 
+    class Meta:
+        ordering = ("id",)
+
 
 class BalanceWithdrawal(models.Model):
     balance = models.OneToOneField(
@@ -74,3 +77,6 @@ class BalanceWithdrawal(models.Model):
     def calculate_amount(self):
         self.balance.sum_in_jpy = self.car_order.total
         self.balance.save()
+
+    class Meta:
+        ordering = ("id",)

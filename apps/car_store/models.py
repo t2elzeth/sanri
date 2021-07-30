@@ -16,6 +16,9 @@ class CarStore(models.Model):
     def __str__(self):
         return self.brand
 
+    class Meta:
+        ordering = ("id",)
+
 
 class CarStoreImage(models.Model):
     car_store = models.ForeignKey(
@@ -25,3 +28,6 @@ class CarStoreImage(models.Model):
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        ordering = ("id",)

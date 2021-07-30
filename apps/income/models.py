@@ -6,6 +6,9 @@ from django.utils import timezone
 class IncomeType(models.Model):
     name = models.CharField(max_length=255)
 
+    class Meta:
+        ordering = ("id",)
+
 
 class Income(models.Model):
     type = models.ForeignKey(
@@ -18,3 +21,6 @@ class Income(models.Model):
 
     def __str__(self):
         return f"{self.amount}"
+
+    class Meta:
+        ordering = ("id",)

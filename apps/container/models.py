@@ -45,6 +45,9 @@ class Container(models.Model):
             getattr(wheel_sales, "sum", 0),
         )
 
+    class Meta:
+        ordering = ("id",)
+
 
 class WheelRecycling(models.Model):
     container = models.OneToOneField(
@@ -53,6 +56,8 @@ class WheelRecycling(models.Model):
     count = models.IntegerField()
     sum = models.IntegerField()
 
+    class Meta:
+        ordering = ("id",)
 
 class WheelSales(models.Model):
     container = models.OneToOneField(
@@ -60,6 +65,9 @@ class WheelSales(models.Model):
     )
     count = models.IntegerField()
     sum = models.IntegerField()
+
+    class Meta:
+        ordering = ("id",)
 
 
 class ContainerCar(models.Model):
@@ -73,6 +81,9 @@ class ContainerCar(models.Model):
 
     def __str__(self):
         return f"{self.container.name}: {self.car.carModel.name}"
+
+    class Meta:
+        ordering = ("id",)
 
 
 class ContainerBalanceWithdrawal(models.Model):
@@ -90,3 +101,6 @@ class ContainerBalanceWithdrawal(models.Model):
     def calculate(self):
         self.balance.sum_in_jpy = self.container.totalAmount
         self.balance.save()
+
+    class Meta:
+        ordering = ("id",)

@@ -9,6 +9,9 @@ class MonthlyPaymentType(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        ordering = ("id",)
+
 
 class MonthlyPayment(models.Model):
     type = models.ForeignKey(
@@ -25,3 +28,6 @@ class MonthlyPayment(models.Model):
 
     def __str__(self):
         return f"{self.amount}"
+
+    class Meta:
+        ordering = ("id",)
