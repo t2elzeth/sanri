@@ -11,6 +11,7 @@ from .serializers import (
     TokenSerializer,
     UserSerializer,
 )
+from .filters import BalanceFilter
 
 
 class RegisterAPIView(mixins.CreateModelMixin, generics.GenericAPIView):
@@ -93,6 +94,7 @@ class BalanceListAPIView(generics.ListCreateAPIView):
     queryset = Balance.objects.all()
     serializer_class = BalanceSerializer
     permission_classes = [IsAuthenticated]
+    filterset_class = BalanceFilter
 
     def get_queryset(self):
         user_type = self.request.user.user_type
