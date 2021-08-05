@@ -6,8 +6,6 @@ def get_transport(transport):
 
 
 def calculate_total(price, auctionFees, recycle, transport):
-    transport = get_transport(transport)
-
     included = (price, price * 0.1, auctionFees, recycle, transport)
     return sum(included)
 

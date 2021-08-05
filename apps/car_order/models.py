@@ -53,9 +53,12 @@ class CarOrder(models.Model):
         self.total = calculate_total(
             self.price, self.auctionFees, self.recycle, self.transport
         )
-        self.total_FOB = calculate_total_fob(
-            self.price, self.amount, self.transport, self.fob
-        )
+        if self.client.atWhatPrice == User.AT_WHAT_PRICE_BY_FOB:
+            self.total_FOB = calculate_total_fob(
+                self.price, self.amount, self.transport, self.fob
+            )
+        elif self.client.atWhatPrice == User.AT_WHAT_PRICE_BY_FACT:
+            self.total_FOB = 0
 
     def __str__(self):
         return f"CarOrder#{self.id} of {self.client}"
