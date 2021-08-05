@@ -18,7 +18,7 @@ def post_save_car_resale(instance: CarOrder, created, **kwargs):
             sum_in_jpy=instance.total,
             payment_type=Balance.PAYMENT_TYPE_CASHLESS,
             sender_name="CarOrder",
-            comment=f"Balance withdrawal for CarOrder#{instance.id}",
+            comment=f"Снятие за покупку#{instance.id}",
             balance_action=Balance.BALANCE_ACTION_WITHDRAWAL,
         )
         BalanceWithdrawal.objects.create(balance=balance, car_order=instance)
