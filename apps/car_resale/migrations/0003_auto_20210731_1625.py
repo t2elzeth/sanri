@@ -6,20 +6,23 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('car_resale', '0002_carresalenewclientwithdrawal_carresaleoldclientreplenishment'),
+        (
+            "car_resale",
+            "0002_carresalenewclientwithdrawal_carresaleoldclientreplenishment",
+        ),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='carresale',
-            options={'ordering': ('id',)},
+            name="carresale",
+            options={"ordering": ("id",)},
         ),
         migrations.AlterModelOptions(
-            name='carresalenewclientwithdrawal',
-            options={'ordering': ('id',)},
+            name="carresalenewclientwithdrawal",
+            options={"ordering": ("id",)},
         ),
         migrations.AlterModelOptions(
-            name='carresaleoldclientreplenishment',
-            options={'ordering': ('id',)},
+            name="carresaleoldclientreplenishment",
+            options={"ordering": ("id",)},
         ),
     ]

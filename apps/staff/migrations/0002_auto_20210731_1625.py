@@ -6,20 +6,20 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('staff', '0001_initial'),
+        ("staff", "0001_initial"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='staffexpense',
-            options={'ordering': ('id',)},
+            name="staffexpense",
+            options={"ordering": ("id",)},
         ),
         migrations.AlterModelOptions(
-            name='staffexpensetype',
-            options={'ordering': ('id',)},
+            name="staffexpensetype",
+            options={"ordering": ("id",)},
         ),
         migrations.AlterModelOptions(
-            name='staffmember',
-            options={'ordering': ('id',)},
+            name="staffmember",
+            options={"ordering": ("id",)},
         ),
     ]

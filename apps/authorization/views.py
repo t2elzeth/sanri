@@ -3,6 +3,7 @@ from rest_framework.permissions import IsAuthenticated
 
 from utils.mixins import DetailAPIViewMixin
 
+from .filters import BalanceFilter
 from .models import Balance, ManagedUser, User
 from .serializers import (
     BalanceSerializer,
@@ -11,7 +12,6 @@ from .serializers import (
     TokenSerializer,
     UserSerializer,
 )
-from .filters import BalanceFilter
 
 
 class RegisterAPIView(mixins.CreateModelMixin, generics.GenericAPIView):

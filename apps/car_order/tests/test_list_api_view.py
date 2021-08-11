@@ -1,14 +1,15 @@
+from auction.models import Auction
+from authorization.models import Balance, User
+from car_model.models import CarMark
+from car_order.models import BalanceWithdrawal, CarOrder
+from rest_framework import status
 from rest_framework.authtoken.models import Token
 from rest_framework.reverse import reverse
 from rest_framework.test import APITestCase
-from rest_framework import status
-
-from auction.models import Auction
-from authorization.models import User, Balance
-from car_model.models import CarMark
-from car_order.models import CarOrder, BalanceWithdrawal
 from transport_companies.models import TransportCompany
+
 from utils.tests import Authenticate
+
 
 class TestGetListOfCarOrdersAsClient(Authenticate, APITestCase):
     AUTHENTICATION_CREDENTIALS = "Token {}"
@@ -134,14 +135,26 @@ class TestGetListOfCarOrdersAsClient(Authenticate, APITestCase):
         self.assertEqual(len(response.data), 3)
 
     def test_delete_car_order(self):
-        self.url = reverse("car-order-detail", kwargs={'pk': self.carOrder_FIT.id})
+        self.url = reverse(
+            "car-order-detail", kwargs={"pk": self.carOrder_FIT.id}
+        )
 
         response = self.client.delete(self.url)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
         # Check if CarOrder is deleted
-        self.assertFalse(CarOrder.objects.filter(id=self.carOrder_FIT.id).exists())
+        self.assertFalse(
+            CarOrder.objects.filter(id=self.carOrder_FIT.id).exists()
+        )
 
         # Check if Balance withdrawal gets deleted with CarOrder
-        self.assertFalse(BalanceWithdrawal.objects.filter(id=self.carOrder_FIT.withdrawal.id).exists())
-        self.assertFalse(Balance.objects.filter(car_order_withdrawals=self.carOrder_FIT.withdrawal).exists())
+        self.assertFalse(
+            BalanceWithdrawal.objects.filter(
+                id=self.carOrder_FIT.withdrawal.id
+            ).exists()
+        )
+        self.assertFalse(
+            Balance.objects.filter(
+                car_order_withdrawals=self.carOrder_FIT.withdrawal
+            ).exists()
+        )

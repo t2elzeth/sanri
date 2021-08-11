@@ -6,28 +6,28 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('container', '0002_containerbalancewithdrawal'),
+        ("container", "0002_containerbalancewithdrawal"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='container',
-            options={'ordering': ('id',)},
+            name="container",
+            options={"ordering": ("id",)},
         ),
         migrations.AlterModelOptions(
-            name='containerbalancewithdrawal',
-            options={'ordering': ('id',)},
+            name="containerbalancewithdrawal",
+            options={"ordering": ("id",)},
         ),
         migrations.AlterModelOptions(
-            name='containercar',
-            options={'ordering': ('id',)},
+            name="containercar",
+            options={"ordering": ("id",)},
         ),
         migrations.AlterModelOptions(
-            name='wheelrecycling',
-            options={'ordering': ('id',)},
+            name="wheelrecycling",
+            options={"ordering": ("id",)},
         ),
         migrations.AlterModelOptions(
-            name='wheelsales',
-            options={'ordering': ('id',)},
+            name="wheelsales",
+            options={"ordering": ("id",)},
         ),
     ]

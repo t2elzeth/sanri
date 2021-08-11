@@ -49,7 +49,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     USER_TYPE_YARD_MANAGER = "yard_manager"
     USER_TYPE_CLIENT = "client"
     USER_TYPE_EMPLOYEE = "employee"
-    USER_TYPE_DILLER = 'diller'
+    USER_TYPE_DILLER = "diller"
     USER_TYPE_CHOICES = (
         (USER_TYPE_SUPERUSER, USER_TYPE_SUPERUSER),
         (USER_TYPE_ADMIN, USER_TYPE_ADMIN),

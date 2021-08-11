@@ -6,18 +6,30 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('authorization', '0005_auto_20210731_1625'),
+        ("authorization", "0005_auto_20210731_1625"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='balance',
-            name='rate',
+            model_name="balance",
+            name="rate",
             field=models.IntegerField(default=0),
         ),
         migrations.AlterField(
-            model_name='user',
-            name='user_type',
-            field=models.CharField(choices=[('superuser', 'superuser'), ('admin', 'admin'), ('sales_manager', 'sales_manager'), ('yard_manager', 'yard_manager'), ('client', 'client'), ('employee', 'employee'), ('diller', 'diller')], default='superuser', max_length=255),
+            model_name="user",
+            name="user_type",
+            field=models.CharField(
+                choices=[
+                    ("superuser", "superuser"),
+                    ("admin", "admin"),
+                    ("sales_manager", "sales_manager"),
+                    ("yard_manager", "yard_manager"),
+                    ("client", "client"),
+                    ("employee", "employee"),
+                    ("diller", "diller"),
+                ],
+                default="superuser",
+                max_length=255,
+            ),
         ),
     ]

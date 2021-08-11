@@ -14,7 +14,10 @@ class CarSale(models.Model):
         Auction, on_delete=models.CASCADE, related_name="car_sales"
     )
     carOrder = models.ForeignKey(
-        CarOrder, on_delete=models.SET_NULL, related_name="car_sales", null=True
+        CarOrder,
+        on_delete=models.SET_NULL,
+        related_name="car_sales",
+        null=True,
     )
     price = models.IntegerField(default=0)
     recycle = models.IntegerField(default=0)

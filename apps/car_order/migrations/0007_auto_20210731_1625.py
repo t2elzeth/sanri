@@ -6,16 +6,16 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('car_order', '0006_auto_20210723_1857'),
+        ("car_order", "0006_auto_20210723_1857"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='balancewithdrawal',
-            options={'ordering': ('id',)},
+            name="balancewithdrawal",
+            options={"ordering": ("id",)},
         ),
         migrations.AlterModelOptions(
-            name='carorder',
-            options={'ordering': ('id',)},
+            name="carorder",
+            options={"ordering": ("id",)},
         ),
     ]

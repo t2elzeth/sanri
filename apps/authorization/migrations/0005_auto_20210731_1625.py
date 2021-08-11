@@ -6,20 +6,20 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('authorization', '0004_auto_20210723_1214'),
+        ("authorization", "0004_auto_20210723_1214"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='balance',
-            options={'ordering': ('id',)},
+            name="balance",
+            options={"ordering": ("id",)},
         ),
         migrations.AlterModelOptions(
-            name='manageduser',
-            options={'ordering': ('id',)},
+            name="manageduser",
+            options={"ordering": ("id",)},
         ),
         migrations.AlterModelOptions(
-            name='user',
-            options={'ordering': ('id',)},
+            name="user",
+            options={"ordering": ("id",)},
         ),
     ]
