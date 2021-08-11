@@ -11,6 +11,7 @@ from .serializers import (
     ManagerSerializer,
     TokenSerializer,
     UserSerializer,
+DillerSerializer
 )
 
 
@@ -44,6 +45,7 @@ class ClientListAPIView(generics.ListCreateAPIView):
         if user_type in (
             User.USER_TYPE_SALES_MANAGER,
             User.USER_TYPE_YARD_MANAGER,
+            User.USER_TYPE_DILLER,
         ):
             self.queryset = [
                 managed_user.user
@@ -68,6 +70,18 @@ class EmployeeAPIView(generics.ListCreateAPIView):
 class EmployeeDetailAPIView(DetailAPIViewMixin):
     queryset = User.objects.filter(user_type=User.USER_TYPE_EMPLOYEE)
     serializer_class = UserSerializer
+
+
+class DillerAPIView(generics.ListCreateAPIView):
+    queryset = User.objects.filter(
+        user_type=User.USER_TYPE_DILLER,
+    )
+    serializer_class = DillerSerializer
+
+
+class DillerDetailAPIView(DetailAPIViewMixin):
+    queryset = User.objects.filter(user_type=User.USER_TYPE_DILLER)
+    serializer_class = DillerSerializer
 
 
 class ManagerAPIView(generics.ListCreateAPIView):

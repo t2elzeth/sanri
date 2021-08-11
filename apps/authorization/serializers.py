@@ -269,3 +269,43 @@ class ManagerSerializer(UserSerializer):
             )
 
         return manager
+
+
+class DillerSerializer(UserSerializer):
+    managed_users_ids = serializers.ListSerializer(
+        child=serializers.IntegerField(), write_only=True, required=False
+    )
+    managed_users = ManagedUserSerializer(
+        source="managed_users_as_manager", read_only=True, many=True
+    )
+
+    class Meta(UserSerializer.Meta):
+        fields = UserSerializer.Meta.fields + [
+            "managed_users_ids",
+            "managed_users",
+        ]
+
+    def create(self, validated_data: dict):
+        managed_user_ids = validated_data.pop("managed_users_ids", [])
+        validated_data.update({"user_type": User.USER_TYPE_DILLER})
+
+        manager = super().create(validated_data)
+        for user_id in managed_user_ids:
+            manager.managed_users_as_manager.create(
+                user=User.objects.get(id=user_id)
+            )
+
+        return manager
+
+    def update(self, instance, validated_data):
+        managed_user_ids = validated_data.pop("managed_users_ids", [])
+
+        manager = super().update(instance, validated_data)
+
+        manager.managed_users_as_manager.all().delete()
+        for user_id in managed_user_ids:
+            manager.managed_users_as_manager.create(
+                user=User.objects.get(id=user_id)
+            )
+
+        return manager
