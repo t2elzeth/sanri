@@ -49,6 +49,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     USER_TYPE_YARD_MANAGER = "yard_manager"
     USER_TYPE_CLIENT = "client"
     USER_TYPE_EMPLOYEE = "employee"
+    USER_TYPE_DILLER = 'diller'
     USER_TYPE_CHOICES = (
         (USER_TYPE_SUPERUSER, USER_TYPE_SUPERUSER),
         (USER_TYPE_ADMIN, USER_TYPE_ADMIN),
@@ -56,6 +57,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         (USER_TYPE_YARD_MANAGER, USER_TYPE_YARD_MANAGER),
         (USER_TYPE_CLIENT, USER_TYPE_CLIENT),
         (USER_TYPE_EMPLOYEE, USER_TYPE_EMPLOYEE),
+        (USER_TYPE_DILLER, USER_TYPE_DILLER),
     )
     user_type = models.CharField(
         max_length=255, choices=USER_TYPE_CHOICES, default=USER_TYPE_SUPERUSER
