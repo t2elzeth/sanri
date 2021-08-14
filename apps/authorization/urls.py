@@ -17,7 +17,4 @@ urlpatterns = [
     # Balance
     path("Balance/", views.BalanceListAPIView.as_view()),
     path("Balance/<int:pk>/", views.BalanceAPIView.as_view()),
-# Diller
-    path("Diller/", views.DillerAPIView.as_view()),
-    path("Diller/<int:pk>/", views.DillerDetailAPIView.as_view()),
 ]

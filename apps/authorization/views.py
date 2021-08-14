@@ -11,7 +11,6 @@ from .serializers import (
     ManagerSerializer,
     TokenSerializer,
     UserSerializer,
-DillerSerializer
 )
 
 
