@@ -100,6 +100,8 @@ class CarOrderSerializer(serializers.ModelSerializer):
             "transportCompany",
             "transportCompany_id",
             "analysis",
+            "additional_expenses",
+            'comment'
         ]
 
 
