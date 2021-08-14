@@ -46,7 +46,7 @@ class CarOrder(models.Model):
     documentsGiven = models.BooleanField(default=False)
     total = models.IntegerField()
     total_FOB = models.IntegerField()
-    created_at = models.DateTimeField(default=timezone.now)
+    created_at = models.DateField(default=timezone.now)
     analysis = models.JSONField(default=dict)
 
     def calculate_totals(self):
