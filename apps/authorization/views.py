@@ -100,6 +100,16 @@ class BalanceListAPIView(generics.ListCreateAPIView):
         user_type = self.request.user.user_type
         if user_type == User.USER_TYPE_CLIENT:
             self.queryset = self.queryset.filter(client=self.request.user)
+        elif user_type in (
+                User.USER_TYPE_SALES_MANAGER,
+                User.USER_TYPE_YARD_MANAGER,
+        ):
+            managed_users = [
+                managed_user.user
+                for managed_user in self.request.user.managed_users_as_manager.all()
+            ]
+            self.queryset = self.queryset.filter(client__in=managed_users)
+
         return super().get_queryset()
 
 
