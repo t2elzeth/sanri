@@ -3,7 +3,7 @@ from car_model.models import CarModel
 from django.contrib.auth import get_user_model
 from django.db import models
 from transport_companies.models import TransportCompany
-
+from django.utils import timezone
 from .formulas import calculate_total, calculate_total_fob
 
 User = get_user_model()
@@ -46,7 +46,7 @@ class CarOrder(models.Model):
     documentsGiven = models.BooleanField(default=False)
     total = models.IntegerField()
     total_FOB = models.IntegerField()
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(default=timezone.now)
     analysis = models.JSONField(default=dict)
 
     def calculate_totals(self):
