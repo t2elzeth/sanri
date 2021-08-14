@@ -20,7 +20,6 @@ class ContainerAPIView(generics.ListCreateAPIView):
         elif user_type in (
             User.USER_TYPE_SALES_MANAGER,
             User.USER_TYPE_YARD_MANAGER,
-            User.USER_TYPE_DILLER
         ):
             managed_users = [
                 managed_user.user
