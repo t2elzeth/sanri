@@ -113,7 +113,7 @@ class ParkingSerializer(CarOrderSerializer):
         return car.created_at + timedelta(days=90)
 
     def get_parked_for(self, car):
-        return (timezone.now() - car.created_at).days
+        return (timezone.now().date() - car.created_at).days
 
     class Meta(CarOrderSerializer.Meta):
         fields = CarOrderSerializer.Meta.fields + [
