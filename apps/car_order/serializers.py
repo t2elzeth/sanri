@@ -96,6 +96,7 @@ class CarOrderSerializer(serializers.ModelSerializer):
             "carNumber",
             "total",
             "total_FOB",
+            "total_FOB2",
             "created_at",
             "transportCompany",
             "transportCompany_id",
