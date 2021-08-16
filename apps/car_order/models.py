@@ -4,7 +4,7 @@ from django.contrib.auth import get_user_model
 from django.db import models
 from transport_companies.models import TransportCompany
 from django.utils import timezone
-from .formulas import calculate_total, calculate_total_fob
+from .formulas import calculate_total, calculate_total_fob, calculate_total_fob2
 
 User = get_user_model()
 
@@ -46,12 +46,15 @@ class CarOrder(models.Model):
     documentsGiven = models.BooleanField(default=False)
     total = models.IntegerField()
     total_FOB = models.IntegerField()
+    total_FOB2 = models.IntegerField(default=0)
     created_at = models.DateField(default=timezone.now)
     analysis = models.JSONField(default=dict)
     comment = models.TextField(default="")
     additional_expenses = models.IntegerField(default=0)
 
     def calculate_totals(self):
+        self.total_FOB = 0
+        self.total_FOB2 = 0
         self.total = calculate_total(
             self.price, self.auctionFees, self.recycle, self.transport
         )
@@ -59,8 +62,8 @@ class CarOrder(models.Model):
             self.total_FOB = calculate_total_fob(
                 self.price, self.amount, self.transport, self.fob
             )
-        elif self.client.atWhatPrice == User.AT_WHAT_PRICE_BY_FACT:
-            self.total_FOB = 0
+        elif self.client.atWhatPrice == User.AT_WHAT_PRICE_BY_FOB2:
+            self.total_FOB2 = calculate_total_fob2(self.price, self.auctionFees, self.transport, self.fob)
 
     def __str__(self):
         return f"CarOrder#{self.id} of {self.client}"
