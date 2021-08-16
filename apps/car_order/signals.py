@@ -8,6 +8,8 @@ from .models import BalanceWithdrawal, CarOrder
 
 @receiver(pre_save, sender=CarOrder)
 def update_stock(instance: CarOrder, **kwargs):
+    if instance.client.atWhatPrice in (User.AT_WHAT_PRICE_BY_FOB, User.AT_WHAT_PRICE_BY_FOB2):
+        instance.fob = instance.client.sizeFOB
     instance.calculate_totals()
 
 
