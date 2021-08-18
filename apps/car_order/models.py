@@ -58,6 +58,10 @@ class CarOrder(models.Model):
         self.total = calculate_total(
             self.price, self.auctionFees, self.recycle, self.transport
         )
+
+        if self.client is None:
+            return
+
         if self.client.atWhatPrice == User.AT_WHAT_PRICE_BY_FOB:
             self.total_FOB = calculate_total_fob(
                 self.price, self.amount, self.transport, self.fob
