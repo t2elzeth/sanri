@@ -87,6 +87,9 @@ class BalanceWithdrawal(models.Model):
     )
 
     def calculate_amount(self):
+        if self.car_order.client is None:
+            return
+
         if self.car_order.client.atWhatPrice == User.AT_WHAT_PRICE_BY_FACT:
             self.balance.sum_in_jpy = self.car_order.total
         elif  self.car_order.client.atWhatPrice == User.AT_WHAT_PRICE_BY_FOB:
