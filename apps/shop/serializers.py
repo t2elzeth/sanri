@@ -39,3 +39,8 @@ class ShopCarSerializer(serializers.ModelSerializer):
             "status",
             "image"
         ]
+
+    def create(self, validated_data: dict):
+        images = validated_data.pop('image', None)
+
+        return super().create(validated_data)
