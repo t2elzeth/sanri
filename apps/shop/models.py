@@ -33,7 +33,7 @@ class ShopCar(models.Model):
         (STATUS_FOR_APPROVE, STATUS_FOR_APPROVE),
         (STATUS_SOLD, STATUS_SOLD),
     )
-    status = models.CharField(max_length=255, choices=STATUS_CHOICES)
+    status = models.CharField(max_length=255, choices=STATUS_CHOICES, default=STATUS_FOR_SELL)
 
     def __str__(self):
         return f"{self.hp}HP | {self.currency}{self.price}"
