@@ -6,18 +6,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('car_order', '0008_alter_carorder_created_at'),
+        ("car_order", "0008_alter_carorder_created_at"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='carorder',
-            name='additional_expenses',
+            model_name="carorder",
+            name="additional_expenses",
             field=models.IntegerField(default=0),
         ),
         migrations.AddField(
-            model_name='carorder',
-            name='comment',
-            field=models.TextField(default=''),
+            model_name="carorder",
+            name="comment",
+            field=models.TextField(default=""),
         ),
     ]

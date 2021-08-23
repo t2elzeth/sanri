@@ -101,8 +101,8 @@ class BalanceListAPIView(generics.ListCreateAPIView):
         if user_type == User.USER_TYPE_CLIENT:
             self.queryset = self.queryset.filter(client=self.request.user)
         elif user_type in (
-                User.USER_TYPE_SALES_MANAGER,
-                User.USER_TYPE_YARD_MANAGER,
+            User.USER_TYPE_SALES_MANAGER,
+            User.USER_TYPE_YARD_MANAGER,
         ):
             managed_users = [
                 managed_user.user

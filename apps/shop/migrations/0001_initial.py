@@ -8,35 +8,78 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='ShopCar',
+            name="ShopCar",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('price', models.IntegerField()),
-                ('currency', models.CharField(choices=[('usd', 'usd'), ('jpy', 'jpy')], max_length=255)),
-                ('hp', models.IntegerField()),
-                ('engine', models.CharField(max_length=255)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("price", models.IntegerField()),
+                (
+                    "currency",
+                    models.CharField(
+                        choices=[("usd", "usd"), ("jpy", "jpy")],
+                        max_length=255,
+                    ),
+                ),
+                ("hp", models.IntegerField()),
+                ("engine", models.CharField(max_length=255)),
             ],
         ),
         migrations.CreateModel(
-            name='ShopImage',
+            name="ShopImage",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('image', models.ImageField(upload_to='')),
-                ('car', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='images', to='shop.shopcar')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("image", models.ImageField(upload_to="")),
+                (
+                    "car",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="images",
+                        to="shop.shopcar",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='FuelEfficiency',
+            name="FuelEfficiency",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('city', models.FloatField()),
-                ('track', models.FloatField()),
-                ('car', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='fuel_efficiency', to='shop.shopcar')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("city", models.FloatField()),
+                ("track", models.FloatField()),
+                (
+                    "car",
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="fuel_efficiency",
+                        to="shop.shopcar",
+                    ),
+                ),
             ],
         ),
     ]

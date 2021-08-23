@@ -109,7 +109,7 @@ OWN_APPS = [
     "staff",
     "transport_companies",
     "statistic",
-    "shop"
+    "shop",
 ]
 
 INSTALLED_APPS += THIRD_PARTY_APPS + OWN_APPS

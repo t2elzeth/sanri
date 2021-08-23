@@ -7,13 +7,13 @@ import django.utils.timezone
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('car_order', '0007_auto_20210731_1625'),
+        ("car_order", "0007_auto_20210731_1625"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='carorder',
-            name='created_at',
+            model_name="carorder",
+            name="created_at",
             field=models.DateField(default=django.utils.timezone.now),
         ),
     ]

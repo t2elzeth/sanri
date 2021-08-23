@@ -82,9 +82,9 @@ class ClientSerializer(serializers.ModelSerializer):
         cars = user.car_orders.all()
 
         total_key = {
-            User.AT_WHAT_PRICE_BY_FACT: 'total',
-            User.AT_WHAT_PRICE_BY_FOB: 'total_FOB',
-            User.AT_WHAT_PRICE_BY_FOB2: 'total_FOB2'
+            User.AT_WHAT_PRICE_BY_FACT: "total",
+            User.AT_WHAT_PRICE_BY_FOB: "total_FOB",
+            User.AT_WHAT_PRICE_BY_FOB2: "total_FOB2",
         }
 
         key = total_key[user.atWhatPrice]
