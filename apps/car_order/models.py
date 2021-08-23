@@ -49,7 +49,7 @@ class CarOrder(models.Model):
     total_FOB2 = models.IntegerField(default=0)
     created_at = models.DateField(default=timezone.now)
     analysis = models.JSONField(default=dict)
-    comment = models.TextField(default="")
+    comment = models.TextField(default="", blank=True, null=True)
     additional_expenses = models.IntegerField(default=0)
 
     def calculate_totals(self):
