@@ -56,4 +56,7 @@ class ShopCarSerializer(serializers.ModelSerializer):
         fe_serializer.is_valid(raise_exception=False)
         fe_serializer.save(car=car)
 
+        for img in images:
+            car.images.create(image=img)
+
         return car
