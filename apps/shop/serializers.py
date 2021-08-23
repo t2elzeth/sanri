@@ -17,7 +17,8 @@ class ShopImageSerializer(serializers.ModelSerializer):
 
 class ShopCarSerializer(serializers.ModelSerializer):
     fuel_efficiency = FuelEfficiencySerializer()
-    images = ShopImageSerializer(many=True)
+    images = ShopImageSerializer(many=True, read_only=True)
+    image = serializers.ListSerializer(child=serializers.FileField(), write_only=True)
 
     class Meta:
         model = ShopCar
@@ -36,4 +37,5 @@ class ShopCarSerializer(serializers.ModelSerializer):
             "displacement",
             "complect",
             "status",
+            "image"
         ]
