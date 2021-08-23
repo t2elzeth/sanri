@@ -102,7 +102,6 @@ OWN_APPS = [
     "car_order",
     "car_resale",
     "car_sale",
-    "car_store",
     "container",
     "file",
     "income",
@@ -110,6 +109,7 @@ OWN_APPS = [
     "staff",
     "transport_companies",
     "statistic",
+    "shop"
 ]
 
 INSTALLED_APPS += THIRD_PARTY_APPS + OWN_APPS
