@@ -19,7 +19,7 @@ class ShopImageSerializer(serializers.ModelSerializer):
 
 class ShopCarSerializer(serializers.ModelSerializer):
     fuel_efficiency = FuelEfficiencySerializer()
-    images = ShopImageSerializer(many=True, read_only=True)
+    images = ShopImageSerializer(many=True, required=False)
     image = serializers.ListSerializer(child=serializers.FileField(), write_only=True)
 
     model = CarModelSerializer(read_only=True)
@@ -48,7 +48,7 @@ class ShopCarSerializer(serializers.ModelSerializer):
         ]
 
     def create(self, validated_data: dict):
-        images = validated_data.pop('image', None)
+        new_images = validated_data.pop('image', None)
         fuel_efficiency = validated_data.pop('fuel_efficiency', None)
 
         car: ShopCar = super().create(validated_data)
@@ -56,13 +56,14 @@ class ShopCarSerializer(serializers.ModelSerializer):
         fe_serializer.is_valid(raise_exception=False)
         fe_serializer.save(car=car)
 
-        for img in images:
+        for img in new_images:
             car.images.create(image=img)
 
         return car
 
     def update(self, instance: ShopCar, validated_data: dict):
-        images = validated_data.pop('image', instance.images)
+        new_images = validated_data.pop('image', [])
+        old_images = validated_data.pop('images', ShopImageSerializer(instance.images, many=True).data)
         fuel_efficiency = validated_data.pop('fuel_efficiency', instance.fuel_efficiency)
 
         car: ShopCar = super().update(instance, validated_data)
@@ -71,7 +72,10 @@ class ShopCarSerializer(serializers.ModelSerializer):
         fe_serializer.save()
 
         car.images.all().delete()
-        for img in images:
+        for img in new_images:
             car.images.create(image=img)
+
+        for img in old_images:
+            ShopImage.objects.create(car=car, image=img['image'])
 
         return car
