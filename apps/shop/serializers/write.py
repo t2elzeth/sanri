@@ -2,10 +2,12 @@ from .common import FuelEfficiencySerializer, ShopImageSerializer
 from rest_framework import serializers
 from car_model.serializers import CarModelSerializer
 from car_model.models import CarModel
-from shop.models import ShopCar, ShopImage
+from shop.models import ShopCar, ShopImage, CarForApprove
 import os
 from django.db import models
 from urllib.parse import urlparse
+from authorization.models import User
+
 
 class WriteShopCarSerializer(serializers.ModelSerializer):
     fuel_efficiency = FuelEfficiencySerializer()
@@ -71,3 +73,15 @@ class WriteShopCarSerializer(serializers.ModelSerializer):
             ShopImage.objects.create(car=car, image=imagename)
 
         return car
+
+
+class WriteForApproveSerializer(serializers.ModelSerializer):
+    shop_car = serializers.PrimaryKeyRelatedField(queryset=ShopCar.objects.filter(status=ShopCar.STATUS_FOR_SELL))
+
+    class Meta:
+        model = CarForApprove
+        fields = ['shop_car']
+
+    def create(self, validated_data):
+        validated_data.update({'client': self.context['request'].user})
+        return super().create(validated_data)

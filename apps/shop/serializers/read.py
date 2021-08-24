@@ -1,11 +1,13 @@
 from rest_framework import serializers
 from rest_framework.generics import UpdateAPIView
-from shop.models import ShopCar, ShopImage, FuelEfficiency
+from shop.models import ShopCar, ShopImage, FuelEfficiency, CarForApprove
 from car_model.models import CarModel
 from car_model.serializers import CarModelSerializer
+from authorization.serializers import UserSerializer
 import os
 from urllib.parse import urlparse
 from .common import FuelEfficiencySerializer, ShopImageSerializer
+
 
 class ReadShopCarSerializer(serializers.ModelSerializer):
     fuel_efficiency = FuelEfficiencySerializer()
@@ -73,3 +75,12 @@ class ReadShopCarSerializer(serializers.ModelSerializer):
         #     ShopImage.objects.create(car=car, image=imagename)
 
         return car
+
+
+class ReadForApproveSerializer(serializers.ModelSerializer):
+    shop_car = ReadShopCarSerializer(read_only=True)
+    client = UserSerializer(read_only=True)
+
+    class Meta:
+        model = CarForApprove
+        fields = ['id', 'client', 'shop_car']

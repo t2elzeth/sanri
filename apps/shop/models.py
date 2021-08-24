@@ -1,6 +1,6 @@
 from django.db import models
 from car_model.models import CarMark, CarModel
-
+from authorization.models import User
 
 class ShopCar(models.Model):
     model = models.ForeignKey(
@@ -58,3 +58,12 @@ class ShopImage(models.Model):
 
     def __str__(self):
         return f"Image of car #{self.car.id}"
+
+
+class CarForApprove(models.Model):
+    client = models.OneToOneField(User, on_delete=models.CASCADE, related_name='for_approve')
+    shop_car = models.OneToOneField(ShopCar, on_delete=models.CASCADE, related_name='for_approve')
+
+
+    def __str__(self):
+        return f"For approve car#{self.shop_car.id} from client #{self.client.id}"
