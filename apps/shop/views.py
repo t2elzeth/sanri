@@ -8,7 +8,7 @@ from .serializers.write import WriteShopCarSerializer, WriteForApproveSerializer
 
 
 class ShopCarAPIView(generics.ListCreateAPIView):
-    queryset = ShopCar.objects.all()
+    queryset = ShopCar.objects.filter(status=ShopCar.STATUS_FOR_SELL)
     serializer_class = ReadShopCarSerializer
 
 
