@@ -1,5 +1,5 @@
 from rest_framework import serializers
-
+from rest_framework.generics import UpdateAPIView
 from .models import ShopCar, ShopImage, FuelEfficiency
 from car_model.models import CarModel
 from car_model.serializers import CarModelSerializer
@@ -14,7 +14,7 @@ class FuelEfficiencySerializer(serializers.ModelSerializer):
 class ShopImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = ShopImage
-        fields = ["image"]
+        fields = ["id", "image"]
 
 
 class ShopCarSerializer(serializers.ModelSerializer):
@@ -56,6 +56,21 @@ class ShopCarSerializer(serializers.ModelSerializer):
         fe_serializer.is_valid(raise_exception=False)
         fe_serializer.save(car=car)
 
+        for img in images:
+            car.images.create(image=img)
+
+        return car
+
+    def update(self, instance: ShopCar, validated_data: dict):
+        images = validated_data.pop('image', instance.images)
+        fuel_efficiency = validated_data.pop('fuel_efficiency', instance.fuel_efficiency)
+
+        car: ShopCar = super().update(instance, validated_data)
+        fe_serializer = FuelEfficiencySerializer(instance=instance.fuel_efficiency, data=fuel_efficiency, partial=True)
+        fe_serializer.is_valid()
+        fe_serializer.save()
+
+        car.images.all().delete()
         for img in images:
             car.images.create(image=img)
 
