@@ -1,26 +1,16 @@
+from .common import FuelEfficiencySerializer, ShopImageSerializer
 from rest_framework import serializers
-from rest_framework.generics import UpdateAPIView
-from .models import ShopCar, ShopImage, FuelEfficiency
-from car_model.models import CarModel
 from car_model.serializers import CarModelSerializer
+from car_model.models import CarModel
+from shop.models import ShopCar, ShopImage
+import os
+from django.db import models
+from urllib.parse import urlparse
 
-
-class FuelEfficiencySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = FuelEfficiency
-        fields = ["city", "track"]
-
-
-class ShopImageSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ShopImage
-        fields = ["id", "image"]
-
-
-class ShopCarSerializer(serializers.ModelSerializer):
+class WriteShopCarSerializer(serializers.ModelSerializer):
     fuel_efficiency = FuelEfficiencySerializer()
-    images = ShopImageSerializer(many=True, required=False)
-    image = serializers.ListSerializer(child=serializers.FileField(), write_only=True)
+    images = serializers.ListSerializer(child=serializers.DictField(), write_only=True, required=False)
+    image = serializers.ListSerializer(child=serializers.FileField(), write_only=True, required=False)
 
     model = CarModelSerializer(read_only=True)
     model_id = serializers.PrimaryKeyRelatedField(source="model", queryset=CarModel.objects.all())
@@ -63,7 +53,7 @@ class ShopCarSerializer(serializers.ModelSerializer):
 
     def update(self, instance: ShopCar, validated_data: dict):
         new_images = validated_data.pop('image', [])
-        old_images = validated_data.pop('images', ShopImageSerializer(instance.images, many=True).data)
+        old_images = validated_data.pop('images', [])
         fuel_efficiency = validated_data.pop('fuel_efficiency', instance.fuel_efficiency)
 
         car: ShopCar = super().update(instance, validated_data)
@@ -76,6 +66,8 @@ class ShopCarSerializer(serializers.ModelSerializer):
             car.images.create(image=img)
 
         for img in old_images:
-            ShopImage.objects.create(car=car, image=img['image'])
+            a = urlparse(img['image'])
+            imagename = (os.path.basename(a.path))  #
+            ShopImage.objects.create(car=car, image=imagename)
 
         return car
