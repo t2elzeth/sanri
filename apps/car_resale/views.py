@@ -6,12 +6,14 @@ from utils.mixins import DetailAPIViewMixin
 
 from .models import CarResale
 from .serializers import CarResaleSerializer
+from .filters import CarResaleFilter
 
 
 class CarResaleAPIView(generics.ListCreateAPIView):
     queryset = CarResale.objects.all()
     serializer_class = CarResaleSerializer
     permission_classes = [IsAuthenticated]
+    filterset_class = CarResaleFilter
 
     def get_queryset(self):
         user_type = self.request.user.user_type
