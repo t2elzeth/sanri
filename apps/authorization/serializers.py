@@ -2,7 +2,7 @@ from container.models import Container
 from django.contrib.auth import authenticate
 from income.models import Income
 from rest_framework import serializers
-from rest_framework.exceptions import ValidationError
+from rest_framework.exceptions import ValidationError, APIException, NotAuthenticated
 
 from .models import Balance, ManagedUser, User
 
@@ -198,7 +198,9 @@ class TokenSerializer(serializers.Serializer):
         if not self.user:
             self.user = User.objects.get_object_or_none(**params)
             if self.user and not self.user.check_password(password):
-                self.fail("invalid_credentials")
+                # self.fail("invalid_credentials")
+                # raise ValidationError(self.default_error_messages['invalid_credentials'])
+                raise NotAuthenticated(self.default_error_messages['invalid_credentials'])
         if self.user and self.user.is_active:
             return data
         self.fail("invalid_credentials")
