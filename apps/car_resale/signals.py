@@ -25,12 +25,6 @@ def post_save_car_resale(instance: CarResale, created, **kwargs):
         car_order.price = instance.salePrice
         car_order.client = instance.newClient
 
-        newClientWorksByFOB = (
-            instance.newClient.atWhatPrice
-            == instance.newClient.AT_WHAT_PRICE_BY_FOB
-        )
-        car_order.fob = instance.newClient.sizeFOB * newClientWorksByFOB
-
         balance = instance.newClient.balances.create(
             sum_in_jpy=car_order.total,
             payment_type=Balance.PAYMENT_TYPE_CASHLESS,
