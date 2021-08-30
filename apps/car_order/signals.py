@@ -1,18 +1,19 @@
-from authorization.models import Balance
+from authorization.models import Balance, User
+from django.conf import settings
 from django.db.models.signals import post_delete, post_save, pre_save
 from django.dispatch import receiver
-from authorization.models import User
-from django.conf import settings
+
 from .models import BalanceWithdrawal, CarOrder
 
 
 @receiver(pre_save, sender=CarOrder)
-def update_stock(instance: CarOrder, **kwargs):
-    if instance.client is not None and instance.client.atWhatPrice in (
-        User.AT_WHAT_PRICE_BY_FOB,
-        User.AT_WHAT_PRICE_BY_FOB2,
-    ):
+def set_fob(instance: CarOrder, **kwargs):
+    if instance.client is not None:
         instance.fob = instance.client.sizeFOB
+
+
+@receiver(pre_save, sender=CarOrder)
+def calculate_totals(instance: CarOrder, **kwargs):
     instance.calculate_totals()
 
 

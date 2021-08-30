@@ -2,9 +2,7 @@ from authorization.models import Balance
 from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 
-from .models import (
-    ShopCar, ShopImage, FuelEfficiency, CarForApprove
-)
+from .models import CarForApprove, FuelEfficiency, ShopCar, ShopImage
 
 
 @receiver(post_save, sender=CarForApprove)

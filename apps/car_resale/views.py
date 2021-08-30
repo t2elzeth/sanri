@@ -4,9 +4,9 @@ from rest_framework.permissions import IsAuthenticated
 
 from utils.mixins import DetailAPIViewMixin
 
+from .filters import CarResaleFilter
 from .models import CarResale
 from .serializers import CarResaleSerializer
-from .filters import CarResaleFilter
 
 
 class CarResaleAPIView(generics.ListCreateAPIView):

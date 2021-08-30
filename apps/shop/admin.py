@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import ShopCar, ShopImage, FuelEfficiency, CarForApprove
+from .models import CarForApprove, FuelEfficiency, ShopCar, ShopImage
 
 
 class FuelEfficiencyInline(admin.StackedInline):
@@ -10,7 +10,7 @@ class FuelEfficiencyInline(admin.StackedInline):
 
 class ShopImageInline(admin.StackedInline):
     model = ShopImage
-    extra =  0
+    extra = 0
 
 
 class ForApproveInline(admin.StackedInline):
@@ -19,4 +19,4 @@ class ForApproveInline(admin.StackedInline):
 
 @admin.register(ShopCar)
 class ShopCarAdmin(admin.ModelAdmin):
-    inlines = [ FuelEfficiencyInline, ShopImageInline, ForApproveInline]
+    inlines = [FuelEfficiencyInline, ShopImageInline, ForApproveInline]

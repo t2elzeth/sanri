@@ -2,9 +2,13 @@ from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 
 from utils.mixins import DetailAPIViewMixin
-from .models import ShopCar, CarForApprove
-from .serializers.read import ReadShopCarSerializer, ReadForApproveSerializer
-from .serializers.write import WriteShopCarSerializer, WriteForApproveSerializer
+
+from .models import CarForApprove, ShopCar
+from .serializers.read import ReadForApproveSerializer, ReadShopCarSerializer
+from .serializers.write import (
+    WriteForApproveSerializer,
+    WriteShopCarSerializer,
+)
 
 
 class ShopCarAPIView(generics.ListCreateAPIView):
@@ -18,7 +22,7 @@ class ShopCarForApproveView(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_serializer_class(self):
-        if self.request.method == 'POST':
+        if self.request.method == "POST":
             self.serializer_class = WriteForApproveSerializer
 
         return super().get_serializer_class()
@@ -34,7 +38,7 @@ class ShopCarDetailAPIView(DetailAPIViewMixin):
     serializer_class = ReadShopCarSerializer
 
     def get_serializer_class(self):
-        if self.request.method == 'PATCH':
+        if self.request.method == "PATCH":
             return WriteShopCarSerializer
 
         return super().get_serializer_class()

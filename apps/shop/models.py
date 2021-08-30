@@ -1,6 +1,7 @@
-from django.db import models
-from car_model.models import CarMark, CarModel
 from authorization.models import User
+from car_model.models import CarMark, CarModel
+from django.db import models
+
 
 class ShopCar(models.Model):
     model = models.ForeignKey(
@@ -33,7 +34,9 @@ class ShopCar(models.Model):
         (STATUS_FOR_APPROVE, STATUS_FOR_APPROVE),
         (STATUS_SOLD, STATUS_SOLD),
     )
-    status = models.CharField(max_length=255, choices=STATUS_CHOICES, default=STATUS_FOR_SELL)
+    status = models.CharField(
+        max_length=255, choices=STATUS_CHOICES, default=STATUS_FOR_SELL
+    )
 
     def __str__(self):
         return f"{self.hp}HP | {self.currency}{self.price}"
@@ -61,9 +64,14 @@ class ShopImage(models.Model):
 
 
 class CarForApprove(models.Model):
-    client = models.OneToOneField(User, on_delete=models.CASCADE, related_name='for_approve')
-    shop_car = models.OneToOneField(ShopCar, on_delete=models.CASCADE, related_name='for_approve')
-
+    client = models.OneToOneField(
+        User, on_delete=models.CASCADE, related_name="for_approve"
+    )
+    shop_car = models.OneToOneField(
+        ShopCar, on_delete=models.CASCADE, related_name="for_approve"
+    )
 
     def __str__(self):
-        return f"For approve car#{self.shop_car.id} from client #{self.client.id}"
+        return (
+            f"For approve car#{self.shop_car.id} from client #{self.client.id}"
+        )

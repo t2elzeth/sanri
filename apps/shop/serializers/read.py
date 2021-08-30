@@ -1,21 +1,27 @@
-from rest_framework import serializers
-from rest_framework.generics import UpdateAPIView
-from shop.models import ShopCar, ShopImage, FuelEfficiency, CarForApprove
-from car_model.models import CarModel
-from car_model.serializers import CarModelSerializer
-from authorization.serializers import UserSerializer
 import os
 from urllib.parse import urlparse
+
+from authorization.serializers import UserSerializer
+from car_model.models import CarModel
+from car_model.serializers import CarModelSerializer
+from rest_framework import serializers
+from rest_framework.generics import UpdateAPIView
+from shop.models import CarForApprove, FuelEfficiency, ShopCar, ShopImage
+
 from .common import FuelEfficiencySerializer, ShopImageSerializer
 
 
 class ReadShopCarSerializer(serializers.ModelSerializer):
     fuel_efficiency = FuelEfficiencySerializer()
     images = ShopImageSerializer(many=True, required=False)
-    image = serializers.ListSerializer(child=serializers.FileField(), write_only=True, required=False)
+    image = serializers.ListSerializer(
+        child=serializers.FileField(), write_only=True, required=False
+    )
 
     model = CarModelSerializer(read_only=True)
-    model_id = serializers.PrimaryKeyRelatedField(source="model", queryset=CarModel.objects.all())
+    model_id = serializers.PrimaryKeyRelatedField(
+        source="model", queryset=CarModel.objects.all()
+    )
 
     class Meta:
         model = ShopCar
@@ -36,12 +42,12 @@ class ReadShopCarSerializer(serializers.ModelSerializer):
             "displacement",
             "complect",
             "status",
-            "image"
+            "image",
         ]
 
     def create(self, validated_data: dict):
-        new_images = validated_data.pop('image', None)
-        fuel_efficiency = validated_data.pop('fuel_efficiency', None)
+        new_images = validated_data.pop("image", None)
+        fuel_efficiency = validated_data.pop("fuel_efficiency", None)
 
         car: ShopCar = super().create(validated_data)
         fe_serializer = FuelEfficiencySerializer(data=fuel_efficiency)
@@ -55,12 +61,18 @@ class ReadShopCarSerializer(serializers.ModelSerializer):
 
     def update(self, instance: ShopCar, validated_data: dict):
         print(validated_data)
-        new_images = validated_data.pop('image', [])
+        new_images = validated_data.pop("image", [])
         # old_images = validated_data.pop('images', [])
-        fuel_efficiency = validated_data.pop('fuel_efficiency', instance.fuel_efficiency)
+        fuel_efficiency = validated_data.pop(
+            "fuel_efficiency", instance.fuel_efficiency
+        )
 
         car: ShopCar = super().update(instance, validated_data)
-        fe_serializer = FuelEfficiencySerializer(instance=instance.fuel_efficiency, data=fuel_efficiency, partial=True)
+        fe_serializer = FuelEfficiencySerializer(
+            instance=instance.fuel_efficiency,
+            data=fuel_efficiency,
+            partial=True,
+        )
         fe_serializer.is_valid()
         fe_serializer.save()
 
@@ -83,4 +95,4 @@ class ReadForApproveSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CarForApprove
-        fields = ['id', 'client', 'shop_car']
+        fields = ["id", "client", "shop_car"]
