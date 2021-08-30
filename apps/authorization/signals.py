@@ -10,10 +10,6 @@ def update_stock(instance: User, **kwargs):
     if instance.atWhatPrice == User.AT_WHAT_PRICE_BY_FACT:
         instance.sizeFOB = 0
 
-    for car_order in instance.car_orders.all():
-        if car_order.fob != instance.sizeFOB:
-            car_order.save()
-
 
 @receiver(post_save, sender=User)
 def post_save_car_resale(instance: User, created, **kwargs):

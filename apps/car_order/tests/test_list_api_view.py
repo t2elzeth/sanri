@@ -81,7 +81,6 @@ class TestGetListOfCarOrdersAsClient(Authenticate, APITestCase):
             carModel=self.car_model_FIT,
             vinNumber=25000,
             year=2019,
-            fob=self.ownerClient.sizeFOB,
             price=10000,
             recycle=20000,
             auctionFees=25000,

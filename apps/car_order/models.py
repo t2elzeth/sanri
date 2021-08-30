@@ -31,7 +31,6 @@ class CarOrder(models.Model):
     recycle = models.IntegerField()
     auctionFees = models.IntegerField()
     transport = models.IntegerField()
-    fob = models.IntegerField()
     amount = models.IntegerField(default=0)
     transportCompany = models.ForeignKey(
         TransportCompany, on_delete=models.CASCADE, related_name="car_orders"
@@ -56,6 +55,10 @@ class CarOrder(models.Model):
     analysis = models.JSONField(default=dict)
     comment = models.TextField(default="", blank=True, null=True)
     additional_expenses = models.IntegerField(default=0)
+
+    @property
+    def fob(self):
+        return self.client.sizeFOB
 
     def calculate_totals(self):
         self.total_FOB = 0

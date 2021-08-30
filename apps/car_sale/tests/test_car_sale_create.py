@@ -47,7 +47,6 @@ class TestCreateNewCarSale(Authenticate, APITestCase):
             carModel=self.car_model,
             vinNumber=25000,
             year=2019,
-            fob=self.ownerClient.sizeFOB,
             price=50000,
             recycle=20000,
             auctionFees=25000,
@@ -86,6 +85,8 @@ class TestCreateNewCarSale(Authenticate, APITestCase):
         response = self.client.patch(self.url, payload)
 
         car_order_withdrawal = self.carOrder.withdrawal
+        car_order_carModel = str(self.carOrder.carModel)
+        car_order_vinNumber = str(self.carOrder.vinNumber)
 
         self.carSale.refresh_from_db()
         self.assertEqual(response.data["price"], 60_000)
@@ -106,6 +107,10 @@ class TestCreateNewCarSale(Authenticate, APITestCase):
             CarOrderWithdrawal.objects.filter(id=car_order_withdrawal.id).exists()
         )
         self.assertEqual(car_order_withdrawal.balance.sum_in_jpy, self.carOrder.total)
+
+        # Check if carOrder data is kept
+        self.assertEqual(self.carSale.vinNumber, car_order_vinNumber)
+        self.assertEqual(self.carSale.carModel, car_order_carModel)
 
     def test_update_set_to_true_with_no_price_and_recycle(self):
         self.url = reverse("car-sale-detail", kwargs={"pk": self.carSale.id})

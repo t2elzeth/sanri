@@ -2,7 +2,7 @@ from auction.models import Auction
 from authorization.models import User
 from car_order.models import CarOrder
 from django.db import models
-
+from car_model.models import CarModel
 from .formulas import calculate_total
 
 
@@ -19,6 +19,8 @@ class CarSale(models.Model):
         related_name="car_sales",
         null=True,
     )
+    carModel = models.CharField(max_length=512, blank=True, null=True)
+    vinNumber = models.CharField(max_length=512, blank=True, null=True)
     price = models.IntegerField(default=0)
     recycle = models.IntegerField(default=0)
     auctionFees = models.IntegerField()

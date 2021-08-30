@@ -11,6 +11,10 @@ def update_stock(instance: CarSale, **kwargs):
         instance.price = 0
         instance.recycle = 0
 
+    if instance.carOrder is not None:
+        instance.carModel = str(instance.carOrder.carModel)
+        instance.vinNumber = str(instance.carOrder.vinNumber)
+
     instance.calculate_total()
 
 
@@ -19,7 +23,7 @@ def post_save_car_resale(instance: CarSale, created, **kwargs):
     if created:
         instance.save()
 
-    if instance.status:
+    if instance.status and instance.carOrder is not None:
         # CarOrder is no longer in DB, cause it's been sold
         instance.carOrder.delete()
 

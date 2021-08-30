@@ -43,7 +43,6 @@ class CreateCarSale(TestCase):
             carModel=self.car_model,
             vinNumber=25000,
             year=2019,
-            fob=self.ownerClient.sizeFOB,
             price=50000,
             recycle=20000,
             auctionFees=25000,

@@ -7,12 +7,6 @@ from .models import BalanceWithdrawal, CarOrder
 
 
 @receiver(pre_save, sender=CarOrder)
-def set_fob(instance: CarOrder, **kwargs):
-    if instance.client is not None:
-        instance.fob = instance.client.sizeFOB
-
-
-@receiver(pre_save, sender=CarOrder)
 def calculate_totals(instance: CarOrder, **kwargs):
     instance.calculate_totals()
 
