@@ -84,6 +84,7 @@ class CreateCarSale(TestCase):
     def test_try_to_change_price_and_recycle_with_status_true(self):
         self.car_sale.status = True
         self.car_sale.save()
+        self.car_sale.refresh_from_db()
 
         self.assertEqual(self.car_sale.price, 0)
         self.assertEqual(self.car_sale.recycle, 0)
@@ -103,5 +104,5 @@ class CreateCarSale(TestCase):
         )
         self.assertEqual(self.car_sale.total, new_total)
 
-        self.carOrder.refresh_from_db()
-        self.assertIsNone(self.carOrder.client)
+        # Make sure carOrder is deleted
+        self.assertIsNone(self.car_sale.carOrder)

@@ -26,7 +26,7 @@ def post_save_car_resale(instance: CarResale, created, **kwargs):
         car_order.client = instance.newClient
 
         balance = instance.newClient.balances.create(
-            sum_in_jpy=car_order.total,
+            sum_in_jpy=car_order.get_total(),
             payment_type=Balance.PAYMENT_TYPE_CASHLESS,
             balance_action=Balance.BALANCE_ACTION_WITHDRAWAL,
             sender_name="CarResale",

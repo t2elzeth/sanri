@@ -60,6 +60,16 @@ class CarOrder(models.Model):
     def fob(self):
         return self.client.sizeFOB
 
+    def get_total(self):
+        if self.client.atWhatPrice == User.AT_WHAT_PRICE_BY_FACT:
+            return self.total
+        elif self.client.atWhatPrice == User.AT_WHAT_PRICE_BY_FOB:
+            return self.total_FOB
+        elif self.client.atWhatPrice == User.AT_WHAT_PRICE_BY_FOB2:
+            return self.total_FOB2
+
+        return 0
+
     def calculate_totals(self):
         self.total_FOB = 0
         self.total_FOB2 = 0

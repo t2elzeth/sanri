@@ -96,7 +96,6 @@ class TestGetListOfCarOrdersAsClient(Authenticate, APITestCase):
             carModel=self.car_model_ACCORD,
             vinNumber=25000,
             year=2019,
-            fob=self.ownerClient.sizeFOB,
             price=25000,
             recycle=20000,
             auctionFees=25000,
@@ -112,7 +111,6 @@ class TestGetListOfCarOrdersAsClient(Authenticate, APITestCase):
             carModel=self.car_model_FIT,
             vinNumber=25000,
             year=2019,
-            fob=self.notOwnerClient.sizeFOB,
             price=50000,
             recycle=20000,
             auctionFees=25000,
@@ -146,13 +144,13 @@ class TestGetListOfCarOrdersAsClient(Authenticate, APITestCase):
             CarOrder.objects.filter(id=self.carOrder_FIT.id).exists()
         )
 
-        # Check if Balance withdrawal gets deleted with CarOrder
-        self.assertFalse(
+        # Check if Balance withdrawal doesn't get deleted with CarOrder
+        self.assertTrue(
             BalanceWithdrawal.objects.filter(
                 id=self.carOrder_FIT.withdrawal.id
             ).exists()
         )
-        self.assertFalse(
+        self.assertTrue(
             Balance.objects.filter(
                 car_order_withdrawals=self.carOrder_FIT.withdrawal
             ).exists()

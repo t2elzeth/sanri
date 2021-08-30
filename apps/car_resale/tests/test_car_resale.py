@@ -130,7 +130,7 @@ class CreateNewCarResaleTest(Authenticate, APITestCase):
         self.assertTrue(
             Balance.objects.filter(
                 client=self.newClient,
-                sum_in_jpy=self.carOrder.total,
+                sum_in_jpy=self.carOrder.get_total(),
                 balance_action=Balance.BALANCE_ACTION_WITHDRAWAL,
             ).exists()
         )
