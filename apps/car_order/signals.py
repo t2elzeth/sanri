@@ -14,14 +14,9 @@ def calculate_totals(instance: CarOrder, **kwargs):
 @receiver(post_save, sender=CarOrder)
 def post_save_car_resale(instance: CarOrder, created, **kwargs):
     if created:
-        withdrawal_amount = 0
-        if instance.client.atWhatPrice == User.AT_WHAT_PRICE_BY_FACT:
-            withdrawal_amount = instance.total
-        elif instance.client.atWhatPrice == User.AT_WHAT_PRICE_BY_FOB:
-            withdrawal_amount = instance.total_FOB
-        elif instance.client.atWhatPrice == User.AT_WHAT_PRICE_BY_FOB2:
-            withdrawal_amount = instance.total_FOB2
+        withdrawal_amount = instance.get_total()
 
+        if instance.client.atWhatPrice == User.AT_WHAT_PRICE_BY_FOB2:
             # Withdrawal from Sanri's balance
             sanri = User.objects.get(username=settings.SANRI_USERNAME)
             Balance.objects.create(
