@@ -1,7 +1,7 @@
 from auction.models import Auction
 from authorization.models import Balance, User
 from car_model.models import CarMark
-from car_order.models import CarOrder
+from car_order.models import CarOrder, BalanceWithdrawal as CarOrderWithdrawal
 from car_sale.models import CarSale
 from rest_framework import status
 from rest_framework.reverse import reverse
@@ -81,8 +81,11 @@ class TestCreateNewCarSale(Authenticate, APITestCase):
     def test_update_status_set_to_true(self):
         self.url = reverse("car-sale-detail", kwargs={"pk": self.carSale.id})
 
+        self.assertEqual(self.carSale.ownerClient, self.carOrder.client)
         payload = {"price": 60_000, "recycle": 10_000, "status": True}
         response = self.client.patch(self.url, payload)
+
+        car_order_withdrawal = self.carOrder.withdrawal
 
         self.carSale.refresh_from_db()
         self.assertEqual(response.data["price"], 60_000)
@@ -92,12 +95,17 @@ class TestCreateNewCarSale(Authenticate, APITestCase):
             Balance.objects.filter(
                 client=self.carSale.ownerClient,
                 sum_in_jpy=self.carSale.total,
-                sum_in_usa=self.carSale.total,
-                rate=1,
                 payment_type=Balance.PAYMENT_TYPE_CASHLESS,
                 balance_action=Balance.BALANCE_ACTION_REPLENISHMENT,
             ).exists()
         )
+
+        # Check if balance withdrawal for CarOrder is kept
+        car_order_withdrawal.refresh_from_db()
+        self.assertTrue(
+            CarOrderWithdrawal.objects.filter(id=car_order_withdrawal.id).exists()
+        )
+        self.assertEqual(car_order_withdrawal.balance.sum_in_jpy, self.carOrder.total)
 
     def test_update_set_to_true_with_no_price_and_recycle(self):
         self.url = reverse("car-sale-detail", kwargs={"pk": self.carSale.id})

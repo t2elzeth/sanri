@@ -20,9 +20,10 @@ def post_save_car_resale(instance: CarSale, created, **kwargs):
         instance.save()
 
     if instance.status:
-        instance.carOrder.client = None
-        instance.carOrder.save()
+        # CarOrder is no longer in DB, cause it's been sold
+        instance.carOrder.delete()
 
+        # ownerClient receives money for selling his car
         Balance.objects.create(
             client=instance.ownerClient,
             sum_in_jpy=instance.total,

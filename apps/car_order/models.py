@@ -90,7 +90,7 @@ class BalanceWithdrawal(models.Model):
         related_name="car_order_withdrawals",
     )
     car_order = models.OneToOneField(
-        CarOrder, on_delete=models.CASCADE, related_name="withdrawal"
+        CarOrder, on_delete=models.SET_NULL, related_name="withdrawal", null=True
     )
 
     def calculate_amount(self):
