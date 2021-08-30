@@ -138,8 +138,14 @@ DATABASES = {
         "PASSWORD": "postgres",
         "HOST": "213.139.209.59",
         "PORT": 5432,
-    }
+    },
 }
+
+if 'test' in sys.argv:
+    DATABASES['default'] = {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'mydatabase'
+    }
 
 # DATABASES = {
 #     "default": {
