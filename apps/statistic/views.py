@@ -25,7 +25,7 @@ class StatisticAPIView(APIView):
 
         # Количество безналичных переводов
         cashless_payments = Balance.objects.filter(
-            payment_type=Balance.PAYMENT_TYPE_CASHLESS
+            payment_type=Balance.PAYMENT_TYPE_CASHLESS, balance_action=Balance.BALANCE_ACTION_REPLENISHMENT
         )
         if from_:
             cashless_payments = cashless_payments.filter(created_at__gte=from_)

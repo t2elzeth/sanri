@@ -14,3 +14,6 @@ class BalanceFilter(django_filters.rest_framework.FilterSet):
     balance_action = django_filters.CharFilter(
         field_name="balance_action", lookup_expr="iexact"
     )
+    payment_type = django_filters.CharFilter(
+        field_name="payment_type", lookup_expr="iexact"
+    )
