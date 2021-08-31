@@ -77,3 +77,74 @@ class TestSetFOB(TestCase):
 
         self.car_order.refresh_from_db()
         self.assertEqual(self.car_order.fob, self.user.sizeFOB)
+
+
+class TestCarOrderBalanceWithdrawal(TestCase):
+    def setUp(self) -> None:
+        self.user = User.objects.create_user(
+            password="123",
+            fullName="My owner client",
+            country="KG",
+            email="ownerclient@gmail.com",
+            phoneNumber="+996771221103",
+            service=User.SERVICE_ENTIRE,
+            atWhatPrice=User.AT_WHAT_PRICE_BY_FOB,
+            username="client_by_fob",
+            sizeFOB=25000,
+        )
+
+        self.auction = Auction.objects.create(
+            name='MyTestAuction',
+            parkingPrice1=25000,
+            parkingPrice2=25000,
+            parkingPrice3=25000,
+            parkingPrice4=25000
+        )
+
+        self.car_marks = {
+            'honda': CarMark.objects.create(
+                name="HONDA"
+            )
+        }
+        self.car_models = {
+            'fit': self.car_marks['honda'].models.create(
+                name="FIT"
+            )
+        }
+
+        self.transport_company = TransportCompany.objects.create(
+            name="MyTestTransportCompany"
+        )
+
+        self.car_order = CarOrder.objects.create(
+            client=self.user,
+            auction=self.auction,
+            lotNumber=10000,
+            carModel=self.car_models['fit'],
+            vinNumber="vx-1000",
+            year=2015,
+            price=20000,
+            recycle=10000,
+            auctionFees=20000,
+            transport=25000,
+            amount=2,
+            transportCompany=self.transport_company,
+            carNumber=CarOrder.CAR_NUMBER_REMOVED,
+            documentsGiven=False
+        )
+
+        self.withdrawal = self.car_order.withdrawal
+
+    def test_initial_car_order_withdrawal_amount(self):
+        """
+        Make sure the BalanceWithdrawal amount is correct
+        when new instance of CarOrder created
+        """
+        self.assertEqual(self.withdrawal.balance.sum_in_jpy, self.car_order.get_total())
+
+    def test_car_order_total_changes(self):
+        self.car_order.price = 250000
+        self.car_order.save()
+
+        self.withdrawal.refresh_from_db()
+        self.assertEqual(self.withdrawal.balance.sum_in_jpy, self.car_order.get_total())
