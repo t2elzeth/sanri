@@ -7,7 +7,7 @@ from car_model.models import CarMark, CarModel
 from transport_companies.models import TransportCompany
 
 
-class TestSetFOB(TestCase):
+class TestCarOrderAndUserRelation(TestCase):
     def setUp(self) -> None:
         self.user = User.objects.create_user(
             password="123",
@@ -78,6 +78,24 @@ class TestSetFOB(TestCase):
         self.car_order.refresh_from_db()
         self.assertEqual(self.car_order.fob, self.user.sizeFOB)
 
+    def test_get_total(self):
+        # Check when user works by FACT
+        self.user.atWhatPrice = self.user.AT_WHAT_PRICE_BY_FACT
+        self.user.save()
+        self.car_order.refresh_from_db()
+        self.assertEqual(self.car_order.total, self.car_order.get_total())
+
+        # Check when user works by FOB
+        self.user.atWhatPrice = self.user.AT_WHAT_PRICE_BY_FOB
+        self.user.save()
+        self.car_order.refresh_from_db()
+        self.assertEqual(self.car_order.total_FOB, self.car_order.get_total())
+
+        # Check when user works by FOB2
+        self.user.atWhatPrice = self.user.AT_WHAT_PRICE_BY_FOB2
+        self.user.save()
+        self.car_order.refresh_from_db()
+        self.assertEqual(self.car_order.total_FOB2, self.car_order.get_total())
 
 class TestCarOrderBalanceWithdrawal(TestCase):
     def setUp(self) -> None:
