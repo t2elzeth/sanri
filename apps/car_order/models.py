@@ -13,6 +13,9 @@ from .formulas import (
 
 User = get_user_model()
 
+def get_date():
+    return timezone.now().date()
+
 
 class CarOrder(models.Model):
     client = models.ForeignKey(
@@ -51,7 +54,7 @@ class CarOrder(models.Model):
     total = models.IntegerField()
     total_FOB = models.IntegerField()
     total_FOB2 = models.IntegerField(default=0)
-    created_at = models.DateField(default=timezone.now().date)
+    created_at = models.DateField(default=get_date)
     analysis = models.JSONField(default=dict)
     comment = models.TextField(default="", blank=True, null=True)
     additional_expenses = models.IntegerField(default=0)
