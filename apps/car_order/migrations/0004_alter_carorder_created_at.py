@@ -7,13 +7,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('car_order', '0003_remove_carorder_fob'),
+        ("car_order", "0003_remove_carorder_fob"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='carorder',
-            name='created_at',
+            model_name="carorder",
+            name="created_at",
             field=models.DateField(default=car_order.models.get_date),
         ),
     ]

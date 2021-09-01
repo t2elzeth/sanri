@@ -7,14 +7,20 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('container', '0001_initial'),
-        ('monthly_payment', '0001_initial'),
+        ("container", "0001_initial"),
+        ("monthly_payment", "0001_initial"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='monthlypayment',
-            name='from_container',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='monthly_payments', to='container.container'),
+            model_name="monthlypayment",
+            name="from_container",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="monthly_payments",
+                to="container.container",
+            ),
         ),
     ]

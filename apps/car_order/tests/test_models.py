@@ -22,22 +22,16 @@ class TestCarOrderAndUserRelation(TestCase):
         )
 
         self.auction = Auction.objects.create(
-            name='MyTestAuction',
+            name="MyTestAuction",
             parkingPrice1=25000,
             parkingPrice2=25000,
             parkingPrice3=25000,
-            parkingPrice4=25000
+            parkingPrice4=25000,
         )
 
-        self.car_marks = {
-            'honda': CarMark.objects.create(
-                name="HONDA"
-            )
-        }
+        self.car_marks = {"honda": CarMark.objects.create(name="HONDA")}
         self.car_models = {
-            'fit': self.car_marks['honda'].models.create(
-                name="FIT"
-            )
+            "fit": self.car_marks["honda"].models.create(name="FIT")
         }
 
         self.transport_company = TransportCompany.objects.create(
@@ -48,7 +42,7 @@ class TestCarOrderAndUserRelation(TestCase):
             client=self.user,
             auction=self.auction,
             lotNumber=10000,
-            carModel=self.car_models['fit'],
+            carModel=self.car_models["fit"],
             vinNumber="vx-1000",
             year=2015,
             price=20000,
@@ -58,7 +52,7 @@ class TestCarOrderAndUserRelation(TestCase):
             amount=2,
             transportCompany=self.transport_company,
             carNumber=CarOrder.CAR_NUMBER_REMOVED,
-            documentsGiven=False
+            documentsGiven=False,
         )
 
     def test_fob_when_created(self):
@@ -97,6 +91,7 @@ class TestCarOrderAndUserRelation(TestCase):
         self.car_order.refresh_from_db()
         self.assertEqual(self.car_order.total_FOB2, self.car_order.get_total())
 
+
 class TestCarOrderBalanceWithdrawal(TestCase):
     def setUp(self) -> None:
         self.user = User.objects.create_user(
@@ -112,22 +107,16 @@ class TestCarOrderBalanceWithdrawal(TestCase):
         )
 
         self.auction = Auction.objects.create(
-            name='MyTestAuction',
+            name="MyTestAuction",
             parkingPrice1=25000,
             parkingPrice2=25000,
             parkingPrice3=25000,
-            parkingPrice4=25000
+            parkingPrice4=25000,
         )
 
-        self.car_marks = {
-            'honda': CarMark.objects.create(
-                name="HONDA"
-            )
-        }
+        self.car_marks = {"honda": CarMark.objects.create(name="HONDA")}
         self.car_models = {
-            'fit': self.car_marks['honda'].models.create(
-                name="FIT"
-            )
+            "fit": self.car_marks["honda"].models.create(name="FIT")
         }
 
         self.transport_company = TransportCompany.objects.create(
@@ -138,7 +127,7 @@ class TestCarOrderBalanceWithdrawal(TestCase):
             client=self.user,
             auction=self.auction,
             lotNumber=10000,
-            carModel=self.car_models['fit'],
+            carModel=self.car_models["fit"],
             vinNumber="vx-1000",
             year=2015,
             price=20000,
@@ -148,7 +137,7 @@ class TestCarOrderBalanceWithdrawal(TestCase):
             amount=2,
             transportCompany=self.transport_company,
             carNumber=CarOrder.CAR_NUMBER_REMOVED,
-            documentsGiven=False
+            documentsGiven=False,
         )
 
         self.withdrawal = self.car_order.withdrawal
@@ -158,11 +147,15 @@ class TestCarOrderBalanceWithdrawal(TestCase):
         Make sure the BalanceWithdrawal amount is correct
         when new instance of CarOrder created
         """
-        self.assertEqual(self.withdrawal.balance.sum_in_jpy, self.car_order.get_total())
+        self.assertEqual(
+            self.withdrawal.balance.sum_in_jpy, self.car_order.get_total()
+        )
 
     def test_car_order_total_changes(self):
         self.car_order.price = 250000
         self.car_order.save()
 
         self.withdrawal.refresh_from_db()
-        self.assertEqual(self.withdrawal.balance.sum_in_jpy, self.car_order.get_total())
+        self.assertEqual(
+            self.withdrawal.balance.sum_in_jpy, self.car_order.get_total()
+        )

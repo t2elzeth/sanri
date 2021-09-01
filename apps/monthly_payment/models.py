@@ -20,7 +20,11 @@ class MonthlyPayment(models.Model):
     )
     date = models.DateField()
     from_container = models.ForeignKey(
-        Container, on_delete=models.CASCADE, related_name="monthly_payments", null=True, blank=True
+        Container,
+        on_delete=models.CASCADE,
+        related_name="monthly_payments",
+        null=True,
+        blank=True,
     )
     amount = models.CharField(max_length=255)
     comment = models.TextField()

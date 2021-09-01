@@ -13,6 +13,7 @@ from .formulas import (
 
 User = get_user_model()
 
+
 def get_date():
     return timezone.now().date()
 
@@ -106,7 +107,10 @@ class BalanceWithdrawal(models.Model):
         related_name="car_order_withdrawals",
     )
     car_order = models.OneToOneField(
-        CarOrder, on_delete=models.SET_NULL, related_name="withdrawal", null=True
+        CarOrder,
+        on_delete=models.SET_NULL,
+        related_name="withdrawal",
+        null=True,
     )
 
     def calculate_amount(self):

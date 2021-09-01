@@ -104,9 +104,13 @@ class TestCreateNewCarSale(Authenticate, APITestCase):
         # Check if balance withdrawal for CarOrder is kept
         car_order_withdrawal.refresh_from_db()
         self.assertTrue(
-            CarOrderWithdrawal.objects.filter(id=car_order_withdrawal.id).exists()
+            CarOrderWithdrawal.objects.filter(
+                id=car_order_withdrawal.id
+            ).exists()
         )
-        self.assertEqual(car_order_withdrawal.balance.sum_in_jpy, self.carOrder.total)
+        self.assertEqual(
+            car_order_withdrawal.balance.sum_in_jpy, self.carOrder.total
+        )
 
         # Check if carOrder data is kept
         self.assertEqual(self.carSale.vinNumber, car_order_vinNumber)
