@@ -1,11 +1,11 @@
-from django.test import TestCase
-
 from auction.models import Auction
 from authorization.models import User
 from car_model.models import CarMark
 from car_order.models import CarOrder
 from car_sale.formulas import calculate_total
 from car_sale.models import CarSale
+from django.test import TestCase
+from transport_companies.models import TransportCompany
 
 
 class CreateCarSale(TestCase):
@@ -32,6 +32,10 @@ class CreateCarSale(TestCase):
         self.car_mark = CarMark.objects.create(name="HONDA")
         self.car_model = self.car_mark.models.create(name="FIT")
 
+        self.transport_company = TransportCompany.objects.create(
+            name="My transport company"
+        )
+
         self.carOrder = CarOrder.objects.create(
             client=self.ownerClient,
             auction=self.auction,
@@ -39,12 +43,12 @@ class CreateCarSale(TestCase):
             carModel=self.car_model,
             vinNumber=25000,
             year=2019,
-            fob=self.ownerClient.sizeFOB,
             price=50000,
             recycle=20000,
             auctionFees=25000,
             transport=3000,
             carNumber=CarOrder.CAR_NUMBER_NOT_GIVEN,
+            transportCompany=self.transport_company,
         )
 
         self.car_sale = CarSale.objects.create(
@@ -80,6 +84,7 @@ class CreateCarSale(TestCase):
     def test_try_to_change_price_and_recycle_with_status_true(self):
         self.car_sale.status = True
         self.car_sale.save()
+        self.car_sale.refresh_from_db()
 
         self.assertEqual(self.car_sale.price, 0)
         self.assertEqual(self.car_sale.recycle, 0)
@@ -99,5 +104,5 @@ class CreateCarSale(TestCase):
         )
         self.assertEqual(self.car_sale.total, new_total)
 
-        self.carOrder.refresh_from_db()
-        self.assertIsNone(self.carOrder.client)
+        # Make sure carOrder is deleted
+        self.assertIsNone(self.car_sale.carOrder)

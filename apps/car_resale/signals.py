@@ -1,12 +1,16 @@
-from django.db.models.signals import pre_save, post_save
-from django.dispatch import receiver
-
 from authorization.models import Balance
 from car_order.models import CarOrder
-from .models import CarResale
-from income.models import Income, IncomeType
-from django.conf import settings
 from car_sale.models import CarSale
+from django.conf import settings
+from django.db.models.signals import post_save, pre_save
+from django.dispatch import receiver
+from income.models import Income, IncomeType
+
+from .models import (
+    CarResale,
+    CarResaleNewClientWithdrawal,
+    CarResaleOldClientReplenishment,
+)
 
 
 @receiver(pre_save, sender=CarResale)
@@ -21,29 +25,29 @@ def post_save_car_resale(instance: CarResale, created, **kwargs):
         car_order.price = instance.salePrice
         car_order.client = instance.newClient
 
-        newClientWorksByFOB = (
-            instance.newClient.atWhatPrice
-            == instance.newClient.AT_WHAT_PRICE_BY_FOB
+        balance = instance.newClient.balances.create(
+            sum_in_jpy=car_order.get_total(),
+            payment_type=Balance.PAYMENT_TYPE_CASHLESS,
+            balance_action=Balance.BALANCE_ACTION_WITHDRAWAL,
+            sender_name="CarResale",
+            comment=f"Withdrawal for resaling car #{car_order.id}",
         )
-        car_order.fob = instance.newClient.sizeFOB * newClientWorksByFOB
+        car_order.withdrawal.balance = balance
         car_order.save()
 
         # Calculate balances
         car_order.refresh_from_db()
-        instance.oldClient.balances.create(
+        balance = instance.oldClient.balances.create(
             sum_in_jpy=car_order.total,
             rate=1,
             sum_in_usa=car_order.total,
             payment_type=Balance.PAYMENT_TYPE_CASHLESS,
             balance_action=Balance.BALANCE_ACTION_REPLENISHMENT,
+            sender_name="CarResale",
+            comment=f"Replenishment for resaling car#{car_order.id}",
         )
-
-        instance.newClient.balances.create(
-            sum_in_jpy=car_order.total,
-            rate=1,
-            sum_in_usa=car_order.total,
-            payment_type=Balance.PAYMENT_TYPE_CASHLESS,
-            balance_action=Balance.BALANCE_ACTION_WITHDRAWAL,
+        CarResaleOldClientReplenishment.objects.create(
+            balance=balance, car_resale=instance
         )
 
         if instance.oldClient.username == settings.SANRI_USERNAME:
@@ -55,3 +59,5 @@ def post_save_car_resale(instance: CarResale, created, **kwargs):
             )
 
         CarSale.objects.filter(carOrder=car_order).delete()
+
+    instance.old_client_replenishment.calculate()

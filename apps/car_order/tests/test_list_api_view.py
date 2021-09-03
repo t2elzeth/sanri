@@ -1,15 +1,17 @@
+from auction.models import Auction
+from authorization.models import Balance, User
+from car_model.models import CarMark
+from car_order.models import BalanceWithdrawal, CarOrder
+from rest_framework import status
 from rest_framework.authtoken.models import Token
 from rest_framework.reverse import reverse
 from rest_framework.test import APITestCase
-
-from auction.models import Auction
-from authorization.models import User
-from car_model.models import CarMark
-from car_order.models import CarOrder
 from transport_companies.models import TransportCompany
 
+from utils.tests import Authenticate
 
-class TestGetListOfCarOrdersAsClient(APITestCase):
+
+class TestGetListOfCarOrdersAsClient(Authenticate, APITestCase):
     AUTHENTICATION_CREDENTIALS = "Token {}"
 
     def setUp(self) -> None:
@@ -79,8 +81,7 @@ class TestGetListOfCarOrdersAsClient(APITestCase):
             carModel=self.car_model_FIT,
             vinNumber=25000,
             year=2019,
-            fob=self.ownerClient.sizeFOB,
-            price=50000,
+            price=10000,
             recycle=20000,
             auctionFees=25000,
             transport=3000,
@@ -88,15 +89,14 @@ class TestGetListOfCarOrdersAsClient(APITestCase):
             transportCompany=self.transportCompany,
         )
 
-        self.carOrder_FIT = CarOrder.objects.create(
+        self.carOrder_ACCORD = CarOrder.objects.create(
             client=self.ownerClient,
             auction=self.auction,
             lotNumber=25000,
             carModel=self.car_model_ACCORD,
             vinNumber=25000,
             year=2019,
-            fob=self.ownerClient.sizeFOB,
-            price=50000,
+            price=25000,
             recycle=20000,
             auctionFees=25000,
             transport=3000,
@@ -104,14 +104,13 @@ class TestGetListOfCarOrdersAsClient(APITestCase):
             transportCompany=self.transportCompany,
         )
 
-        self.carOrder_FIT = CarOrder.objects.create(
+        self.carOrder_FIT_not_owner = CarOrder.objects.create(
             client=self.notOwnerClient,
             auction=self.auction,
             lotNumber=25000,
             carModel=self.car_model_FIT,
             vinNumber=25000,
             year=2019,
-            fob=self.notOwnerClient.sizeFOB,
             price=50000,
             recycle=20000,
             auctionFees=25000,
@@ -120,22 +119,39 @@ class TestGetListOfCarOrdersAsClient(APITestCase):
             transportCompany=self.transportCompany,
         )
 
-    def test_get_list_of_car_orders(self):
-        self.client.credentials(
-            HTTP_AUTHORIZATION=self.AUTHENTICATION_CREDENTIALS.format(
-                self.ownerClient_token
-            )
+    def test_get_list_of_car_orders_as_ownerclient(self):
+        # Client sees only his own CarOrders
+        self.set_credentials(self.ownerClient_token)
+        response = self.client.get(self.url)
+        self.assertEqual(len(response.data), 2)
+
+    def test_get_list_of_car_orders_as_manager(self):
+        # Manager sees all CarOrders
+        self.set_credentials(self.manager_token)
+        response = self.client.get(self.url)
+        self.assertEqual(len(response.data), 3)
+
+    def test_delete_car_order(self):
+        self.url = reverse(
+            "car-order-detail", kwargs={"pk": self.carOrder_FIT.id}
         )
 
-        response = self.client.get(self.url)
+        response = self.client.delete(self.url)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
-        print(len(response.data))
-
-        self.client.credentials(
-            HTTP_AUTHORIZATION=self.AUTHENTICATION_CREDENTIALS.format(
-                self.manager_token
-            )
+        # Check if CarOrder is deleted
+        self.assertFalse(
+            CarOrder.objects.filter(id=self.carOrder_FIT.id).exists()
         )
-        response = self.client.get(self.url)
 
-        print(len(response.data))
+        # Check if Balance withdrawal doesn't get deleted with CarOrder
+        self.assertTrue(
+            BalanceWithdrawal.objects.filter(
+                id=self.carOrder_FIT.withdrawal.id
+            ).exists()
+        )
+        self.assertTrue(
+            Balance.objects.filter(
+                car_order_withdrawals=self.carOrder_FIT.withdrawal
+            ).exists()
+        )

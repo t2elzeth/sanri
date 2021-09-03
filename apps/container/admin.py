@@ -1,6 +1,7 @@
 from django.contrib import admin
 
 from . import models
+from .models import ContainerBalanceWithdrawal
 
 
 class WheelRecyclingInline(admin.StackedInline):
@@ -25,6 +26,10 @@ class WheelSalesInline(admin.StackedInline):
         return request.user.is_superuser
 
 
+class ContainerBalanceWithdrawalInline(admin.StackedInline):
+    model = ContainerBalanceWithdrawal
+
+
 class ContainerCarsInline(admin.StackedInline):
     model = models.ContainerCar
     extra = 0
@@ -34,4 +39,9 @@ class ContainerCarsInline(admin.StackedInline):
 class ContainerAdmin(admin.ModelAdmin):
     list_display = ("id", "name")
 
-    inlines = [WheelRecyclingInline, WheelSalesInline, ContainerCarsInline]
+    inlines = (
+        ContainerBalanceWithdrawalInline,
+        WheelRecyclingInline,
+        WheelSalesInline,
+        ContainerCarsInline,
+    )

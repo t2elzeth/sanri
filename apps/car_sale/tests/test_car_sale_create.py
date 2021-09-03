@@ -1,15 +1,17 @@
+from auction.models import Auction
+from authorization.models import Balance, User
+from car_model.models import CarMark
+from car_order.models import CarOrder, BalanceWithdrawal as CarOrderWithdrawal
+from car_sale.models import CarSale
 from rest_framework import status
 from rest_framework.reverse import reverse
 from rest_framework.test import APITestCase
+from transport_companies.models import TransportCompany
 
-from auction.models import Auction
-from authorization.models import User, Balance
-from car_model.models import CarMark
-from car_order.models import CarOrder
-from car_sale.models import CarSale
+from utils.tests import Authenticate
 
 
-class TestCreateNewCarSale(APITestCase):
+class TestCreateNewCarSale(Authenticate, APITestCase):
     def setUp(self) -> None:
         self.url = reverse("car-sale-list-create")
         self.ownerClient = User.objects.create_user(
@@ -22,6 +24,7 @@ class TestCreateNewCarSale(APITestCase):
             atWhatPrice=User.AT_WHAT_PRICE_BY_FACT,
             username="owner_client",
         )
+        self.token = self.create_token(self.ownerClient)
 
         self.auction = Auction.objects.create(
             name="AuctionName",
@@ -33,6 +36,9 @@ class TestCreateNewCarSale(APITestCase):
 
         self.car_mark = CarMark.objects.create(name="HONDA")
         self.car_model = self.car_mark.models.create(name="FIT")
+        self.transport_company = TransportCompany.objects.create(
+            name="My transport company"
+        )
 
         self.carOrder = CarOrder.objects.create(
             client=self.ownerClient,
@@ -41,12 +47,12 @@ class TestCreateNewCarSale(APITestCase):
             carModel=self.car_model,
             vinNumber=25000,
             year=2019,
-            fob=self.ownerClient.sizeFOB,
             price=50000,
             recycle=20000,
             auctionFees=25000,
             transport=3000,
             carNumber=CarOrder.CAR_NUMBER_NOT_GIVEN,
+            transportCompany=self.transport_company,
         )
 
         self.carSale = CarSale.objects.create(
@@ -58,6 +64,7 @@ class TestCreateNewCarSale(APITestCase):
         )
 
     def test_create(self):
+        self.set_credentials(self.token)
         payload = {
             "ownerClient_id": self.ownerClient.id,
             "auction_id": self.auction.id,
@@ -73,8 +80,13 @@ class TestCreateNewCarSale(APITestCase):
     def test_update_status_set_to_true(self):
         self.url = reverse("car-sale-detail", kwargs={"pk": self.carSale.id})
 
+        self.assertEqual(self.carSale.ownerClient, self.carOrder.client)
         payload = {"price": 60_000, "recycle": 10_000, "status": True}
         response = self.client.patch(self.url, payload)
+
+        car_order_withdrawal = self.carOrder.withdrawal
+        car_order_carModel = str(self.carOrder.carModel)
+        car_order_vinNumber = str(self.carOrder.vinNumber)
 
         self.carSale.refresh_from_db()
         self.assertEqual(response.data["price"], 60_000)
@@ -84,12 +96,25 @@ class TestCreateNewCarSale(APITestCase):
             Balance.objects.filter(
                 client=self.carSale.ownerClient,
                 sum_in_jpy=self.carSale.total,
-                sum_in_usa=self.carSale.total,
-                rate=1,
                 payment_type=Balance.PAYMENT_TYPE_CASHLESS,
                 balance_action=Balance.BALANCE_ACTION_REPLENISHMENT,
             ).exists()
         )
+
+        # Check if balance withdrawal for CarOrder is kept
+        car_order_withdrawal.refresh_from_db()
+        self.assertTrue(
+            CarOrderWithdrawal.objects.filter(
+                id=car_order_withdrawal.id
+            ).exists()
+        )
+        self.assertEqual(
+            car_order_withdrawal.balance.sum_in_jpy, self.carOrder.total
+        )
+
+        # Check if carOrder data is kept
+        self.assertEqual(self.carSale.vinNumber, car_order_vinNumber)
+        self.assertEqual(self.carSale.carModel, car_order_carModel)
 
     def test_update_set_to_true_with_no_price_and_recycle(self):
         self.url = reverse("car-sale-detail", kwargs={"pk": self.carSale.id})

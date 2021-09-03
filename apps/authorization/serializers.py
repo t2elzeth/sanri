@@ -1,10 +1,14 @@
-from django.contrib.auth import authenticate
-from rest_framework import serializers
-from rest_framework.exceptions import ValidationError
-
 from container.models import Container
+from django.contrib.auth import authenticate
 from income.models import Income
-from .models import Balance, User, ManagedUser
+from rest_framework import serializers
+from rest_framework.exceptions import (
+    APIException,
+    NotAuthenticated,
+    ValidationError,
+)
+
+from .models import Balance, ManagedUser, User
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -81,9 +85,17 @@ class ClientSerializer(serializers.ModelSerializer):
     def get_cars_for_sale(self, user):
         cars = user.car_orders.all()
 
+        total_key = {
+            User.AT_WHAT_PRICE_BY_FACT: "total",
+            User.AT_WHAT_PRICE_BY_FOB: "total_FOB",
+            User.AT_WHAT_PRICE_BY_FOB2: "total_FOB2",
+        }
+
+        key = total_key[user.atWhatPrice]
+
         return {
             "number": len(cars),
-            "totalAmount": sum(car.total for car in cars),
+            "totalAmount": sum(getattr(car, key) for car in cars),
         }
 
     def get_balance_replenishments(self, user):
@@ -190,7 +202,11 @@ class TokenSerializer(serializers.Serializer):
         if not self.user:
             self.user = User.objects.get_object_or_none(**params)
             if self.user and not self.user.check_password(password):
-                self.fail("invalid_credentials")
+                # self.fail("invalid_credentials")
+                # raise ValidationError(self.default_error_messages['invalid_credentials'])
+                raise NotAuthenticated(
+                    self.default_error_messages["invalid_credentials"]
+                )
         if self.user and self.user.is_active:
             return data
         self.fail("invalid_credentials")
@@ -224,7 +240,7 @@ class BalanceSerializer(serializers.ModelSerializer):
 
 
 class ManagedUserSerializer(serializers.ModelSerializer):
-    user = UserSerializer()
+    user = ClientSerializer()
 
     class Meta:
         model = ManagedUser

@@ -1,12 +1,13 @@
-from rest_framework import generics
-
 from authorization.models import User
 from container.models import ContainerCar
+from rest_framework import generics
+from rest_framework.permissions import IsAuthenticated
+
 from utils.mixins import DetailAPIViewMixin
+
 from .filters import CarModelFilter
 from .models import CarOrder
 from .serializers import CarOrderSerializer, ParkingSerializer
-from rest_framework.permissions import IsAuthenticated
 
 
 class CarOrderAPIView(generics.ListCreateAPIView):
@@ -19,6 +20,15 @@ class CarOrderAPIView(generics.ListCreateAPIView):
         user_type = self.request.user.user_type
         if user_type == User.USER_TYPE_CLIENT:
             self.queryset = self.queryset.filter(client=self.request.user)
+        elif user_type in (
+            User.USER_TYPE_SALES_MANAGER,
+            User.USER_TYPE_YARD_MANAGER,
+        ):
+            managed_users = [
+                managed_user.user
+                for managed_user in self.request.user.managed_users_as_manager.all()
+            ]
+            self.queryset = self.queryset.filter(client__in=managed_users)
         return super().get_queryset()
 
 
@@ -36,6 +46,15 @@ class ParkingAPIView(generics.ListAPIView):
         user_type = self.request.user.user_type
         if user_type == User.USER_TYPE_CLIENT:
             self.queryset = self.queryset.filter(client=self.request.user)
+        elif user_type in (
+            User.USER_TYPE_SALES_MANAGER,
+            User.USER_TYPE_YARD_MANAGER,
+        ):
+            managed_users = [
+                managed_user.user
+                for managed_user in self.request.user.managed_users_as_manager.all()
+            ]
+            self.queryset = self.queryset.filter(client__in=managed_users)
 
         car_ids = list(
             [

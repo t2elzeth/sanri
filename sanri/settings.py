@@ -102,14 +102,13 @@ OWN_APPS = [
     "car_order",
     "car_resale",
     "car_sale",
-    "car_store",
     "container",
-    "file",
     "income",
     "monthly_payment",
     "staff",
     "transport_companies",
     "statistic",
+    "shop",
 ]
 
 INSTALLED_APPS += THIRD_PARTY_APPS + OWN_APPS
@@ -136,11 +135,17 @@ DATABASES = {
         "NAME": "postgres",
         "USER": "t2elzeth",
         "PASSWORD": "postgres",
-        "HOST": "213.139.209.59",
+        "HOST": "db",
         "PORT": 5432,
-    }
+    },
 }
 
+if "test" in sys.argv:
+    DATABASES["default"] = {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": "mydatabase",
+    }
+#
 # DATABASES = {
 #     "default": {
 #         "ENGINE": "django.db.backends.sqlite3",

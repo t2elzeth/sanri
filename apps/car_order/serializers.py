@@ -1,13 +1,13 @@
 from datetime import timedelta
 
-from django.utils import timezone
-from rest_framework import serializers
-
 from auction.models import Auction
 from authorization.models import User
-from car_model.models import CarModel, CarMark
-from .models import CarOrder
+from car_model.models import CarMark, CarModel
+from django.utils import timezone
+from rest_framework import serializers
 from transport_companies.models import TransportCompany
+
+from .models import CarOrder
 
 
 class ClientSerializer(serializers.ModelSerializer):
@@ -73,6 +73,9 @@ class CarOrderSerializer(serializers.ModelSerializer):
     total_FOB = serializers.IntegerField(read_only=True)
     transportCompany = TransportCompanySerializer(read_only=True)
 
+    # FOB property cannot be written, so its readonly
+    fob = serializers.IntegerField(read_only=True)
+
     class Meta:
         model = CarOrder
         fields = [
@@ -96,9 +99,13 @@ class CarOrderSerializer(serializers.ModelSerializer):
             "carNumber",
             "total",
             "total_FOB",
+            "total_FOB2",
             "created_at",
             "transportCompany",
             "transportCompany_id",
+            "analysis",
+            "additional_expenses",
+            "comment",
         ]
 
 
@@ -110,7 +117,7 @@ class ParkingSerializer(CarOrderSerializer):
         return car.created_at + timedelta(days=90)
 
     def get_parked_for(self, car):
-        return (timezone.now() - car.created_at).days
+        return (timezone.now().date() - car.created_at).days
 
     class Meta(CarOrderSerializer.Meta):
         fields = CarOrderSerializer.Meta.fields + [

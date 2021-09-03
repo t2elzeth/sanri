@@ -1,5 +1,12 @@
 from django.contrib import admin
 
-from .models import CarOrder
+from .models import BalanceWithdrawal, CarOrder
 
-admin.site.register(CarOrder)
+
+class BalanceReplenishmentInline(admin.StackedInline):
+    model = BalanceWithdrawal
+
+
+@admin.register(CarOrder)
+class CarOrderAdmin(admin.ModelAdmin):
+    inlines = [BalanceReplenishmentInline]

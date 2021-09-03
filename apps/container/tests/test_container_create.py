@@ -1,15 +1,19 @@
-from rest_framework import status
-from rest_framework.reverse import reverse
-from rest_framework.test import APITestCase
 from auction.models import Auction
-from authorization.models import User, Balance
+from authorization.models import Balance, User
 from car_model.models import CarMark
 from car_order.models import CarOrder
 from container.formulas import calculate_total
 from container.models import Container
+from rest_framework import status
+from rest_framework.authtoken.models import Token
+from rest_framework.reverse import reverse
+from rest_framework.test import APITestCase
+from transport_companies.models import TransportCompany
+
+from utils.tests import Authenticate
 
 
-class CreateContainerTest(APITestCase):
+class CreateContainerTest(Authenticate, APITestCase):
     def setUp(self) -> None:
         self.url = reverse("container-list-create")
         self.container_client = User.objects.create_user(
@@ -22,6 +26,7 @@ class CreateContainerTest(APITestCase):
             atWhatPrice=User.AT_WHAT_PRICE_BY_FACT,
             username="owner_client",
         )
+        self.token = Token.objects.create(user=self.container_client)
 
         self.auction = Auction.objects.create(
             name="AuctionName",
@@ -35,6 +40,10 @@ class CreateContainerTest(APITestCase):
         self.car_model_FIT = self.car_mark.models.create(name="FIT")
         self.car_model_ODYSSEI = self.car_mark.models.create(name="ODYSSEI")
 
+        self.transport_company = TransportCompany.objects.create(
+            name="My transport company"
+        )
+
         self.carOrder_1 = CarOrder.objects.create(
             client=self.container_client,
             auction=self.auction,
@@ -42,12 +51,12 @@ class CreateContainerTest(APITestCase):
             carModel=self.car_model_FIT,
             vinNumber=25000,
             year=2019,
-            fob=self.container_client.sizeFOB,
             price=50000,
             recycle=20000,
             auctionFees=25000,
             transport=3000,
             carNumber=CarOrder.CAR_NUMBER_NOT_GIVEN,
+            transportCompany=self.transport_company,
         )
 
         self.carOrder_2 = CarOrder.objects.create(
@@ -57,15 +66,17 @@ class CreateContainerTest(APITestCase):
             carModel=self.car_model_ODYSSEI,
             vinNumber=25000,
             year=2019,
-            fob=self.container_client.sizeFOB,
             price=50000,
             recycle=20000,
             auctionFees=25000,
             transport=3000,
             carNumber=CarOrder.CAR_NUMBER_NOT_GIVEN,
+            transportCompany=self.transport_company,
         )
 
     def test_container_create_with_valid_data(self):
+        self.set_credentials(self.token)
+
         payload = {
             "client_id": self.container_client.id,
             "name": "My test container",

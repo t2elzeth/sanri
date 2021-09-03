@@ -4,6 +4,9 @@ from django.db import models
 class StaffExpenseType(models.Model):
     name = models.CharField(max_length=255)
 
+    class Meta:
+        ordering = ("id",)
+
 
 class StaffMember(models.Model):
     full_name = models.CharField(max_length=255)
@@ -13,6 +16,9 @@ class StaffMember(models.Model):
 
     def __str__(self):
         return self.full_name
+
+    class Meta:
+        ordering = ("id",)
 
 
 class StaffExpense(models.Model):
@@ -28,3 +34,6 @@ class StaffExpense(models.Model):
 
     def __str__(self):
         return f"{self.amount}"
+
+    class Meta:
+        ordering = ("id",)

@@ -1,12 +1,21 @@
-from django.contrib.auth import get_user_model
-from django.db import models
-
 from auction.models import Auction
 from car_model.models import CarModel
-from .formulas import calculate_total, calculate_total_fob
+from django.contrib.auth import get_user_model
+from django.db import models
+from django.utils import timezone
 from transport_companies.models import TransportCompany
 
+from .formulas import (
+    calculate_total,
+    calculate_total_fob,
+    calculate_total_fob2,
+)
+
 User = get_user_model()
+
+
+def get_date():
+    return timezone.now().date()
 
 
 class CarOrder(models.Model):
@@ -26,7 +35,6 @@ class CarOrder(models.Model):
     recycle = models.IntegerField()
     auctionFees = models.IntegerField()
     transport = models.IntegerField()
-    fob = models.IntegerField()
     amount = models.IntegerField(default=0)
     transportCompany = models.ForeignKey(
         TransportCompany, on_delete=models.CASCADE, related_name="car_orders"
@@ -46,15 +54,68 @@ class CarOrder(models.Model):
     documentsGiven = models.BooleanField(default=False)
     total = models.IntegerField()
     total_FOB = models.IntegerField()
-    created_at = models.DateTimeField(auto_now_add=True)
+    total_FOB2 = models.IntegerField(default=0)
+    created_at = models.DateField(default=get_date)
+    analysis = models.JSONField(default=dict)
+    comment = models.TextField(default="", blank=True, null=True)
+    additional_expenses = models.IntegerField(default=0)
+
+    @property
+    def fob(self):
+        return self.client.sizeFOB
+
+    def get_total(self):
+        if self.client.atWhatPrice == User.AT_WHAT_PRICE_BY_FACT:
+            return self.total
+        elif self.client.atWhatPrice == User.AT_WHAT_PRICE_BY_FOB:
+            return self.total_FOB
+        elif self.client.atWhatPrice == User.AT_WHAT_PRICE_BY_FOB2:
+            return self.total_FOB2
+
+        return 0
 
     def calculate_totals(self):
+        self.total_FOB = 0
+        self.total_FOB2 = 0
         self.total = calculate_total(
             self.price, self.auctionFees, self.recycle, self.transport
         )
-        self.total_FOB = calculate_total_fob(
-            self.price, self.amount, self.transport, self.fob
-        )
+
+        if self.client is None:
+            return
+
+        if self.client.atWhatPrice == User.AT_WHAT_PRICE_BY_FOB:
+            self.total_FOB = calculate_total_fob(
+                self.price, self.amount, self.transport, self.fob
+            )
+        elif self.client.atWhatPrice == User.AT_WHAT_PRICE_BY_FOB2:
+            self.total_FOB2 = calculate_total_fob2(
+                self.price, self.auctionFees, self.transport, self.fob
+            )
 
     def __str__(self):
         return f"CarOrder#{self.id} of {self.client}"
+
+    class Meta:
+        ordering = ("id",)
+
+
+class BalanceWithdrawal(models.Model):
+    balance = models.OneToOneField(
+        "authorization.Balance",
+        on_delete=models.CASCADE,
+        related_name="car_order_withdrawals",
+    )
+    car_order = models.OneToOneField(
+        CarOrder,
+        on_delete=models.SET_NULL,
+        related_name="withdrawal",
+        null=True,
+    )
+
+    def calculate_amount(self):
+        self.balance.sum_in_jpy = self.car_order.get_total()
+        self.balance.save()
+
+    class Meta:
+        ordering = ("id",)

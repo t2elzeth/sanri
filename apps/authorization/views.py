@@ -2,13 +2,15 @@ from rest_framework import generics, mixins, status
 from rest_framework.permissions import IsAuthenticated
 
 from utils.mixins import DetailAPIViewMixin
-from .models import Balance, User
+
+from .filters import BalanceFilter
+from .models import Balance, ManagedUser, User
 from .serializers import (
     BalanceSerializer,
     ClientSerializer,
+    ManagerSerializer,
     TokenSerializer,
     UserSerializer,
-    ManagerSerializer,
 )
 
 
@@ -37,12 +39,18 @@ class ClientListAPIView(generics.ListCreateAPIView):
     serializer_class = ClientSerializer
     permission_classes = [IsAuthenticated]
 
-    # def get_queryset(self):
-    #     user_type = self.request.user.user_type
-    #     if user_type == User.USER_TYPE_CLIENT:
-    #         self.queryset = self.queryset.filter(id=self.request.user.id)
-    #
-    #     return super().get_queryset()
+    def get_queryset(self):
+        user_type = self.request.user.user_type
+        if user_type in (
+            User.USER_TYPE_SALES_MANAGER,
+            User.USER_TYPE_YARD_MANAGER,
+        ):
+            self.queryset = [
+                managed_user.user
+                for managed_user in self.request.user.managed_users_as_manager.all()
+            ]
+
+        return super().get_queryset()
 
 
 class ClientAPIView(DetailAPIViewMixin):
@@ -86,11 +94,22 @@ class BalanceListAPIView(generics.ListCreateAPIView):
     queryset = Balance.objects.all()
     serializer_class = BalanceSerializer
     permission_classes = [IsAuthenticated]
+    filterset_class = BalanceFilter
 
     def get_queryset(self):
         user_type = self.request.user.user_type
         if user_type == User.USER_TYPE_CLIENT:
             self.queryset = self.queryset.filter(client=self.request.user)
+        elif user_type in (
+            User.USER_TYPE_SALES_MANAGER,
+            User.USER_TYPE_YARD_MANAGER,
+        ):
+            managed_users = [
+                managed_user.user
+                for managed_user in self.request.user.managed_users_as_manager.all()
+            ]
+            self.queryset = self.queryset.filter(client__in=managed_users)
+
         return super().get_queryset()
 
 
