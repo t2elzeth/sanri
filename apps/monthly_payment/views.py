@@ -23,6 +23,12 @@ class MonthlyPaymentDetailAPIView(DetailAPIViewMixin):
     queryset = MonthlyPayment.objects.all()
     serializer_class = ReadMonthlyPaymentSerializer
 
+    def get_serializer_class(self):
+        if self.request.method in ('UPDATE', 'PATCH'):
+            self.serializer_class = WriteMonthlyPaymentSerializer
+
+        return super(MonthlyPaymentDetailAPIView, self).get_serializer_class()
+
 
 class MonthlyPaymentTypeAPIView(generics.ListCreateAPIView):
     queryset = MonthlyPaymentType.objects.all()
