@@ -9,7 +9,7 @@ class MonthlyPaymentTypeSerializer(serializers.ModelSerializer):
         fields = ["id", "name"]
 
 
-class MonthlyPaymentSerializer(serializers.ModelSerializer):
+class WriteMonthlyPaymentSerializer(serializers.ModelSerializer):
     class Meta:
         model = MonthlyPayment
         fields = [
@@ -19,4 +19,19 @@ class MonthlyPaymentSerializer(serializers.ModelSerializer):
             "date",
             "amount",
             "comment",
+        ]
+
+
+class ReadMonthlyPaymentSerializer(serializers.ModelSerializer):
+    type = MonthlyPaymentTypeSerializer()
+
+    class Meta:
+        model = MonthlyPayment
+        fields = [
+            'id',
+            'type',
+            'from_container',
+            'date',
+            'amount',
+            'comment'
         ]
