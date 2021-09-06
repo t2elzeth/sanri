@@ -9,12 +9,12 @@ class StaffExpenseTypeSerializer(serializers.ModelSerializer):
         fields = ["id", "name"]
 
 
-class StaffExpenseSerializer(serializers.ModelSerializer):
+class WriteStaffExpenseSerializer(serializers.ModelSerializer):
     class Meta:
         model = StaffExpense
         fields = [
             "id",
-            "staff_members",
+            "staff_member",
             "type",
             "date",
             "amount",
@@ -32,3 +32,12 @@ class StaffMemberSerializer(serializers.ModelSerializer):
             "position",
             "visa_expiration_date",
         ]
+
+
+class ReadStaffExpenseSerializer(serializers.ModelSerializer):
+    type = StaffExpenseTypeSerializer()
+    staff_member = StaffMemberSerializer()
+
+    class Meta:
+        model = StaffExpense
+        fields = ["id", "staff_member", "type", "date", "amount", "comment"]

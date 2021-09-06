@@ -1,7 +1,6 @@
 import os
 import sys
 from pathlib import Path
-
 import dotenv
 
 dotenv.load_dotenv()
@@ -10,11 +9,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 sys.path.insert(0, os.path.join(BASE_DIR, "apps"))
 
-SECRET_KEY = (
-    "django-insecure-x=rjvpp_@0x-r-@02m2zp6+xl5gzukts&-jhzgy_xd)76nyu*_"
-)
-
-DEBUG = True
+SECRET_KEY = "django-insecure-x=rjvpp_@0x-r-@02m2zp6+xl5gzukts&-jhzgy_xd)76nyu*_"
+DEBUG = bool(int(os.getenv("DJANGO_DEBUG", 1)))
 
 ALLOWED_HOSTS = ["*"]
 
@@ -135,7 +131,7 @@ DATABASES = {
         "NAME": "postgres",
         "USER": "t2elzeth",
         "PASSWORD": "postgres",
-        "HOST": "db",
+        "HOST": "213.139.209.59",
         "PORT": 5432,
     },
 }

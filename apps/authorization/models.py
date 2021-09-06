@@ -9,11 +9,22 @@ from . import managers
 
 class UserBalance:
     def __init__(self, user):
-        self.replenishments = sum([balance.sum_in_jpy for balance in user.balances.all() if
-                              balance.balance_action == balance.BALANCE_ACTION_REPLENISHMENT])
+        self.replenishments = sum(
+            [
+                balance.sum_in_jpy
+                for balance in user.balances.all()
+                if balance.balance_action
+                == balance.BALANCE_ACTION_REPLENISHMENT
+            ]
+        )
 
-        self.withdrawals = sum([balance.sum_in_jpy for balance in user.balances.all() if
-                              balance.balance_action == balance.BALANCE_ACTION_WITHDRAWAL])
+        self.withdrawals = sum(
+            [
+                balance.sum_in_jpy
+                for balance in user.balances.all()
+                if balance.balance_action == balance.BALANCE_ACTION_WITHDRAWAL
+            ]
+        )
 
         self.amount = self.replenishments - self.withdrawals
 

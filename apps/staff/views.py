@@ -4,20 +4,37 @@ from utils.mixins import DetailAPIViewMixin
 
 from .models import StaffExpense, StaffExpenseType, StaffMember
 from .serializers import (
-    StaffExpenseSerializer,
+    WriteStaffExpenseSerializer,
     StaffExpenseTypeSerializer,
     StaffMemberSerializer,
+    ReadStaffExpenseSerializer
 )
 
 
 class StaffExpenseAPIView(generics.ListCreateAPIView):
     queryset = StaffExpense.objects.all()
-    serializer_class = StaffExpenseSerializer
+    serializer_class = WriteStaffExpenseSerializer
+
+    def get_serializer_class(self):
+        if self.request.method == 'POST':
+            self.serializer_class = WriteStaffExpenseSerializer
+        else:
+            self.serializer_class = ReadStaffExpenseSerializer
+
+        return super().get_serializer_class()
 
 
 class StaffExpenseDetailAPIView(DetailAPIViewMixin):
     queryset = StaffExpense.objects.all()
-    serializer_class = StaffExpenseSerializer
+    serializer_class = ReadStaffExpenseSerializer
+
+    def get_serializer_class(self):
+        if self.request.method in ('UPDATE', 'PATCH'):
+            self.serializer_class = WriteStaffExpenseSerializer
+        else:
+            self.serializer_class = ReadStaffExpenseSerializer
+
+        return super().get_serializer_class()
 
 
 class StaffMemberAPIView(generics.ListCreateAPIView):
