@@ -22,7 +22,9 @@ class StaffMember(models.Model):
 
 
 class StaffExpense(models.Model):
-    staff_members = models.ManyToManyField(StaffMember)
+    staff_member = models.ForeignKey(
+        StaffMember, on_delete=models.CASCADE, related_name="expenses"
+    )
     type = models.ForeignKey(
         StaffExpenseType,
         on_delete=models.CASCADE,

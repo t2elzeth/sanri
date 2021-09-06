@@ -27,11 +27,4 @@ class ReadMonthlyPaymentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = MonthlyPayment
-        fields = [
-            'id',
-            'type',
-            'from_container',
-            'date',
-            'amount',
-            'comment'
-        ]
+        fields = ["id", "type", "from_container", "date", "amount", "comment"]

@@ -91,7 +91,10 @@ class TestCreateAPIView(Authenticate, APITestCase):
         self.car_order = CarOrder.objects.get(id=response.data["id"])
 
         self.user.refresh_from_db()
-        self.assertEqual(self.user.balance.amount, -self.car_order.withdrawal.balance.sum_in_jpy)
+        self.assertEqual(
+            self.user.balance.amount,
+            -self.car_order.withdrawal.balance.sum_in_jpy,
+        )
         self.assertEqual(self.sanri.balance.amount, 0)
 
     def test_create_with_user_fob2(self):
@@ -122,9 +125,12 @@ class TestCreateAPIView(Authenticate, APITestCase):
         response = self.client.post(self.url, payload)
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.car_order = CarOrder.objects.get(id=response.data['id'])
+        self.car_order = CarOrder.objects.get(id=response.data["id"])
 
-        self.assertEqual(self.sanri.balance.amount, -(self.car_order.recycle + self.car_order.price * 0.1))
+        self.assertEqual(
+            self.sanri.balance.amount,
+            -(self.car_order.recycle + self.car_order.price * 0.1),
+        )
 
     def test_create_with_no_authtoken(self):
         response = self.client.post(self.url, {})

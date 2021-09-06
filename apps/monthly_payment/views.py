@@ -3,7 +3,11 @@ from rest_framework import generics
 from utils.mixins import DetailAPIViewMixin
 
 from .models import MonthlyPayment, MonthlyPaymentType
-from .serializers import WriteMonthlyPaymentSerializer, MonthlyPaymentTypeSerializer, ReadMonthlyPaymentSerializer
+from .serializers import (
+    WriteMonthlyPaymentSerializer,
+    MonthlyPaymentTypeSerializer,
+    ReadMonthlyPaymentSerializer,
+)
 
 
 class MonthlyPaymentAPIView(generics.ListCreateAPIView):
@@ -11,7 +15,7 @@ class MonthlyPaymentAPIView(generics.ListCreateAPIView):
     serializer_class = WriteMonthlyPaymentSerializer
 
     def get_serializer_class(self):
-        if self.request.method == 'POST':
+        if self.request.method == "POST":
             self.serializer_class = WriteMonthlyPaymentSerializer
         else:
             self.serializer_class = ReadMonthlyPaymentSerializer
@@ -24,7 +28,7 @@ class MonthlyPaymentDetailAPIView(DetailAPIViewMixin):
     serializer_class = ReadMonthlyPaymentSerializer
 
     def get_serializer_class(self):
-        if self.request.method in ('UPDATE', 'PATCH'):
+        if self.request.method in ("UPDATE", "PATCH"):
             self.serializer_class = WriteMonthlyPaymentSerializer
 
         return super(MonthlyPaymentDetailAPIView, self).get_serializer_class()
