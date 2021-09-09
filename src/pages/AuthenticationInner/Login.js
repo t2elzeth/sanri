@@ -4,6 +4,7 @@ import axios from "axios";
 import {useHistory} from "react-router-dom";
 // Redux
 import { Link } from "react-router-dom";
+import routeNames from "../../routes/routeNames"
 
 import { Card, CardBody, Col, Container, Row } from "reactstrap";
 
@@ -35,6 +36,10 @@ function Login() {
       })
       .catch(err => console.log(err))
   }
+
+  useEffect(() => {
+    console.log(routeNames)
+  })
 
   return (
     <React.Fragment>
