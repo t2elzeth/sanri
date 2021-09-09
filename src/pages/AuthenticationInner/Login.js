@@ -26,9 +26,7 @@ function Login() {
   const handleUsernameChange = (e) => setUsername(e.target.value);
 
   function handleSubmit() {
-    const formData = {
-      username, password
-    }
+    const formData = { username, password}
 
     AuthenticateAPI.post("/login/", formData)
       .then(res => {
