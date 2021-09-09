@@ -1,4 +1,11 @@
 {
+  "CommonBase": "Общая база",
+  "ResellHistory": "История перепродажи",
+  "NumberAndDocuments": "Документы с номерами",
+  "SoldCarsList": "Список проданных машин",
+  "AddNew": "Добавить",
+  "Buy": "Покупка",
+  "Sell": "Продажа",
   "Mega Menu": "Мега Меню",
   "Search": "Поиск",
   "Menu": "Menu",
