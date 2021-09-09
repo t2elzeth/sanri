@@ -44,6 +44,8 @@ import { withTranslation } from "react-i18next"
 import classNames from "classnames";
 import reports from "./reports";
 
+import WalletActivities from "./walletActivities";
+
 class Dashboard extends Component {
   constructor(props) {
     super(props)
@@ -218,6 +220,9 @@ class Dashboard extends Component {
             <Row>
               <Col lg="12">
                 <LatestTranaction />
+              </Col>
+              <Col lg="12">
+                <WalletActivities />
               </Col>
             </Row>
           </Container>
