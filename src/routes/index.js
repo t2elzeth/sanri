@@ -52,8 +52,6 @@ import Register from "../pages/Authentication/Register"
 import ForgetPwd from "../pages/Authentication/ForgetPassword"
 
 // Inner Authentication
-import Login1 from "../pages/AuthenticationInner/Login"
-import Login2 from "../pages/AuthenticationInner/Login2"
 import Register1 from "../pages/AuthenticationInner/Register"
 import Register2 from "../pages/AuthenticationInner/Register2"
 import Recoverpw from "../pages/AuthenticationInner/Recoverpw"
