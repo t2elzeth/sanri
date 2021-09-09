@@ -42,24 +42,13 @@ import Breadcrumbs from "../../components/Common/Breadcrumb"
 //i18n
 import { withTranslation } from "react-i18next"
 import classNames from "classnames";
+import reports from "./reports";
 
 class Dashboard extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      reports: [
-        { title: "Orders", iconClass: "bx-copy-alt", description: "1,235" },
-        {
-          title: "Revenue",
-          iconClass: "bx-archive-in",
-          description: "$35, 723",
-        },
-        {
-          title: "Average Price",
-          iconClass: "bx-purchase-tag-alt",
-          description: "$16.2",
-        },
-      ],
+      reports,
       email: [
         { title: "Week", linkto: "#", isActive: false },
         { title: "Month", linkto: "#", isActive: false },
@@ -116,6 +105,7 @@ class Dashboard extends Component {
             <Row>
               <Col xl="4">
                 <WelcomeComp />
+                <MonthlyEarning />
                 <MonthlyEarning />
               </Col>
               <Col xl="8">

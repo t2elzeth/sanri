@@ -17,18 +17,17 @@ class MonthlyEarning extends Component {
         {" "}
         <Card>
           <CardBody>
-            <CardTitle className="mb-4 h4">Monthly Earning</CardTitle>
+            <CardTitle className="mb-4 h4">Прибыль</CardTitle>
             <Row>
               <Col sm="6">
-                <p className="text-muted">This month</p>
+                <p className="text-muted">За весь период</p>
                 <h3>$34,252</h3>
-                <p className="text-muted">
-                  <span className="text-success me-2">
-                    {" "}
-                    12% <i className="mdi mdi-arrow-up"></i>{" "}
-                  </span>{" "}
-                  From previous period
-                </p>
+                {/*<p className="text-muted">*/}
+                {/*  <span className="text-success me-2">*/}
+                {/*    12% <i className="mdi mdi-arrow-up" />*/}
+                {/*  </span>*/}
+                {/*  From previous period*/}
+                {/*</p>*/}
                 <div className="mt-4">
                   <Link
                     to=""
@@ -39,7 +38,7 @@ class MonthlyEarning extends Component {
                 </div>
               </Col>
               <Col sm="6">
-                <div className="mt-4 mt-sm-0">
+                <div className="mt-sm-0">
                   <ApexRadial />
                 </div>
               </Col>
