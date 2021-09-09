@@ -327,9 +327,6 @@ const publicRoutes = [
   { path: "/crypto-ico-landing", component: CryptoIcoLanding },
 
   // Authentication Inner
-  { path: "/pages-login", component: Login1 },
-  { path: "/pages-login-2", component: Login2 },
-
   { path: "/pages-register", component: Register1 },
   { path: "/pages-register-2", component: Register2 },
 
