@@ -66,7 +66,6 @@ class ClientSerializer(serializers.ModelSerializer):
         containers = user.containers.filter(status=Container.STATUS_SHIPPED)
         total = 0
         for container in containers:
-            print(user.atWhatPrice)
             container_total = 0
             cars_total = sum(container_car.car.get_total() for container_car in container.container_cars.all())
             if user.atWhatPrice == User.AT_WHAT_PRICE_BY_FACT:
