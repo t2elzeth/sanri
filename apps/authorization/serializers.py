@@ -83,11 +83,21 @@ class ClientSerializer(serializers.ModelSerializer):
     def get_going_to_containers(self, user):
         containers = user.containers.filter(status=Container.STATUS_GOING_TO)
 
+        total = 0
+        for container in containers:
+            container_total = 0
+            cars_total = sum(container_car.car.get_total() for container_car in container.container_cars.all())
+            if user.atWhatPrice == User.AT_WHAT_PRICE_BY_FACT:
+                container_total = cars_total + container.commission + container.containerTransportation + container.packagingMaterials + container.wheel_recycling.sum - container.wheel_sales.sum
+            elif user.atWhatPrice == User.AT_WHAT_PRICE_BY_FOB:
+                container_total = cars_total + container.loading
+            elif user.atWhatPrice == User.AT_WHAT_PRICE_BY_FOB2:
+                container_total = cars_total + container.transportation
+            total += container_total
+
         return {
             "number": len(containers),
-            "totalAmount": sum(
-                container.totalAmount for container in containers
-            ),
+            "totalAmount": total
         }
 
     def get_cars_for_sale(self, user):
