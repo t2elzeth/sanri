@@ -1,4 +1,4 @@
-from container.models import Container
+from container.models import Container, ContainerCar
 from django.contrib.auth import authenticate
 from income.models import Income
 from rest_framework import serializers
@@ -83,7 +83,13 @@ class ClientSerializer(serializers.ModelSerializer):
         }
 
     def get_cars_for_sale(self, user):
-        cars = user.car_orders.all()
+        car_ids = list(
+            [
+                el["car__id"]
+                for el in ContainerCar.objects.all().values("car__id")
+            ]
+        )
+        cars = user.car_orders.exclude(id__in=car_ids)
 
         total_key = {
             User.AT_WHAT_PRICE_BY_FACT: "total",
