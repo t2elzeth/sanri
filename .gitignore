@@ -121,4 +121,5 @@ GitHub.sublime-settings
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
-.history.DS_Store
+.history
+.DS_Store
