@@ -10,6 +10,12 @@ from .models import BalanceWithdrawal, CarOrder
 def calculate_totals(instance: CarOrder, **kwargs):
     instance.calculate_totals()
 
+    previous = CarOrder.objects.filter(id=instance.id).first()
+
+    if previous.client.id != instance.client.id:
+        instance.withdrawal.balance.client = instance.client
+        instance.withdrawal.balance.save()
+
 
 @receiver(post_save, sender=CarOrder)
 def post_save_car_resale(instance: CarOrder, created, **kwargs):
