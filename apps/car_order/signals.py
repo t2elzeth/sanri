@@ -12,7 +12,7 @@ def calculate_totals(instance: CarOrder, **kwargs):
 
     previous = CarOrder.objects.filter(id=instance.id).first()
 
-    if previous.client.id != instance.client.id:
+    if previous is not None and previous.client.id != instance.client.id:
         instance.withdrawal.balance.client = instance.client
         instance.withdrawal.balance.save()
 
