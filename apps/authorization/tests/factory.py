@@ -14,6 +14,6 @@ class ClientFactory(factory.django.DjangoModelFactory):
 
     service = User.SERVICE_ENTIRE
     atWhatPrice = User.AT_WHAT_PRICE_BY_FACT
-    sizeFOB = factory.Faker("numerify", text="###%")
+    sizeFOB = factory.Faker("pyint", min_value=1, max_value=200_000)
     username = factory.Faker("user_name")
     user_type = User.USER_TYPE_CLIENT
