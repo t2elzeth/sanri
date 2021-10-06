@@ -4,46 +4,7 @@ from django.db import models
 from django.utils import timezone
 from rest_framework.authtoken.models import Token
 
-from . import managers
-
-
-class UserBalance:
-    def __init__(self, user: "User"):
-        self.replenishments = sum(
-            [
-                balance.sum_in_jpy
-                for balance in user.balances.all()
-                if balance.balance_action
-                   == balance.BALANCE_ACTION_REPLENISHMENT
-            ]
-        )
-
-        self.withdrawals = sum(
-            [
-                balance.sum_in_jpy
-                for balance in user.balances.all()
-                if balance.balance_action == balance.BALANCE_ACTION_WITHDRAWAL
-            ]
-        )
-
-        self.amount = self.replenishments - self.withdrawals
-
-
-class UserWorksBy:
-    def __init__(self, user: "User"):
-        self._user = user
-
-    @property
-    def by_fact(self) -> bool:
-        return self._user.atWhatPrice == self._user.AT_WHAT_PRICE_BY_FACT
-
-    @property
-    def by_fob(self) -> bool:
-        return self._user.atWhatPrice == self._user.AT_WHAT_PRICE_BY_FOB
-
-    @property
-    def by_fob2(self) -> bool:
-        return self._user.atWhatPrice == self._user.AT_WHAT_PRICE_BY_FOB2
+from . import managers, model_helpers
 
 
 class User(AbstractBaseUser, PermissionsMixin):
@@ -112,12 +73,12 @@ class User(AbstractBaseUser, PermissionsMixin):
         return f"Account of {self.get_username()}"
 
     @property
-    def balance(self) -> UserBalance:
-        return UserBalance(self)
+    def balance(self) -> model_helpers.UserBalance:
+        return model_helpers.UserBalance(self)
 
     @property
-    def works_by(self) -> UserWorksBy:
-        return UserWorksBy(self)
+    def works_by(self) -> model_helpers.UserWorksBy:
+        return model_helpers.UserWorksBy(self)
 
     def login(self):
         token, _ = Token.objects.get_or_create(user=self)
