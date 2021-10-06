@@ -56,7 +56,7 @@ class CarOrder(models.Model):
     total_FOB = models.IntegerField()
     total_FOB2 = models.IntegerField(default=0)
     created_at = models.DateField(default=get_date)
-    analysis = models.JSONField(default=dict)
+    analysis = models.JSONField(default=dict, blank=True)
     comment = models.TextField(default="", blank=True, null=True)
     additional_expenses = models.IntegerField(default=0)
 
