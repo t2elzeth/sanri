@@ -27,6 +27,25 @@ class TestCarOrderAndUserRelation(TestCase):
         """
         self.assertEqual(self.car_order.fob, self.user.sizeFOB)
 
+    def test_balance_client_changes_when_car_order_client_changed(self):
+        """
+
+        @return:
+        """
+
+        self.assertEqual(self.car_order.client.id, self.car_order.withdrawal.balance.client.id)
+
+        self.user.id = None
+        self.user.username = "newussernameemme"
+        self.user.save()
+
+        self.car_order.client = self.user
+        self.car_order.save()
+
+        self.car_order.refresh_from_db()
+
+        self.assertEqual(self.car_order.client.id, self.car_order.withdrawal.balance.client.id)
+
     def test_user_sizeFOB_changed(self):
         """
         Test if CarOrder's fob gets updated as client's fob changes
