@@ -8,7 +8,7 @@ from . import managers
 
 
 class UserBalance:
-    def __init__(self, user):
+    def __init__(self, user: "User"):
         self.replenishments = sum(
             [
                 balance.sum_in_jpy
