@@ -98,15 +98,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     def balance(self):
         return UserBalance(self)
 
-    def activate(self):
-        self.is_active = True
-        self.save()
-
-    def deactivate(self):
-        self.logout()
-        self.is_active = False
-        self.save()
-
     def login(self):
         token, _ = Token.objects.get_or_create(user=self)
         return token
