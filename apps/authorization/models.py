@@ -108,6 +108,12 @@ class User(AbstractBaseUser, PermissionsMixin):
     class Meta:
         ordering = ("id",)
 
+    def save(self, *args, **kwargs):
+        if self.atWhatPrice == self.AT_WHAT_PRICE_BY_FACT:
+            self.sizeFOB = 0
+
+        return super().save(*args, **kwargs)
+
 
 class Balance(models.Model):
     client = models.ForeignKey(
