@@ -1,20 +1,9 @@
-from authorization.models import Balance, User
 from django.conf import settings
-from django.db.models.signals import post_delete, post_save, pre_save
+from django.db.models.signals import post_delete, post_save
 from django.dispatch import receiver
 
+from authorization.models import Balance, User
 from .models import BalanceWithdrawal, CarOrder
-
-
-@receiver(pre_save, sender=CarOrder)
-def calculate_totals(instance: CarOrder, **kwargs):
-    instance.calculate_totals()
-
-    previous = CarOrder.objects.filter(id=instance.id).first()
-
-    if previous is not None and previous.client.id != instance.client.id:
-        instance.withdrawal.balance.client = instance.client
-        instance.withdrawal.balance.save()
 
 
 @receiver(post_save, sender=CarOrder)

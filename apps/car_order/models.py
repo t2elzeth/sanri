@@ -96,6 +96,21 @@ class CarOrder(models.Model):
     def __str__(self):
         return f"CarOrder#{self.id} of {self.client}"
 
+    @property
+    def is_new(self) -> bool:
+        return self.id is None
+
+    def save(self, *args, **kwargs):
+        self.calculate_totals()
+
+        previous = CarOrder.objects.filter(id=self.id).first()
+
+        if not self.is_new and previous.client.id != self.client.id:
+            self.withdrawal.balance.client = self.client
+            self.withdrawal.balance.save()
+
+        return super().save(*args, **kwargs)
+
     class Meta:
         ordering = ("id",)
 
