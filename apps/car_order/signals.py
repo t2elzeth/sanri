@@ -11,7 +11,7 @@ def post_save_car_resale(instance: CarOrder, created, **kwargs):
     if created:
         withdrawal_amount = instance.get_total()
 
-        if instance.client.atWhatPrice == User.AT_WHAT_PRICE_BY_FOB2:
+        if instance.client.works_by.by_fob2:
             # Withdrawal from Sanri's balance
             sanri = User.objects.get(username=settings.SANRI_USERNAME)
             Balance.objects.create(
