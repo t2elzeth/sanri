@@ -1,17 +1,15 @@
 from auction.models import Auction
 from car_model.models import CarModel
-from django.contrib.auth import get_user_model
+
 from django.db import models
 from django.utils import timezone
 from transport_companies.models import TransportCompany
-
+from authorization.models import User
 from .formulas import (
     calculate_total,
     calculate_total_fob,
     calculate_total_fob2,
 )
-
-User = get_user_model()
 
 
 def get_date():
@@ -19,6 +17,11 @@ def get_date():
 
 
 class CarOrder(models.Model):
+    """
+
+    @type client: authorization.models.User
+    @type auction: auction.models.Auction
+    """
     client = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="car_orders", null=True
     )
