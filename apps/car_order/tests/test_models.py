@@ -1,50 +1,78 @@
 from django.test import TestCase
-
-from auction.models import Auction
-from authorization.models import User
-from car_model.models import CarMark
+from django.conf import settings
+from authorization.models import Balance
 from car_model.tests.factory import CarMarkFactory
-from car_order.models import CarOrder
-from transport_companies.models import TransportCompany
 from .factory import CarOrderFactory, ClientFactory, AuctionFactory, TransportCompanyFactory
 
 
 class TestCarOrderAndUserRelation(TestCase):
     def setUp(self) -> None:
         self.user = ClientFactory.create(sizeFOB=25000)
-        self.auction = AuctionFactory.create()
-        self.car_marks = {"honda": CarMarkFactory.create(name="HONDA")}
-        self.car_models = {
-            "fit": self.car_marks["honda"].models.create(name="FIT")
-        }
-        self.transport_company = TransportCompanyFactory.create()
-        self.car_order = CarOrderFactory.create(client=self.user)
+        self.sanri = ClientFactory.create(username=settings.SANRI_USERNAME)
+        self.order = CarOrderFactory.create(client=self.user)
+
+    def test_create_order_for_fact_client(self):
+        """
+        Create order for fact client
+        """
+        if not self.user.works_by.by_fact:
+            self.user.atWhatPrice = self.user.AT_WHAT_PRICE_BY_FACT
+            self.user.save()
+
+        self.order = CarOrderFactory.create(client=self.user)
+        balance_record = self.user.balances.filter(
+            client=self.user,
+            sum_in_jpy=self.order.get_total(),
+            balance_action=Balance.BALANCE_ACTION_WITHDRAWAL
+        ).first()
+        self.assertIsNotNone(balance_record)
+
+    def test_create_order_for_fob2_client(self):
+        """Create order for fob2 client"""
+        if not self.user.works_by.by_fob2:
+            self.user.atWhatPrice = self.user.AT_WHAT_PRICE_BY_FOB2
+            self.user.save()
+
+        self.order = CarOrderFactory.create(client=self.user)
+        balance_record = self.sanri.balances.filter(
+            client=self.sanri,
+            sum_in_jpy=self.order.recycle + self.order.price * 0.1,
+            balance_action=Balance.BALANCE_ACTION_WITHDRAWAL
+        ).first()
+        self.assertIsNotNone(balance_record, "Balance record for sanri user was not created")
+
+        balance_record = self.user.balances.filter(
+            client=self.user,
+            sum_in_jpy=self.order.get_total(),
+            balance_action=Balance.BALANCE_ACTION_WITHDRAWAL
+        )
+        self.assertIsNotNone(balance_record)
 
     def test_fob_when_created(self):
         """
         Test if fob is set to client's sizeFOB
         when CarOrder instance is newly created
         """
-        self.assertEqual(self.car_order.fob, self.user.sizeFOB)
+        self.assertEqual(self.order.fob, self.user.sizeFOB)
 
     def test_balance_client_changes_when_car_order_client_changed(self):
         """
-
-        @return:
+        Try to change the client of order and see
+        if balance record is reassignled to a new client as well
         """
 
-        self.assertEqual(self.car_order.client.id, self.car_order.withdrawal.balance.client.id)
+        self.user = ClientFactory.create()
+        self.order.client = self.user
+        self.order.save()
+        balance_record = self.user.balances.filter(
+            client=self.user,
+            sum_in_jpy=self.order.get_total(),
+            balance_action=Balance.BALANCE_ACTION_WITHDRAWAL
+        ).first()
 
-        self.user.id = None
-        self.user.username = "newussernameemme"
-        self.user.save()
-
-        self.car_order.client = self.user
-        self.car_order.save()
-
-        self.car_order.refresh_from_db()
-
-        self.assertEqual(self.car_order.client.id, self.car_order.withdrawal.balance.client.id)
+        self.assertEqual(self.order.client.id, self.user.id)
+        self.assertEqual(self.order.withdrawal.balance.client.id, self.user.id)
+        self.assertEqual(balance_record.client.id, self.user.id)
 
     def test_user_sizeFOB_changed(self):
         """
@@ -53,27 +81,27 @@ class TestCarOrderAndUserRelation(TestCase):
         self.user.sizeFOB = 15000
         self.user.save()
 
-        self.car_order.refresh_from_db()
-        self.assertEqual(self.car_order.fob, self.user.sizeFOB)
+        self.order.refresh_from_db()
+        self.assertEqual(self.order.fob, self.user.sizeFOB)
 
     def test_get_total(self):
         # Check when user works by FACT
         self.user.atWhatPrice = self.user.AT_WHAT_PRICE_BY_FACT
         self.user.save()
-        self.car_order.refresh_from_db()
-        self.assertEqual(self.car_order.total, self.car_order.get_total())
+        self.order.refresh_from_db()
+        self.assertEqual(self.order.total, self.order.get_total())
 
         # Check when user works by FOB
         self.user.atWhatPrice = self.user.AT_WHAT_PRICE_BY_FOB
         self.user.save()
-        self.car_order.refresh_from_db()
-        self.assertEqual(self.car_order.total_FOB, self.car_order.get_total())
+        self.order.refresh_from_db()
+        self.assertEqual(self.order.total_FOB, self.order.get_total())
 
         # Check when user works by FOB2
         self.user.atWhatPrice = self.user.AT_WHAT_PRICE_BY_FOB2
         self.user.save()
-        self.car_order.refresh_from_db()
-        self.assertEqual(self.car_order.total_FOB2, self.car_order.get_total())
+        self.order.refresh_from_db()
+        self.assertEqual(self.order.total_FOB2, self.order.get_total())
 
 
 class TestCarOrderBalanceWithdrawal(TestCase):
@@ -89,8 +117,8 @@ class TestCarOrderBalanceWithdrawal(TestCase):
 
         self.transport_company = TransportCompanyFactory.create()
 
-        self.car_order = CarOrderFactory.create(client=self.user)
-        self.withdrawal = self.car_order.withdrawal
+        self.order = CarOrderFactory.create(client=self.user)
+        self.withdrawal = self.order.withdrawal
 
     def test_initial_car_order_withdrawal_amount(self):
         """
@@ -98,14 +126,21 @@ class TestCarOrderBalanceWithdrawal(TestCase):
         when new instance of CarOrder created
         """
         self.assertEqual(
-            self.withdrawal.balance.sum_in_jpy, self.car_order.get_total()
+            self.withdrawal.balance.sum_in_jpy, self.order.get_total()
         )
 
     def test_car_order_total_changes(self):
-        self.car_order.price = 250000
-        self.car_order.save()
+        self.order.price = 250000
+        self.order.save()
 
         self.withdrawal.refresh_from_db()
         self.assertEqual(
-            self.withdrawal.balance.sum_in_jpy, self.car_order.get_total()
+            self.withdrawal.balance.sum_in_jpy, self.order.get_total()
+        )
+
+    def test_withdrawal_delete(self):
+        balance_record = self.withdrawal.balance
+        self.withdrawal.delete()
+        self.assertFalse(
+            Balance.objects.filter(id=balance_record.id).exists()
         )
