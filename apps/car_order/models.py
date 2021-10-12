@@ -64,6 +64,7 @@ class CarOrder(models.Model):
     additional_expenses = models.IntegerField(default=0)
 
     is_sold = models.BooleanField(default=False)
+    is_shipped = models.BooleanField(default=False)
 
     @property
     def fob(self):
