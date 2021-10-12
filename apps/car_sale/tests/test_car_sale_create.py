@@ -89,6 +89,7 @@ class TestCreateNewCarSale(Authenticate, APITestCase):
         car_order_vinNumber = str(self.carOrder.vinNumber)
 
         self.carSale.refresh_from_db()
+        self.assertTrue(self.carSale.carOrder.is_sold)
         self.assertEqual(response.data["price"], 60_000)
         self.assertEqual(response.data["recycle"], 10_000)
         self.assertEqual(response.data["status"], True)
