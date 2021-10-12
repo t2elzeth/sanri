@@ -1,17 +1,15 @@
 from auction.models import Auction
 from car_model.models import CarModel
-from django.contrib.auth import get_user_model
+
 from django.db import models
 from django.utils import timezone
 from transport_companies.models import TransportCompany
-
+from authorization.models import User
 from .formulas import (
     calculate_total,
     calculate_total_fob,
     calculate_total_fob2,
 )
-
-User = get_user_model()
 
 
 def get_date():
@@ -19,6 +17,11 @@ def get_date():
 
 
 class CarOrder(models.Model):
+    """
+
+    @type client: authorization.models.User
+    @type auction: auction.models.Auction
+    """
     client = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="car_orders", null=True
     )
@@ -56,7 +59,7 @@ class CarOrder(models.Model):
     total_FOB = models.IntegerField()
     total_FOB2 = models.IntegerField(default=0)
     created_at = models.DateField(default=get_date)
-    analysis = models.JSONField(default=dict)
+    analysis = models.JSONField(default=dict, blank=True)
     comment = models.TextField(default="", blank=True, null=True)
     additional_expenses = models.IntegerField(default=0)
 
@@ -95,6 +98,21 @@ class CarOrder(models.Model):
 
     def __str__(self):
         return f"CarOrder#{self.id} of {self.client}"
+
+    @property
+    def is_new(self) -> bool:
+        return self.id is None
+
+    def save(self, *args, **kwargs):
+        self.calculate_totals()
+
+        previous = CarOrder.objects.filter(id=self.id).first()
+
+        if not self.is_new and previous.client.id != self.client.id:
+            self.withdrawal.balance.client = self.client
+            self.withdrawal.balance.save()
+
+        return super().save(*args, **kwargs)
 
     class Meta:
         ordering = ("id",)

@@ -4,29 +4,7 @@ from django.db import models
 from django.utils import timezone
 from rest_framework.authtoken.models import Token
 
-from . import managers
-
-
-class UserBalance:
-    def __init__(self, user):
-        self.replenishments = sum(
-            [
-                balance.sum_in_jpy
-                for balance in user.balances.all()
-                if balance.balance_action
-                == balance.BALANCE_ACTION_REPLENISHMENT
-            ]
-        )
-
-        self.withdrawals = sum(
-            [
-                balance.sum_in_jpy
-                for balance in user.balances.all()
-                if balance.balance_action == balance.BALANCE_ACTION_WITHDRAWAL
-            ]
-        )
-
-        self.amount = self.replenishments - self.withdrawals
+from . import managers, model_helpers
 
 
 class User(AbstractBaseUser, PermissionsMixin):
@@ -95,17 +73,12 @@ class User(AbstractBaseUser, PermissionsMixin):
         return f"Account of {self.get_username()}"
 
     @property
-    def balance(self):
-        return UserBalance(self)
+    def balance(self) -> model_helpers.UserBalance:
+        return model_helpers.UserBalance(self)
 
-    def activate(self):
-        self.is_active = True
-        self.save()
-
-    def deactivate(self):
-        self.logout()
-        self.is_active = False
-        self.save()
+    @property
+    def works_by(self) -> model_helpers.UserWorksBy:
+        return model_helpers.UserWorksBy(self)
 
     def login(self):
         token, _ = Token.objects.get_or_create(user=self)
@@ -116,6 +89,12 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     class Meta:
         ordering = ("id",)
+
+    def save(self, *args, **kwargs):
+        if self.works_by.by_fact:
+            self.sizeFOB = 0
+
+        return super().save(*args, **kwargs)
 
 
 class Balance(models.Model):
