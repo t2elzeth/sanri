@@ -139,3 +139,6 @@ class CreateContainerTest(Authenticate, APITestCase):
             ).count(),
             1,
         )
+
+        for car in container.container_cars.all():
+            self.assertTrue(car.car.is_shipped)

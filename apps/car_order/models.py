@@ -63,6 +63,9 @@ class CarOrder(models.Model):
     comment = models.TextField(default="", blank=True, null=True)
     additional_expenses = models.IntegerField(default=0)
 
+    is_sold = models.BooleanField(default=False)
+    is_shipped = models.BooleanField(default=False)
+
     @property
     def fob(self):
         return self.client.sizeFOB

@@ -38,7 +38,7 @@ class CarOrderDetailAPIView(DetailAPIViewMixin):
 
 
 class ParkingAPIView(generics.ListAPIView):
-    queryset = CarOrder.objects.exclude(client=None)
+    queryset = CarOrder.objects.exclude(client=None).exclude(is_sold=True)
     serializer_class = ParkingSerializer
     filterset_class = CarModelFilter
 

@@ -25,7 +25,8 @@ def post_save_car_resale(instance: CarSale, created, **kwargs):
 
     if instance.status and instance.carOrder is not None:
         # CarOrder is no longer in DB, cause it's been sold
-        instance.carOrder.delete()
+        instance.carOrder.is_sold = True
+        instance.carOrder.save()
 
         # ownerClient receives money for selling his car
         Balance.objects.create(
