@@ -48,6 +48,17 @@ class ContainerSerializer(serializers.ModelSerializer):
         read_only=True, many=True, source="container_cars"
     )
 
+    # Annotated fields
+    total = serializers.IntegerField(read_only=True)
+    auctionFeesTotal = serializers.IntegerField(read_only=True)
+    transportationTotal = serializers.IntegerField(read_only=True)
+    price10Total = serializers.IntegerField(read_only=True)
+    recycleTotal = serializers.IntegerField(read_only=True)
+    amountTotal = serializers.IntegerField(read_only=True)
+    fobTotal = serializers.IntegerField(read_only=True)
+    income = serializers.IntegerField(read_only=True)
+    overall = serializers.IntegerField(read_only=True)
+
     class Meta:
         model = Container
         fields = [
@@ -67,6 +78,15 @@ class ContainerSerializer(serializers.ModelSerializer):
             "totalAmount",
             "cars",
             "car_ids",
+            "total",
+            "auctionFeesTotal",
+            "transportationTotal",
+            "price10Total",
+            "recycleTotal",
+            "amountTotal",
+            "fobTotal",
+            "income",
+            "overall"
         ]
         extra_kwargs = {"totalAmount": {"read_only": True}}
 
