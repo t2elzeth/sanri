@@ -199,11 +199,6 @@ class ClientSerializer(serializers.ModelSerializer):
         user = self.Meta.model.objects.create_user(**validated_data)
         return user
 
-    def update(self, instance, validated_data):
-        if "username" in validated_data:
-            raise ValidationError({"error": "Username cannot be updated!"})
-        return super().update(instance, validated_data)
-
 
 class TokenSerializer(serializers.Serializer):
     username = serializers.CharField(write_only=True)
