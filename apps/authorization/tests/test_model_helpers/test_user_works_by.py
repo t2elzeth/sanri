@@ -6,9 +6,15 @@ from authorization.models import User
 
 class TestClientWorksBy(TestCase):
     def setUp(self) -> None:
-        self.fact_client: User = ClientFactory.create(atWhatPrice=User.AT_WHAT_PRICE_BY_FACT)
-        self.fob_client: User = ClientFactory.create(atWhatPrice=User.AT_WHAT_PRICE_BY_FOB)
-        self.fob2_client: User = ClientFactory.create(atWhatPrice=User.AT_WHAT_PRICE_BY_FOB2)
+        self.fact_client: User = ClientFactory.create(
+            atWhatPrice=User.AT_WHAT_PRICE_BY_FACT
+        )
+        self.fob_client: User = ClientFactory.create(
+            atWhatPrice=User.AT_WHAT_PRICE_BY_FOB
+        )
+        self.fob2_client: User = ClientFactory.create(
+            atWhatPrice=User.AT_WHAT_PRICE_BY_FOB2
+        )
 
     def test_get_works_by_fact(self):
         self.assertTrue(self.fact_client.works_by.by_fact)

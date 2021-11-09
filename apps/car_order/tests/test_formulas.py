@@ -1,7 +1,12 @@
 from django.test import TestCase
 
-from car_order.formulas import calculate_total, calculate_total_fob, calculate_total_fob2, get_transport, \
-    MIN_TRANSPORT_TO_INCLUDE
+from car_order.formulas import (
+    calculate_total,
+    calculate_total_fob,
+    calculate_total_fob2,
+    get_transport,
+    MIN_TRANSPORT_TO_INCLUDE,
+)
 
 
 class TestGetTransportFormula(TestCase):
@@ -39,7 +44,7 @@ class TestCalculateTotalFormula(TestCase):
             "price": 25_000,
             "auctionFees": 10_000,
             "recycle": 100,
-            "transport": 3_000
+            "transport": 3_000,
         }
 
     def test_calculate_total(self):
@@ -63,7 +68,7 @@ class TestCalculateTotalFOBFormula(TestCase):
             "price": self.price,
             "amount": self.amount,
             "fob": self.fob,
-            "transport": transport
+            "transport": transport,
         }
 
     def test_transport_lt_min_transport(self):
@@ -106,7 +111,7 @@ class TestCalculateTotalFOB2Formula(TestCase):
             "price": self.price,
             "auctionFees": self.auctionFees,
             "fob": self.fob,
-            "transport": transport
+            "transport": transport,
         }
 
     def test_transport_lt_min_transport(self):

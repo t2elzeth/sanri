@@ -107,7 +107,7 @@ class CarOrderSerializer(serializers.ModelSerializer):
             "additional_expenses",
             "comment",
             "is_sold",
-            "is_shipped"
+            "is_shipped",
         ]
 
 

@@ -20,6 +20,6 @@ class AddCarService:
             mileage=self._data.mileage,
             condition=self._data.condition,
             price=self._data.price,
-            description=self._data.description
+            description=self._data.description,
         )
         return car

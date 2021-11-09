@@ -86,7 +86,7 @@ class ContainerSerializer(serializers.ModelSerializer):
             "amountTotal",
             "fobTotal",
             "income",
-            "overall"
+            "overall",
         ]
         extra_kwargs = {"totalAmount": {"read_only": True}}
 

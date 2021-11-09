@@ -22,6 +22,7 @@ class CarOrder(models.Model):
     @type client: authorization.models.User
     @type auction: auction.models.Auction
     """
+
     client = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="car_orders", null=True
     )

@@ -2,7 +2,12 @@ from django.test import TestCase
 from django.conf import settings
 from authorization.models import Balance
 from car_model.tests.factory import CarMarkFactory
-from .factory import CarOrderFactory, ClientFactory, AuctionFactory, TransportCompanyFactory
+from .factory import (
+    CarOrderFactory,
+    ClientFactory,
+    AuctionFactory,
+    TransportCompanyFactory,
+)
 
 
 class TestCarOrderAndUserRelation(TestCase):
@@ -23,7 +28,7 @@ class TestCarOrderAndUserRelation(TestCase):
         balance_record = self.user.balances.filter(
             client=self.user,
             sum_in_jpy=self.order.get_total(),
-            balance_action=Balance.BALANCE_ACTION_WITHDRAWAL
+            balance_action=Balance.BALANCE_ACTION_WITHDRAWAL,
         ).first()
         self.assertIsNotNone(balance_record)
 
@@ -37,14 +42,16 @@ class TestCarOrderAndUserRelation(TestCase):
         balance_record = self.sanri.balances.filter(
             client=self.sanri,
             sum_in_jpy=self.order.recycle + self.order.price * 0.1,
-            balance_action=Balance.BALANCE_ACTION_WITHDRAWAL
+            balance_action=Balance.BALANCE_ACTION_WITHDRAWAL,
         ).first()
-        self.assertIsNotNone(balance_record, "Balance record for sanri user was not created")
+        self.assertIsNotNone(
+            balance_record, "Balance record for sanri user was not created"
+        )
 
         balance_record = self.user.balances.filter(
             client=self.user,
             sum_in_jpy=self.order.get_total(),
-            balance_action=Balance.BALANCE_ACTION_WITHDRAWAL
+            balance_action=Balance.BALANCE_ACTION_WITHDRAWAL,
         )
         self.assertIsNotNone(balance_record)
 
@@ -67,7 +74,7 @@ class TestCarOrderAndUserRelation(TestCase):
         balance_record = self.user.balances.filter(
             client=self.user,
             sum_in_jpy=self.order.get_total(),
-            balance_action=Balance.BALANCE_ACTION_WITHDRAWAL
+            balance_action=Balance.BALANCE_ACTION_WITHDRAWAL,
         ).first()
 
         self.assertEqual(self.order.client.id, self.user.id)
@@ -141,6 +148,4 @@ class TestCarOrderBalanceWithdrawal(TestCase):
     def test_withdrawal_delete(self):
         balance_record = self.withdrawal.balance
         self.withdrawal.delete()
-        self.assertFalse(
-            Balance.objects.filter(id=balance_record.id).exists()
-        )
+        self.assertFalse(Balance.objects.filter(id=balance_record.id).exists())

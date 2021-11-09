@@ -8,7 +8,9 @@ from car_order.tests.factory import CarOrderFactory, ClientFactory
 
 class TestGetTotalFactClient(TestCase):
     def setUp(self) -> None:
-        self.client: User = ClientFactory.create(atWhatPrice=User.AT_WHAT_PRICE_BY_FACT)
+        self.client: User = ClientFactory.create(
+            atWhatPrice=User.AT_WHAT_PRICE_BY_FACT
+        )
         self.order: CarOrder = CarOrderFactory.create(client=self.client)
 
     def test_get_total(self):
@@ -18,7 +20,9 @@ class TestGetTotalFactClient(TestCase):
 
 class TestGetTotalFOBClient(TestCase):
     def setUp(self) -> None:
-        self.client: User = ClientFactory.create(atWhatPrice=User.AT_WHAT_PRICE_BY_FOB)
+        self.client: User = ClientFactory.create(
+            atWhatPrice=User.AT_WHAT_PRICE_BY_FOB
+        )
         self.order: CarOrder = CarOrderFactory.create(client=self.client)
 
     def test_get_total(self):
@@ -30,7 +34,9 @@ class TestGetTotalFOBClient(TestCase):
 class TestGetTotalFOB2Client(TestCase):
     def setUp(self) -> None:
         ClientFactory.create(username=settings.SANRI_USERNAME)
-        self.client: User = ClientFactory.create(atWhatPrice=User.AT_WHAT_PRICE_BY_FOB2)
+        self.client: User = ClientFactory.create(
+            atWhatPrice=User.AT_WHAT_PRICE_BY_FOB2
+        )
         self.order: CarOrder = CarOrderFactory.create(client=self.client)
 
     def test_get_total(self):

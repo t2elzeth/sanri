@@ -10,7 +10,9 @@ class CarMarkSerializer(serializers.ModelSerializer):
 
 
 class CarModelSerializer(serializers.ModelSerializer):
-    mark_id = serializers.PrimaryKeyRelatedField(write_only=True, queryset=CarMark.objects.all())
+    mark_id = serializers.PrimaryKeyRelatedField(
+        write_only=True, queryset=CarMark.objects.all()
+    )
     mark = CarMarkSerializer(read_only=True)
 
     class Meta:

@@ -10,4 +10,3 @@ class AddCarDTO:
     condition: int
     price: float
     description: str
-

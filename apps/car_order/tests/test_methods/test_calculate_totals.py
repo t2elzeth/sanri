@@ -9,7 +9,9 @@ from car_order import formulas
 
 class TestCalculateTotalFactClient(TestCase):
     def setUp(self) -> None:
-        self.client: User = ClientFactory.create(atWhatPrice=User.AT_WHAT_PRICE_BY_FACT)
+        self.client: User = ClientFactory.create(
+            atWhatPrice=User.AT_WHAT_PRICE_BY_FACT
+        )
         self.order: CarOrder = CarOrderFactory.create(
             client=self.client,
         )
@@ -20,7 +22,7 @@ class TestCalculateTotalFactClient(TestCase):
             self.order.price,
             self.order.auctionFees,
             self.order.recycle,
-            self.order.transport
+            self.order.transport,
         )
 
         self.assertEqual(result, expected)
@@ -40,7 +42,9 @@ class TestCalculateTotalFactClient(TestCase):
 
 class TestCalculateTotalFOBClient(TestCase):
     def setUp(self) -> None:
-        self.client: User = ClientFactory.create(atWhatPrice=User.AT_WHAT_PRICE_BY_FOB)
+        self.client: User = ClientFactory.create(
+            atWhatPrice=User.AT_WHAT_PRICE_BY_FOB
+        )
         self.order: CarOrder = CarOrderFactory.create(client=self.client)
 
     def test_total(self):
@@ -49,7 +53,7 @@ class TestCalculateTotalFOBClient(TestCase):
             self.order.price,
             self.order.auctionFees,
             self.order.recycle,
-            self.order.transport
+            self.order.transport,
         )
 
         self.assertEqual(result, expected)
@@ -60,7 +64,7 @@ class TestCalculateTotalFOBClient(TestCase):
             self.order.price,
             self.order.amount,
             self.order.transport,
-            self.order.fob
+            self.order.fob,
         )
 
         self.assertEqual(result, expected)
@@ -75,7 +79,9 @@ class TestCalculateTotalFOBClient(TestCase):
 class TestCalculateTotalFOB2Client(TestCase):
     def setUp(self) -> None:
         ClientFactory.create(username=settings.SANRI_USERNAME)
-        self.client: User = ClientFactory.create(atWhatPrice=User.AT_WHAT_PRICE_BY_FOB2)
+        self.client: User = ClientFactory.create(
+            atWhatPrice=User.AT_WHAT_PRICE_BY_FOB2
+        )
         self.order: CarOrder = CarOrderFactory.create(client=self.client)
 
     def test_total(self):
@@ -84,7 +90,7 @@ class TestCalculateTotalFOB2Client(TestCase):
             self.order.price,
             self.order.auctionFees,
             self.order.recycle,
-            self.order.transport
+            self.order.transport,
         )
 
         self.assertEqual(result, expected)
@@ -101,7 +107,7 @@ class TestCalculateTotalFOB2Client(TestCase):
             self.order.price,
             self.order.auctionFees,
             self.order.transport,
-            self.order.fob
+            self.order.fob,
         )
 
         self.assertEqual(result, expected)

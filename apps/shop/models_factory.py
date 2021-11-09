@@ -10,10 +10,10 @@ class CarFactory(factory.django.DjangoModelFactory):
         model = models.Car
 
     model = factory.SubFactory(CarModelFactory)
-    year = factory.Faker('pyint', min_value=0, max_value=1000)
+    year = factory.Faker("pyint", min_value=0, max_value=1000)
     volume = factory.Faker("pydecimal", left_digits=2, right_digits=2)
     mileage = factory.Faker("pydecimal", left_digits=15, right_digits=2)
-    condition = factory.Faker('pyint', min_value=0, max_value=1000)
+    condition = factory.Faker("pyint", min_value=0, max_value=1000)
     price = factory.Faker("pydecimal", left_digits=15, right_digits=2)
     description = factory.Faker("paragraph", nb_sentences=3)
 

@@ -9,21 +9,44 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('car_model', '0001_initial'),
+        ("car_model", "0001_initial"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Car',
+            name="Car",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('year', models.IntegerField()),
-                ('volume', models.DecimalField(decimal_places=2, max_digits=4)),
-                ('mileage', models.DecimalField(decimal_places=2, max_digits=20)),
-                ('condition', models.IntegerField()),
-                ('price', models.DecimalField(decimal_places=2, max_digits=20)),
-                ('description', models.TextField()),
-                ('model', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='car_model.carmodel')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("year", models.IntegerField()),
+                (
+                    "volume",
+                    models.DecimalField(decimal_places=2, max_digits=4),
+                ),
+                (
+                    "mileage",
+                    models.DecimalField(decimal_places=2, max_digits=20),
+                ),
+                ("condition", models.IntegerField()),
+                (
+                    "price",
+                    models.DecimalField(decimal_places=2, max_digits=20),
+                ),
+                ("description", models.TextField()),
+                (
+                    "model",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="car_model.carmodel",
+                    ),
+                ),
             ],
         ),
     ]

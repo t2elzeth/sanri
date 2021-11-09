@@ -7,7 +7,7 @@ from .serializers import (
     WriteStaffExpenseSerializer,
     StaffExpenseTypeSerializer,
     StaffMemberSerializer,
-    ReadStaffExpenseSerializer
+    ReadStaffExpenseSerializer,
 )
 
 
@@ -16,7 +16,7 @@ class StaffExpenseAPIView(generics.ListCreateAPIView):
     serializer_class = WriteStaffExpenseSerializer
 
     def get_serializer_class(self):
-        if self.request.method == 'POST':
+        if self.request.method == "POST":
             self.serializer_class = WriteStaffExpenseSerializer
         else:
             self.serializer_class = ReadStaffExpenseSerializer
@@ -29,7 +29,7 @@ class StaffExpenseDetailAPIView(DetailAPIViewMixin):
     serializer_class = ReadStaffExpenseSerializer
 
     def get_serializer_class(self):
-        if self.request.method in ('UPDATE', 'PATCH'):
+        if self.request.method in ("UPDATE", "PATCH"):
             self.serializer_class = WriteStaffExpenseSerializer
         else:
             self.serializer_class = ReadStaffExpenseSerializer

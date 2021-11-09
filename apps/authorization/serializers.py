@@ -67,9 +67,19 @@ class ClientSerializer(serializers.ModelSerializer):
         total = 0
         for container in containers:
             container_total = 0
-            cars_total = sum(container_car.car.get_total() for container_car in container.container_cars.all())
+            cars_total = sum(
+                container_car.car.get_total()
+                for container_car in container.container_cars.all()
+            )
             if user.atWhatPrice == User.AT_WHAT_PRICE_BY_FACT:
-                container_total = cars_total + container.commission + container.containerTransportation + container.packagingMaterials + container.wheel_recycling.sum - container.wheel_sales.sum
+                container_total = (
+                    cars_total
+                    + container.commission
+                    + container.containerTransportation
+                    + container.packagingMaterials
+                    + container.wheel_recycling.sum
+                    - container.wheel_sales.sum
+                )
             elif user.atWhatPrice == User.AT_WHAT_PRICE_BY_FOB:
                 container_total = cars_total + container.loading
             elif user.atWhatPrice == User.AT_WHAT_PRICE_BY_FOB2:
@@ -86,19 +96,26 @@ class ClientSerializer(serializers.ModelSerializer):
         total = 0
         for container in containers:
             container_total = 0
-            cars_total = sum(container_car.car.get_total() for container_car in container.container_cars.all())
+            cars_total = sum(
+                container_car.car.get_total()
+                for container_car in container.container_cars.all()
+            )
             if user.atWhatPrice == User.AT_WHAT_PRICE_BY_FACT:
-                container_total = cars_total + container.commission + container.containerTransportation + container.packagingMaterials + container.wheel_recycling.sum - container.wheel_sales.sum
+                container_total = (
+                    cars_total
+                    + container.commission
+                    + container.containerTransportation
+                    + container.packagingMaterials
+                    + container.wheel_recycling.sum
+                    - container.wheel_sales.sum
+                )
             elif user.atWhatPrice == User.AT_WHAT_PRICE_BY_FOB:
                 container_total = cars_total + container.loading
             elif user.atWhatPrice == User.AT_WHAT_PRICE_BY_FOB2:
                 container_total = cars_total + container.transportation
             total += container_total
 
-        return {
-            "number": len(containers),
-            "totalAmount": total
-        }
+        return {"number": len(containers), "totalAmount": total}
 
     def get_cars_for_sale(self, user):
         car_ids = list(

@@ -9,7 +9,7 @@ class UserBalance:
                 balance.sum_in_jpy
                 for balance in user.balances.all()
                 if balance.balance_action
-                   == balance.BALANCE_ACTION_REPLENISHMENT
+                == balance.BALANCE_ACTION_REPLENISHMENT
             ]
         )
 

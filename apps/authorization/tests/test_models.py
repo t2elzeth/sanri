@@ -5,8 +5,12 @@ from authorization.tests.factory import ClientFactory
 
 class TestClientCreate(TestCase):
     def setUp(self) -> None:
-        self.client_by_fact = ClientFactory.create(atWhatPrice=User.AT_WHAT_PRICE_BY_FACT)
-        self.client_by_fob = ClientFactory.create(atWhatPrice=User.AT_WHAT_PRICE_BY_FOB)
+        self.client_by_fact = ClientFactory.create(
+            atWhatPrice=User.AT_WHAT_PRICE_BY_FACT
+        )
+        self.client_by_fob = ClientFactory.create(
+            atWhatPrice=User.AT_WHAT_PRICE_BY_FOB
+        )
 
     def test_try_to_change_fob_for_by_fact_client(self):
         self.assertEqual(self.client_by_fact.sizeFOB, 0)
