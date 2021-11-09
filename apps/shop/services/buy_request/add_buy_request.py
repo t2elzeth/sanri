@@ -1,6 +1,6 @@
 from authorization.models import User
-from shop.models import Car, BuyRequest
 from shop.dto.buy_request import AddBuyRequestDTO
+from shop.models import BuyRequest
 
 
 class AddBuyRequestService:
@@ -11,7 +11,7 @@ class AddBuyRequestService:
         return User.objects.get(id=self._data.from_client_id)
 
     def _get_car(self):
-        return Car.objects.get(id=self._data.car_id)
+        return self._data.car
 
     def execute(self) -> BuyRequest:
         from_client = self._get_from_client()

@@ -1,10 +1,21 @@
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
+from rest_framework import generics
 from .dto.car import AddCarDTO
-from .serializers import AddCarSerializer, GetCarSerializer
+from .dto.buy_request import AddBuyRequestDTO
+from .serializers import AddCarSerializer, GetCarSerializer, AddBuyRequestSerializer, GetBuyRequestSerializer
 from .services.car import AddCarService
+from .services.buy_request import AddBuyRequestService
+from .models import Car, BuyRequest
+from rest_framework.permissions import IsAuthenticated
+from authorization.models import User
+from django.db.models import Subquery
+
+
+class ListCarsView(generics.ListAPIView):
+    serializer_class = GetCarSerializer
+    queryset = Car.objects.all()
 
 
 class AddCarView(APIView):
@@ -20,3 +31,44 @@ class AddCarView(APIView):
         return_data = GetCarSerializer(instance=car).data
 
         return Response(return_data, status=status.HTTP_201_CREATED)
+
+
+class AddBuyRequestView(APIView):
+    def post(self, request):
+        serializer = AddBuyRequestSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        data = serializer.validated_data
+
+        dto = AddBuyRequestDTO(**data, from_client_id=self.request.user.id)
+        service = AddBuyRequestService(data=dto)
+
+        request = service.execute()
+        return_data = GetBuyRequestSerializer(instance=request).data
+
+        return Response(return_data, status=status.HTTP_201_CREATED)
+
+
+class ListBuyRequestsView(generics.ListAPIView):
+    serializer_class = GetBuyRequestSerializer
+    queryset = BuyRequest.objects.all()
+    permission_classes = (
+        IsAuthenticated,
+    )
+
+    def get_queryset(self):
+        if self.request.user.user_type == User.USER_TYPE_CLIENT:
+            self.queryset = self.queryset.filter(from_client__id=self.request.user.id)
+        elif self.request.user.user_type in (
+                User.USER_TYPE_YARD_MANAGER,
+                User.USER_TYPE_SALES_MANAGER
+        ):
+            new_managed = Subquery(
+                self.request.user.managed_users_as_manager.all()
+                    .select_related("user")
+                    .only("user")
+                    .values("user")
+            )
+            new_queryset = self.queryset.filter(from_client__id__in=new_managed)
+            self.queryset = new_queryset
+
+        return super().get_queryset()

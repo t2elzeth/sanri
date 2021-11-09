@@ -22,6 +22,7 @@ class TestGetCarSerializer(TestCase):
             "condition",
             "price",
             "description",
+            "images"
         )
         received_keys = tuple(self.serialized_data.keys())
 

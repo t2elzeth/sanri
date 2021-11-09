@@ -1,10 +1,11 @@
 from dataclasses import dataclass
+from shop.models import Car
 
 
 @dataclass
 class AddBuyRequestDTO:
     from_client_id: int
-    car_id: int
+    car: Car
 
 
 @dataclass

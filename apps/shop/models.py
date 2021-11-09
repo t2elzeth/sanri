@@ -17,7 +17,19 @@ class Car(models.Model):
         return f"{self.model.mark.name} | {self.model.name} for {self.price}"
 
 
+class CarImage(models.Model):
+    car = models.ForeignKey(Car, on_delete=models.CASCADE, related_name="images")
+    image = models.ImageField()
+
+
 class BuyRequest(models.Model):
     from_client = models.ForeignKey(User, on_delete=models.CASCADE)
-    car = models.ForeignKey(Car, on_delete=models.CASCADE)
-    approved = models.BooleanField(default=False)
+    car = models.ForeignKey(Car, on_delete=models.CASCADE, related_name="buy_requests")
+
+    STATUS_PENDING = "pending"
+    STATUS_APPROVED = "approved"
+    STATUS_DECLINED = "declined"
+    STATUS_CHOICES = ((STATUS_PENDING, STATUS_PENDING),
+                      (STATUS_APPROVED, STATUS_APPROVED),
+                      (STATUS_DECLINED, STATUS_DECLINED))
+    status = models.CharField(max_length=25, choices=STATUS_CHOICES, default=STATUS_PENDING)
