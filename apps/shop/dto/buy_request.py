@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from shop.models import Car
+from shop.models import Car, BuyRequest
 
 
 @dataclass
@@ -10,7 +10,7 @@ class AddBuyRequestDTO:
 
 @dataclass
 class ApproveBuyRequestDTO:
-    request_id: int
+    request: BuyRequest
 
 
 @dataclass

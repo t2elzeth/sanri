@@ -3,10 +3,11 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import generics
 from .dto.car import AddCarDTO
-from .dto.buy_request import AddBuyRequestDTO
-from .serializers import AddCarSerializer, GetCarSerializer, AddBuyRequestSerializer, GetBuyRequestSerializer
+from .dto.buy_request import AddBuyRequestDTO, ApproveBuyRequestDTO
+from .serializers import AddCarSerializer, GetCarSerializer, AddBuyRequestSerializer, GetBuyRequestSerializer, \
+    ApproveBuyRequestSerializer
 from .services.car import AddCarService
-from .services.buy_request import AddBuyRequestService
+from .services.buy_request import AddBuyRequestService, ApproveBuyRequestService
 from .models import Car, BuyRequest
 from rest_framework.permissions import IsAuthenticated
 from authorization.models import User
@@ -72,3 +73,19 @@ class ListBuyRequestsView(generics.ListAPIView):
             self.queryset = new_queryset
 
         return super().get_queryset()
+
+
+class ApproveBuyRequestView(APIView):
+    def post(self, request, pk):
+        serializer = ApproveBuyRequestSerializer(data={
+            "request_id": pk
+        })
+        serializer.is_valid(raise_exception=True)
+        data = serializer.validated_data
+
+        dto = ApproveBuyRequestDTO(**data)
+        service = ApproveBuyRequestService(data=dto)
+
+        req = service.execute()
+        return_data = GetBuyRequestSerializer(instance=req).data
+        return Response(return_data, status=status.HTTP_201_CREATED)
