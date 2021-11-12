@@ -14,7 +14,8 @@ class CarModelSerializer(serializers.ModelSerializer):
         write_only=True, queryset=CarMark.objects.all()
     )
     mark = CarMarkSerializer(read_only=True)
+    model_name = serializers.CharField(read_only=True)
 
     class Meta:
         model = CarModel
-        fields = ["id", "mark", "name", "mark_id"]
+        fields = ["id", "mark", "name", "mark_id", "model_name"]

@@ -15,4 +15,4 @@ class ApproveBuyRequestDTO:
 
 @dataclass
 class DeclineBuyRequestDTO:
-    request_id: int
+    request: BuyRequest

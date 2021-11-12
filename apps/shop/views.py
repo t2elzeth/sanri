@@ -3,11 +3,11 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import generics
 from .dto.car import AddCarDTO
-from .dto.buy_request import AddBuyRequestDTO, ApproveBuyRequestDTO
+from .dto.buy_request import AddBuyRequestDTO, ApproveBuyRequestDTO, DeclineBuyRequestDTO
 from .serializers import AddCarSerializer, GetCarSerializer, AddBuyRequestSerializer, GetBuyRequestSerializer, \
-    ApproveBuyRequestSerializer
+    ApproveBuyRequestSerializer, DeclineBuyRequestSerializer
 from .services.car import AddCarService
-from .services.buy_request import AddBuyRequestService, ApproveBuyRequestService
+from .services.buy_request import AddBuyRequestService, ApproveBuyRequestService, DeclineBuyRequestService
 from .models import Car, BuyRequest
 from rest_framework.permissions import IsAuthenticated
 from authorization.models import User
@@ -15,6 +15,11 @@ from django.db.models import Subquery
 
 
 class ListCarsView(generics.ListAPIView):
+    serializer_class = GetCarSerializer
+    queryset = Car.objects.all()
+
+
+class DetailCarView(generics.RetrieveAPIView):
     serializer_class = GetCarSerializer
     queryset = Car.objects.all()
 
@@ -85,6 +90,22 @@ class ApproveBuyRequestView(APIView):
 
         dto = ApproveBuyRequestDTO(**data)
         service = ApproveBuyRequestService(data=dto)
+
+        req = service.execute()
+        return_data = GetBuyRequestSerializer(instance=req).data
+        return Response(return_data, status=status.HTTP_201_CREATED)
+
+
+class DeclineBuyRequestView(APIView):
+    def post(self, request, pk):
+        serializer = DeclineBuyRequestSerializer(data={
+            "request_id": pk
+        })
+        serializer.is_valid(raise_exception=True)
+        data = serializer.validated_data
+
+        dto = DeclineBuyRequestDTO(**data)
+        service = DeclineBuyRequestService(data=dto)
 
         req = service.execute()
         return_data = GetBuyRequestSerializer(instance=req).data

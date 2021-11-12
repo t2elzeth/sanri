@@ -7,10 +7,10 @@ class DeclineBuyRequestService:
         self._data = data
 
     def _get_request_instance(self):
-        return BuyRequest.objects.get(id=self._data.request_id)
+        return self._data.request
 
     def _set_approved_field(self, req: BuyRequest) -> None:
-        req.approved = False
+        req.status = BuyRequest.STATUS_DECLINED
         req.save()
 
     def execute(self) -> BuyRequest:

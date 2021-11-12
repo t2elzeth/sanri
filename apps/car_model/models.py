@@ -17,6 +17,10 @@ class CarModel(models.Model):
     )
     name = models.CharField(max_length=255)
 
+    @property
+    def model_name(self):
+        return f"{self.mark.name} {self.name}"
+
     def __str__(self):
         return f"{self.mark}:{self.name}"
 

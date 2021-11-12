@@ -89,3 +89,19 @@ class ApproveBuyRequestSerializer(serializers.Serializer):
         })
 
         return validated_data
+
+
+class DeclineBuyRequestSerializer(serializers.Serializer):
+    request_id = serializers.PrimaryKeyRelatedField(
+        queryset=BuyRequest.objects.filter(status=BuyRequest.STATUS_PENDING)
+    )
+
+    @property
+    def validated_data(self):
+        validated_data = super().validated_data
+        request = validated_data.pop("request_id")
+        validated_data.update({
+            "request": request
+        })
+
+        return validated_data
