@@ -3,6 +3,7 @@ from datetime import timedelta
 from auction.models import Auction
 from authorization.models import User
 from car_model.models import CarMark, CarModel
+from car_model.serializers import CarModelSerializer
 from django.utils import timezone
 from rest_framework import serializers
 from transport_companies.models import TransportCompany
@@ -14,22 +15,6 @@ class ClientSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ["id", "fullName"]
-        ref_name = "car_order"
-
-
-class CarMarkSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = CarMark
-        fields = ["id", "name"]
-        ref_name = "car_order"
-
-
-class CarModelSerializer(serializers.ModelSerializer):
-    mark = CarMarkSerializer()
-
-    class Meta:
-        model = CarModel
-        fields = ["id", "mark", "name"]
         ref_name = "car_order"
 
 
