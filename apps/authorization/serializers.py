@@ -61,6 +61,7 @@ class ClientSerializer(serializers.ModelSerializer):
     balance_replenishments = serializers.SerializerMethodField(read_only=True)
     balance_withdrawals = serializers.SerializerMethodField(read_only=True)
     balance = serializers.SerializerMethodField(read_only=True)
+    sizeFOB = serializers.IntegerField(allow_null=True)
 
     def get_shipped_containers(self, user):
         containers = user.containers.filter(status=Container.STATUS_SHIPPED)
@@ -199,6 +200,7 @@ class ClientSerializer(serializers.ModelSerializer):
             "shipped_containers",
             "going_to_containers",
             "cars_for_sale",
+            "transportation_limit",
             "balance_replenishments",
             "balance_withdrawals",
             "balance",
