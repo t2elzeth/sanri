@@ -10,6 +10,10 @@ class AddCarService:
     def _get_model(self) -> CarModel:
         return CarModel.objects.get(id=self._data.model_id)
 
+    def _save_images(self, car):
+        for image in self._data.images:
+            car.images.create(image=image)
+
     def execute(self) -> Car:
         model = self._get_model()
 
@@ -22,4 +26,5 @@ class AddCarService:
             price=self._data.price,
             description=self._data.description,
         )
+        self._save_images(car)
         return car

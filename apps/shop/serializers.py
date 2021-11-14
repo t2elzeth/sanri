@@ -14,6 +14,7 @@ class AddCarSerializer(serializers.Serializer):
     condition = serializers.IntegerField()
     price = serializers.DecimalField(max_digits=20, decimal_places=2)
     description = serializers.CharField()
+    images = serializers.ListSerializer(child=serializers.FileField(), required=False, allow_null=True)
 
 
 class CarImageSerializer(serializers.ModelSerializer):
