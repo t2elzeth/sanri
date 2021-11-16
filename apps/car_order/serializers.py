@@ -50,6 +50,7 @@ class CarOrderSerializer(serializers.ModelSerializer):
         write_only=True,
         queryset=TransportCompany.objects.all(),
     )
+    fob = serializers.IntegerField()
 
     client = ClientSerializer(read_only=True)
     auction = AuctionSerializer(read_only=True)
@@ -57,9 +58,6 @@ class CarOrderSerializer(serializers.ModelSerializer):
     total = serializers.IntegerField(read_only=True)
     total_FOB = serializers.IntegerField(read_only=True)
     transportCompany = TransportCompanySerializer(read_only=True)
-
-    # FOB property cannot be written, so its readonly
-    fob = serializers.IntegerField(read_only=True)
 
     class Meta:
         model = CarOrder

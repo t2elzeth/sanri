@@ -14,7 +14,7 @@ class TestCarOrderAndUserRelation(TestCase):
     def setUp(self) -> None:
         self.user = ClientFactory.create(sizeFOB=25000)
         self.sanri = ClientFactory.create(username=settings.SANRI_USERNAME)
-        self.order = CarOrderFactory.create(client=self.user)
+        self.order = CarOrderFactory.create(client=self.user, fob=12000)
 
     def test_create_order_for_fact_client(self):
         """
@@ -57,10 +57,15 @@ class TestCarOrderAndUserRelation(TestCase):
 
     def test_fob_when_created(self):
         """
-        Test if fob is set to client's sizeFOB
-        when CarOrder instance is newly created
+        Test if fob is set correctly when new instance is created
         """
-        self.assertEqual(self.order.fob, self.user.sizeFOB)
+        self.assertEqual(self.order.fob, 12000)
+
+        self.user.sizeFOB = 10000
+        self.user.save()
+
+        self.order.refresh_from_db()
+        self.assertEqual(self.order.fob, 12000)
 
     def test_balance_client_changes_when_car_order_client_changed(self):
         """
