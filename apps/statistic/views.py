@@ -6,6 +6,7 @@ from container.models import Container, ContainerCar
 from income.models import Income
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from django.db.models import Case, F, When, DecimalField, Q, Sum, Value, Count
 
 
 class StatisticAPIView(APIView):
@@ -40,6 +41,60 @@ class StatisticAPIView(APIView):
         # Количество отправленных контейнеров
         shipped_containers = Container.objects.filter(
             status=Container.STATUS_SHIPPED
+        ).annotate(
+            total=Case(
+                When(
+                    client__atWhatPrice="by_fact",
+                    then=Sum("container_cars__car__total"),
+                ),
+                When(
+                    client__atWhatPrice="by_fob",
+                    then=Sum("container_cars__car__total_FOB"),
+                ),
+                When(
+                    client__atWhatPrice="by_fob2",
+                    then=Sum("container_cars__car__total_FOB2"),
+                ),
+                default=Value(0),
+            ),
+            auctionFeesTotal=Sum("container_cars__car__auctionFees"),
+            transportationTotal=Sum(
+                Case(
+                    When(
+                        container_cars__car__transport__gt=6000,
+                        then=F("container_cars__car__transport"),
+                    ),
+                    default=Value(0),
+                )
+            ),
+            price10Total=Sum(F("container_cars__car__price") * 0.1),
+            recycleTotal=Sum("container_cars__car__recycle"),
+            amountTotal=Sum("container_cars__car__amount"),
+            fobTotal=Sum("container_cars__car__client__sizeFOB"),
+            income=Case(
+                When(
+                    client__atWhatPrice="by_fact",
+                    then=F("total")
+                    + F("commission")
+                    + F("containerTransportation")
+                    + F("packagingMaterials")
+                    + F("wheel_recycling__sum")
+                    - F("wheel_sales__sum"),
+                ),
+                When(
+                    Q(client__atWhatPrice="by_fob")
+                    | Q(client__atWhatPrice="by_fob2"),
+                    then=F("price10Total")
+                    + F("recycleTotal")
+                    + F("amountTotal")
+                    + F("fobTotal")
+                    - F("loading")
+                    - F("auctionFeesTotal")
+                    - F("transportationTotal"),
+                ),
+                default=0,
+                output_field=DecimalField(max_digits=100, decimal_places=2),
+            ),
         )
         if from_:
             shipped_containers = shipped_containers.filter(
@@ -47,10 +102,10 @@ class StatisticAPIView(APIView):
             )
         if to_:
             shipped_containers = shipped_containers.filter(created_at__lte=to_)
-        shipped_containers_number = shipped_containers.count()
-        shipped_containers_sum = sum(
-            container.totalAmount for container in shipped_containers
-        )
+
+        shipped_containers = shipped_containers.aggregate(sum=Sum("income"), count=Count("id"))
+        shipped_containers_number = shipped_containers["count"]
+        shipped_containers_sum = shipped_containers["sum"]
 
         # Количество загруженных машин в контейнеры
         loaded_cars = ContainerCar.objects.all()
