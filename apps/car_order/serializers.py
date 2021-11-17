@@ -59,6 +59,15 @@ class CarOrderSerializer(serializers.ModelSerializer):
     total_FOB = serializers.IntegerField(read_only=True)
     transportCompany = TransportCompanySerializer(read_only=True)
 
+    parked_until = serializers.SerializerMethodField(read_only=True)
+    parked_for = serializers.SerializerMethodField(read_only=True)
+
+    def get_parked_until(self, car):
+        return car.created_at + timedelta(days=90)
+
+    def get_parked_for(self, car):
+        return (timezone.now().date() - car.created_at).days
+
     class Meta:
         model = CarOrder
         fields = [
@@ -91,6 +100,9 @@ class CarOrderSerializer(serializers.ModelSerializer):
             "comment",
             "is_sold",
             "is_shipped",
+
+            "parked_until",
+            "parked_for",
         ]
 
 
