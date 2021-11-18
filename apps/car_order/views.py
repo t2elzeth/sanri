@@ -2,7 +2,7 @@ from authorization.models import User
 from container.models import ContainerCar
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
-
+from django.core.cache import cache
 from utils.mixins import DetailAPIViewMixin
 
 from .filters import CarModelFilter
@@ -17,6 +17,10 @@ class CarOrderAPIView(generics.ListCreateAPIView):
     permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
+        # print(cache.keys("*"))
+
+        print(cache.keys("balance_list*"))
+
         user_type = self.request.user.user_type
         if user_type == User.USER_TYPE_CLIENT:
             self.queryset = self.queryset.filter(client=self.request.user)
