@@ -6,12 +6,20 @@ from rest_framework.request import Request
 
 CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
 
+CACHE_KEY_TEMPLATE = "{key_prefix}-${token}"
+
+
+def generate_cache_key(key_prefix: str, user):
+    return CACHE_KEY_TEMPLATE.format(
+        key_prefix=key_prefix,
+        token=user.auth_token
+    )
+
 
 def cache_action(key_prefix, timeout=CACHE_TTL):
     def decorator(action):
         def wrapper(self, request: Request, *args, **kwargs):
-            authorization_header = request.headers["Authorization"]
-            cache_key = f"{key_prefix}-${authorization_header}"
+            cache_key = generate_cache_key(key_prefix, request.user)
 
             cached_data = cache.get(cache_key)
             if cached_data is not None:

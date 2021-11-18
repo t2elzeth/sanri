@@ -14,6 +14,7 @@ from .serializers import (
     TokenSerializer,
     UserSerializer,
 )
+from rest_framework import views
 
 from django.conf import settings
 from django.core.cache.backends.base import DEFAULT_TIMEOUT
@@ -67,8 +68,19 @@ class ClientAPIView(DetailAPIViewMixin):
     serializer_class = ClientSerializer
 
     def retrieve(self, request, *args, **kwargs):
-        print(cache.keys("*"))
         return super().retrieve(request, *args, **kwargs)
+
+
+class GetMeAPIView(views.APIView):
+    permission_classes = (
+        IsAuthenticated,
+    )
+
+    @cache_action("get-me")
+    def get(self, request):
+        user = self.request.user
+        serializer = ClientSerializer(instance=user)
+        return Response(serializer.data)
 
 
 class EmployeeAPIView(generics.ListCreateAPIView):
@@ -125,7 +137,7 @@ class BalanceListAPIView(generics.ListCreateAPIView):
 
         return super().get_queryset()
 
-    @cache_action(key_prefix="balance_list")
+    # @cache_action(key_prefix="balances")
     def list(self, request, *args, **kwargs):
         return super().list(request, *args, **kwargs)
 
