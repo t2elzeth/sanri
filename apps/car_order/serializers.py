@@ -3,6 +3,7 @@ from datetime import timedelta
 from auction.models import Auction
 from authorization.models import User
 from car_model.models import CarMark, CarModel
+from car_model.serializers import CarModelSerializer
 from django.utils import timezone
 from rest_framework import serializers
 from transport_companies.models import TransportCompany
@@ -14,22 +15,6 @@ class ClientSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ["id", "fullName"]
-        ref_name = "car_order"
-
-
-class CarMarkSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = CarMark
-        fields = ["id", "name"]
-        ref_name = "car_order"
-
-
-class CarModelSerializer(serializers.ModelSerializer):
-    mark = CarMarkSerializer()
-
-    class Meta:
-        model = CarModel
-        fields = ["id", "mark", "name"]
         ref_name = "car_order"
 
 
@@ -65,6 +50,7 @@ class CarOrderSerializer(serializers.ModelSerializer):
         write_only=True,
         queryset=TransportCompany.objects.all(),
     )
+    fob = serializers.IntegerField()
 
     client = ClientSerializer(read_only=True)
     auction = AuctionSerializer(read_only=True)
@@ -73,8 +59,14 @@ class CarOrderSerializer(serializers.ModelSerializer):
     total_FOB = serializers.IntegerField(read_only=True)
     transportCompany = TransportCompanySerializer(read_only=True)
 
-    # FOB property cannot be written, so its readonly
-    fob = serializers.IntegerField(read_only=True)
+    parked_until = serializers.SerializerMethodField(read_only=True)
+    parked_for = serializers.SerializerMethodField(read_only=True)
+
+    def get_parked_until(self, car):
+        return car.created_at + timedelta(days=90)
+
+    def get_parked_for(self, car):
+        return (timezone.now().date() - car.created_at).days
 
     class Meta:
         model = CarOrder
@@ -107,7 +99,10 @@ class CarOrderSerializer(serializers.ModelSerializer):
             "additional_expenses",
             "comment",
             "is_sold",
-            "is_shipped"
+            "is_shipped",
+
+            "parked_until",
+            "parked_for",
         ]
 
 

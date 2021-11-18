@@ -7,7 +7,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 sys.path.insert(0, os.path.join(BASE_DIR, "apps"))
 
-SECRET_KEY = "django-insecure-x=rjvpp_@0x-r-@02m2zp6+xl5gzukts&-jhzgy_xd)76nyu*_"
+SECRET_KEY = (
+    "django-insecure-x=rjvpp_@0x-r-@02m2zp6+xl5gzukts&-jhzgy_xd)76nyu*_"
+)
 DEBUG = config("DEBUG", cast=bool)
 
 ALLOWED_HOSTS = ["*"]

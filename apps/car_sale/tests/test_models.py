@@ -105,4 +105,4 @@ class CreateCarSale(TestCase):
         self.assertEqual(self.car_sale.total, new_total)
 
         # Make sure carOrder is deleted
-        self.assertIsNone(self.car_sale.carOrder)
+        self.assertIsNotNone(self.car_sale.carOrder)

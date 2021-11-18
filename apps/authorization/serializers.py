@@ -61,15 +61,26 @@ class ClientSerializer(serializers.ModelSerializer):
     balance_replenishments = serializers.SerializerMethodField(read_only=True)
     balance_withdrawals = serializers.SerializerMethodField(read_only=True)
     balance = serializers.SerializerMethodField(read_only=True)
+    sizeFOB = serializers.IntegerField(allow_null=True)
 
     def get_shipped_containers(self, user):
         containers = user.containers.filter(status=Container.STATUS_SHIPPED)
         total = 0
         for container in containers:
             container_total = 0
-            cars_total = sum(container_car.car.get_total() for container_car in container.container_cars.all())
+            cars_total = sum(
+                container_car.car.get_total()
+                for container_car in container.container_cars.all()
+            )
             if user.atWhatPrice == User.AT_WHAT_PRICE_BY_FACT:
-                container_total = cars_total + container.commission + container.containerTransportation + container.packagingMaterials + container.wheel_recycling.sum - container.wheel_sales.sum
+                container_total = (
+                    cars_total
+                    + container.commission
+                    + container.containerTransportation
+                    + container.packagingMaterials
+                    + container.wheel_recycling.sum
+                    - container.wheel_sales.sum
+                )
             elif user.atWhatPrice == User.AT_WHAT_PRICE_BY_FOB:
                 container_total = cars_total + container.loading
             elif user.atWhatPrice == User.AT_WHAT_PRICE_BY_FOB2:
@@ -86,19 +97,26 @@ class ClientSerializer(serializers.ModelSerializer):
         total = 0
         for container in containers:
             container_total = 0
-            cars_total = sum(container_car.car.get_total() for container_car in container.container_cars.all())
+            cars_total = sum(
+                container_car.car.get_total()
+                for container_car in container.container_cars.all()
+            )
             if user.atWhatPrice == User.AT_WHAT_PRICE_BY_FACT:
-                container_total = cars_total + container.commission + container.containerTransportation + container.packagingMaterials + container.wheel_recycling.sum - container.wheel_sales.sum
+                container_total = (
+                    cars_total
+                    + container.commission
+                    + container.containerTransportation
+                    + container.packagingMaterials
+                    + container.wheel_recycling.sum
+                    - container.wheel_sales.sum
+                )
             elif user.atWhatPrice == User.AT_WHAT_PRICE_BY_FOB:
                 container_total = cars_total + container.loading
             elif user.atWhatPrice == User.AT_WHAT_PRICE_BY_FOB2:
                 container_total = cars_total + container.transportation
             total += container_total
 
-        return {
-            "number": len(containers),
-            "totalAmount": total
-        }
+        return {"number": len(containers), "totalAmount": total}
 
     def get_cars_for_sale(self, user):
         car_ids = list(
@@ -182,6 +200,7 @@ class ClientSerializer(serializers.ModelSerializer):
             "shipped_containers",
             "going_to_containers",
             "cars_for_sale",
+            "transportation_limit",
             "balance_replenishments",
             "balance_withdrawals",
             "balance",
@@ -198,11 +217,6 @@ class ClientSerializer(serializers.ModelSerializer):
 
         user = self.Meta.model.objects.create_user(**validated_data)
         return user
-
-    def update(self, instance, validated_data):
-        if "username" in validated_data:
-            raise ValidationError({"error": "Username cannot be updated!"})
-        return super().update(instance, validated_data)
 
 
 class TokenSerializer(serializers.Serializer):

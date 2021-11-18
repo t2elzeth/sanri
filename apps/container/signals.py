@@ -35,9 +35,9 @@ def post_save_container(instance: Container, created, **kwargs):
             balance=balance, container=instance
         )
 
-        for car in instance.container_cars.all():
-            car.car.is_shipped = True
-            car.car.save()
+    for car in instance.container_cars.all():
+        car.car.is_shipped = True
+        car.car.save()
 
     if hasattr(instance, "container_withdrawal"):
         instance.container_withdrawal.calculate()

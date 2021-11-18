@@ -22,6 +22,7 @@ class CarOrder(models.Model):
     @type client: authorization.models.User
     @type auction: auction.models.Auction
     """
+
     client = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="car_orders", null=True
     )
@@ -63,12 +64,10 @@ class CarOrder(models.Model):
     comment = models.TextField(default="", blank=True, null=True)
     additional_expenses = models.IntegerField(default=0)
 
+    fob = models.IntegerField(default=0)
+
     is_sold = models.BooleanField(default=False)
     is_shipped = models.BooleanField(default=False)
-
-    @property
-    def fob(self):
-        return self.client.sizeFOB
 
     def get_total(self):
         if self.client.atWhatPrice == User.AT_WHAT_PRICE_BY_FACT:
@@ -92,11 +91,11 @@ class CarOrder(models.Model):
 
         if self.client.atWhatPrice == User.AT_WHAT_PRICE_BY_FOB:
             self.total_FOB = calculate_total_fob(
-                self.price, self.amount, self.transport, self.fob
+                self.price, self.amount, self.transport, self.fob, self.client.transportation_limit
             )
         elif self.client.atWhatPrice == User.AT_WHAT_PRICE_BY_FOB2:
             self.total_FOB2 = calculate_total_fob2(
-                self.price, self.auctionFees, self.transport, self.fob
+                self.price, self.auctionFees, self.transport, self.fob, self.client.transportation_limit
             )
 
     def __str__(self):

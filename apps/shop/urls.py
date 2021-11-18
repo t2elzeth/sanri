@@ -2,19 +2,12 @@ from django.urls import path
 
 from . import views
 
-urlpatterns = [
-    path("", views.ShopCarAPIView.as_view(), name="shop-list"),
-    path(
-        "for_approve/",
-        views.ShopCarForApproveView.as_view(),
-        name="shop-list-for-approve",
-    ),
-    path(
-        "for_approve/<int:pk>/",
-        views.ShopCarForApproveDetailAPIView.as_view(),
-        name="shop-list-for-approve-detail",
-    ),
-    path(
-        "<int:pk>/", views.ShopCarDetailAPIView.as_view(), name="shop-detail"
-    ),
-]
+urlpatterns = (
+    path("", views.ListCarsView.as_view(), name="shop-car-list"),
+    path("<int:pk>/", views.DetailCarView.as_view(), name="shop-car-detail"),
+    path("add/", views.AddCarView.as_view(), name="shop-car-add"),
+    path("requests/add/", views.AddBuyRequestView.as_view(), name="shop-buy-request-add"),
+    path("requests/", views.ListBuyRequestsView.as_view(), name="shop-buy-request-list"),
+    path("requests/<int:pk>/approve/", views.ApproveBuyRequestView.as_view(), name="shop-buy-request-approve"),
+    path("requests/<int:pk>/decline/", views.DeclineBuyRequestView.as_view(), name="shop-buy-request-decline"),
+)

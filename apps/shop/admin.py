@@ -1,22 +1,18 @@
 from django.contrib import admin
 
-from .models import CarForApprove, FuelEfficiency, ShopCar, ShopImage
+from . import models
 
 
-class FuelEfficiencyInline(admin.StackedInline):
-    model = FuelEfficiency
+class CarImagesInline(admin.StackedInline):
+    model = models.CarImage
     extra = 0
 
 
-class ShopImageInline(admin.StackedInline):
-    model = ShopImage
+class CarBuyRequestsInline(admin.StackedInline):
+    model = models.BuyRequest
     extra = 0
 
 
-class ForApproveInline(admin.StackedInline):
-    model = CarForApprove
-
-
-@admin.register(ShopCar)
-class ShopCarAdmin(admin.ModelAdmin):
-    inlines = [FuelEfficiencyInline, ShopImageInline, ForApproveInline]
+@admin.register(models.Car)
+class CarAdmin(admin.ModelAdmin):
+    inlines = (CarImagesInline, CarBuyRequestsInline)

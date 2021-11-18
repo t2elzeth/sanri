@@ -10,6 +10,7 @@ class UserAdmin(BaseUserAdmin):
 
     list_display = (
         "id",
+        "username",
         "email",
     )
 
@@ -49,6 +50,7 @@ class UserAdmin(BaseUserAdmin):
                     "role",
                     "createdAt",
                     "user_type",
+                    "transportation_limit",
                     "email",
                     "is_superuser",
                     "is_staff",

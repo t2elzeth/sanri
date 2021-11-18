@@ -44,6 +44,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(max_length=16, unique=True)
     role = models.CharField(max_length=255, blank=True, null=True)
     createdAt = models.DateTimeField(auto_now_add=True)
+    transportation_limit = models.IntegerField(default=6000)
 
     USER_TYPE_SUPERUSER = "superuser"
     USER_TYPE_ADMIN = "admin"
@@ -91,6 +92,13 @@ class User(AbstractBaseUser, PermissionsMixin):
         ordering = ("id",)
 
     def save(self, *args, **kwargs):
+        if self.id is not None:
+            previous = User.objects.get(id=self.id)
+
+            if self.transportation_limit != previous.transportation_limit:
+                for order in self.car_orders.all():
+                    order.save()
+
         if self.works_by.by_fact:
             self.sizeFOB = 0
 

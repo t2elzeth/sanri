@@ -80,6 +80,7 @@ class TestCreateAPIView(Authenticate, APITestCase):
             "transportCompany_id": self.transport_company.id,
             "additional_expenses": 100,
             "comment": "mycarordercomment",
+            "fob": 12000
         }
         response = self.client.post(self.url, payload)
         self.assertEqual(
@@ -121,6 +122,7 @@ class TestCreateAPIView(Authenticate, APITestCase):
             "transportCompany_id": self.transport_company.id,
             "additional_expenses": 100,
             "comment": "mycarordercomment",
+            "fob": 12000
         }
         response = self.client.post(self.url, payload)
 
