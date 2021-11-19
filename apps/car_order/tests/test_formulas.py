@@ -7,6 +7,7 @@ from car_order.formulas import (
     get_transport,
     MIN_TRANSPORT_TO_INCLUDE,
 )
+from django_redis import get_redis_connection
 
 
 class TestGetTransportFormula(TestCase):
@@ -140,3 +141,6 @@ class TestCalculateTotalFOB2Formula(TestCase):
         expected = self.price + self.auctionFees + self.fob
 
         self.assertEqual(result, expected)
+
+    def test_flush_redis(self):
+        get_redis_connection("default").flushall()

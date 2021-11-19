@@ -204,6 +204,7 @@ class ClientSerializer(serializers.ModelSerializer):
             "balance_replenishments",
             "balance_withdrawals",
             "balance",
+            "user_type"
         ]
         ref_name = "main"
 
