@@ -1,5 +1,5 @@
 from authorization.models import Balance
-from django.db.models.signals import post_save, pre_save
+from django.db.models.signals import post_save, pre_save, post_delete
 from django.dispatch import receiver
 
 from .models import (
@@ -53,3 +53,8 @@ def create_cound_and_sum(instance, created, **kwargs):
 def create_cound_and_sum(instance, created, **kwargs):
     if created:
         instance.container.save()
+
+
+@receiver(post_delete, sender=ContainerBalanceWithdrawal)
+def post_delete_balance_withdrawal(instance: ContainerBalanceWithdrawal, **kwargs):
+    instance.balance.delete()
