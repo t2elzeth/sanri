@@ -128,7 +128,7 @@ class BalanceWithdrawal(models.Model):
     )
     car_order = models.OneToOneField(
         CarOrder,
-        on_delete=models.SET_NULL,
+        on_delete=models.CASCADE,
         related_name="withdrawal",
         null=True,
     )
