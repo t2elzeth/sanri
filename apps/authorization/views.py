@@ -15,6 +15,7 @@ from .serializers import (
     UserSerializer,
 )
 from rest_framework import views
+from rest_framework.pagination import PageNumberPagination
 
 from django.conf import settings
 from django.core.cache.backends.base import DEFAULT_TIMEOUT
@@ -115,11 +116,18 @@ class ManagerDetailAPIView(DetailAPIViewMixin):
     serializer_class = ManagerSerializer
 
 
+class LargeResultsSetPagination(PageNumberPagination):
+    page_size = 10
+    page_size_query_param = 'page_size'
+    max_page_size = 50
+
+
 class BalanceListAPIView(generics.ListCreateAPIView):
     queryset = Balance.objects.all()
     serializer_class = BalanceSerializer
     permission_classes = [IsAuthenticated]
     filterset_class = BalanceFilter
+    pagination_class = LargeResultsSetPagination
 
     def get_queryset(self):
         user_type = self.request.user.user_type
