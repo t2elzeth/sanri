@@ -143,7 +143,7 @@ if "test" in sys.argv:
     }
 
 
-REDIS_PASSWORD = config("REDIS_PASSWORD", "redisSanriAPI827309075911")
+REDIS_PASSWORD = config("REDIS_PASSWORD", "")
 REDIS_HOST = config("REDIS_HOST", "127.0.0.1")
 
 CACHES = {

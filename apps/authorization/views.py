@@ -15,11 +15,13 @@ from .serializers import (
     UserSerializer,
 )
 from rest_framework import views
+from rest_framework.pagination import PageNumberPagination
 
 from django.conf import settings
 from django.core.cache.backends.base import DEFAULT_TIMEOUT
 from django.views.decorators.cache import cache_page
 from utils.cache import cache_action
+from django.db.models import Q
 
 CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
 
@@ -115,11 +117,28 @@ class ManagerDetailAPIView(DetailAPIViewMixin):
     serializer_class = ManagerSerializer
 
 
+class LargeResultsSetPagination(PageNumberPagination):
+    page_size = 10
+    page_size_query_param = 'page_size'
+    max_page_size = 50
+
+
+class BalanceFilters:
+    IS_REPLENISHMENT = Q(balance_action=Balance.BALANCE_ACTION_REPLENISHMENT)
+    IS_WITHDRAWAL = Q(balance_action=Balance.BALANCE_ACTION_WITHDRAWAL)
+    IS_CASHLESS = Q(payment_type=Balance.PAYMENT_TYPE_CASHLESS)
+    IS_CASH = Q(payment_type=Balance.PAYMENT_TYPE_CASH)
+    IS_FOR_RESALE = Q(sender_name__icontains="CarResale".lower())
+    IS_SOLD = Q(comment__icontains="продали".lower())
+    IS_FOR_ORDER = Q(sender_name__icontains="CarOrder".lower())
+
+
 class BalanceListAPIView(generics.ListCreateAPIView):
     queryset = Balance.objects.all()
     serializer_class = BalanceSerializer
     permission_classes = [IsAuthenticated]
     filterset_class = BalanceFilter
+    pagination_class = LargeResultsSetPagination
 
     def get_queryset(self):
         user_type = self.request.user.user_type
@@ -134,6 +153,40 @@ class BalanceListAPIView(generics.ListCreateAPIView):
                 for managed_user in self.request.user.managed_users_as_manager.all()
             ]
             self.queryset = self.queryset.filter(client__in=managed_users)
+
+        group_name = self.request.query_params.get("group_name")
+        if group_name == "clr":
+            self.queryset = self.queryset.filter(
+                BalanceFilters.IS_REPLENISHMENT,
+                BalanceFilters.IS_CASHLESS
+            ).exclude(
+                BalanceFilters.IS_FOR_RESALE,
+                BalanceFilters.IS_SOLD
+            )
+        elif group_name == "cr":
+            self.queryset = self.queryset.filter(
+                (BalanceFilters.IS_REPLENISHMENT & BalanceFilters.IS_CASH) |
+                (BalanceFilters.IS_REPLENISHMENT & BalanceFilters.IS_FOR_RESALE) |
+                BalanceFilters.IS_SOLD
+            )
+        elif group_name == "clw":
+            self.queryset = self.queryset.filter(
+                BalanceFilters.IS_WITHDRAWAL,
+                BalanceFilters.IS_CASHLESS
+            ).exclude(
+                BalanceFilters.IS_FOR_ORDER,
+                BalanceFilters.IS_FOR_RESALE
+            )
+
+        elif group_name == "cw":
+            self.queryset = self.queryset.filter(
+                BalanceFilters.IS_WITHDRAWAL,
+                BalanceFilters.IS_CASH
+            )
+        elif group_name == "orders":
+            self.queryset = (self.queryset
+                             .filter(BalanceFilters.IS_WITHDRAWAL)
+                             .filter(BalanceFilters.IS_FOR_ORDER | BalanceFilters.IS_FOR_RESALE))
 
         return super().get_queryset()
 
