@@ -17,3 +17,6 @@ class BalanceFilter(django_filters.rest_framework.FilterSet):
     payment_type = django_filters.CharFilter(
         field_name="payment_type", lookup_expr="iexact"
     )
+    comment = django_filters.CharFilter(
+        field_name="comment", lookup_expr="icontains"
+    )
