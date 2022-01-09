@@ -1,5 +1,6 @@
 from dataclasses import dataclass
-from shop.models import Car, BuyRequest
+
+from shop.models import BuyRequest, Car
 
 
 @dataclass

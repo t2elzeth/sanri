@@ -1,10 +1,11 @@
+from django.test import TestCase
+
 from auction.models import Auction
 from authorization.models import User
 from car_model.models import CarMark
 from car_order.models import CarOrder
 from car_sale.formulas import calculate_total
 from car_sale.models import CarSale
-from django.test import TestCase
 from transport_companies.models import TransportCompany
 
 

@@ -1,6 +1,6 @@
-from .factory import CarMarkFactory, CarModelFactory
-
 from django.test import TestCase
+
+from .factory import CarMarkFactory, CarModelFactory
 
 
 class TestCarModel(TestCase):

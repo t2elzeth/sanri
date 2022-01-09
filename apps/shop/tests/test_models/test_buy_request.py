@@ -1,7 +1,8 @@
-from django.test import TestCase
-from shop.models import BuyRequest, Car
 from django.db import models
+from django.test import TestCase
+
 from authorization.models import User
+from shop.models import BuyRequest, Car
 
 
 class TestBuyRequestFields(TestCase):

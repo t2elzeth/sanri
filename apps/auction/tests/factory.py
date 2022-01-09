@@ -1,6 +1,6 @@
-from auction.models import Auction
-
 import factory
+
+from auction.models import Auction
 
 
 class AuctionFactory(factory.django.DjangoModelFactory):

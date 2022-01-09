@@ -1,3 +1,4 @@
+from django.conf import settings
 from rest_framework import status
 from rest_framework.reverse import reverse
 from rest_framework.test import APITestCase
@@ -8,8 +9,6 @@ from car_model.models import CarMark
 from car_order.models import CarOrder
 from transport_companies.models import TransportCompany
 from utils.tests import Authenticate
-
-from django.conf import settings
 
 
 class TestCreateAPIView(Authenticate, APITestCase):
@@ -80,7 +79,7 @@ class TestCreateAPIView(Authenticate, APITestCase):
             "transportCompany_id": self.transport_company.id,
             "additional_expenses": 100,
             "comment": "mycarordercomment",
-            "fob": 12000
+            "fob": 12000,
         }
         response = self.client.post(self.url, payload)
         self.assertEqual(
@@ -122,7 +121,7 @@ class TestCreateAPIView(Authenticate, APITestCase):
             "transportCompany_id": self.transport_company.id,
             "additional_expenses": 100,
             "comment": "mycarordercomment",
-            "fob": 12000
+            "fob": 12000,
         }
         response = self.client.post(self.url, payload)
 

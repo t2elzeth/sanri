@@ -1,18 +1,17 @@
 from django.conf import settings
-from django.core.cache.backends.base import DEFAULT_TIMEOUT
 from django.core.cache import cache
-from rest_framework.response import Response
+from django.core.cache.backends.base import DEFAULT_TIMEOUT
 from rest_framework.request import Request
+from rest_framework.response import Response
 
-CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
+CACHE_TTL = getattr(settings, "CACHE_TTL", DEFAULT_TIMEOUT)
 
 CACHE_KEY_TEMPLATE = "{key_prefix}-${token}"
 
 
 def generate_cache_key(key_prefix: str, user):
     return CACHE_KEY_TEMPLATE.format(
-        key_prefix=key_prefix,
-        token=user.auth_token
+        key_prefix=key_prefix, token=user.auth_token
     )
 
 

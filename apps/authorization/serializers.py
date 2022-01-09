@@ -1,13 +1,12 @@
-from container.models import Container, ContainerCar
 from django.contrib.auth import authenticate
-from income.models import Income
 from rest_framework import serializers
 from rest_framework.exceptions import (
-    APIException,
     NotAuthenticated,
     ValidationError,
 )
 
+from container.models import Container, ContainerCar
+from income.models import Income
 from .models import Balance, ManagedUser, User
 
 
@@ -204,7 +203,7 @@ class ClientSerializer(serializers.ModelSerializer):
             "balance_replenishments",
             "balance_withdrawals",
             "balance",
-            "user_type"
+            "user_type",
         ]
         ref_name = "main"
 

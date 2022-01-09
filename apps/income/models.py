@@ -14,7 +14,7 @@ class Income(models.Model):
         IncomeType, on_delete=models.CASCADE, related_name="incomes"
     )
     date = models.DateField(default=timezone.now)
-    amount = models.IntegerField()
+    amount = models.DecimalField(decimal_places=2, max_digits=10)
     comment = models.TextField(default="")
     created_at = models.DateTimeField(auto_now_add=True)
 

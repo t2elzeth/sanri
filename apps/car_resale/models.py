@@ -1,6 +1,7 @@
+from django.db import models
+
 from authorization.models import User
 from car_order.models import CarOrder
-from django.db import models
 
 
 class CarResale(models.Model):

@@ -1,190 +1,204 @@
+from django.db.models import (
+    Case,
+    Count,
+    DecimalField,
+    F,
+    Q,
+    Subquery,
+    Sum,
+    Value,
+    When,
+)
+from rest_framework.request import Request
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
 from authorization.models import Balance
 from car_order.models import CarOrder
 from car_resale.models import CarResale
 from car_sale.models import CarSale
 from container.models import Container, ContainerCar
 from income.models import Income
-from rest_framework.response import Response
-from rest_framework.views import APIView
-from django.db.models import Case, F, When, DecimalField, Q, Sum, Value, Count
+from monthly_payment.models import MonthlyPayment
+from staff.models import StaffExpense
+
+
+class DateFilters:
+    def __init__(self, request: Request):
+        self.from_date = request.query_params.get("from")
+        self.to_date = request.query_params.get("to")
 
 
 class StatisticAPIView(APIView):
     def get(self, request, *args, **kwargs):
-        from_ = request.query_params.get("from")
-        to_ = request.query_params.get("to")
+        date_filters = DateFilters(request)
+
+        created_at_from = Q()
+        created_at_to = Q()
+        date_from = Q()
+        date_to = Q()
+
+        if date_filters.from_date:
+            created_at_from = Q(created_at__gte=date_filters.from_date)
+            date_from = Q(date__gte=date_filters.from_date)
+
+        if date_filters.to_date:
+            created_at_to = Q(created_at__gte=date_filters.to_date)
+            date_to = Q(date__lte=date_filters.to_date)
 
         # Количество купленных машин
-        car_orders = CarOrder.objects.all()
-        if from_:
-            car_orders = car_orders.filter(created_at__gte=from_)
-        if to_:
-            car_orders = car_orders.filter(created_at__lte=to_)
-
-        car_orders_number = car_orders.count()
-        car_orders_sum = sum(car_order.total for car_order in car_orders)
+        car_orders = CarOrder.objects.filter(
+            created_at_from, created_at_to
+        ).aggregate(count=Count(1), sum=Sum("total"))
 
         # Количество безналичных переводов
         cashless_payments = Balance.objects.filter(
+            created_at_from,
+            created_at_to,
             payment_type=Balance.PAYMENT_TYPE_CASHLESS,
             balance_action=Balance.BALANCE_ACTION_REPLENISHMENT,
-        )
-        if from_:
-            cashless_payments = cashless_payments.filter(created_at__gte=from_)
-        if to_:
-            cashless_payments = cashless_payments.filter(created_at__lte=to_)
-        cashless_payments_number = cashless_payments.count()
-        cashless_payments_sum = sum(
-            payment.sum_in_jpy for payment in cashless_payments
-        )
+        ).aggregate(count=Count(1), sum=Sum("sum_in_jpy"))
 
         # Количество отправленных контейнеров
-        shipped_containers = Container.objects.filter(
-            status=Container.STATUS_SHIPPED
-        ).annotate(
-            total=Case(
-                When(
-                    client__atWhatPrice="by_fact",
-                    then=Sum("container_cars__car__total"),
-                ),
-                When(
-                    client__atWhatPrice="by_fob",
-                    then=Sum("container_cars__car__total_FOB"),
-                ),
-                When(
-                    client__atWhatPrice="by_fob2",
-                    then=Sum("container_cars__car__total_FOB2"),
-                ),
-                default=Value(0),
-            ),
-            auctionFeesTotal=Sum("container_cars__car__auctionFees"),
-            transportationTotal=Sum(
-                Case(
+        shipped_containers = (
+            Container.objects.filter(
+                created_at_from, created_at_to, status=Container.STATUS_SHIPPED
+            )
+            .annotate(
+                total=Case(
                     When(
-                        container_cars__car__transport__gt=6000,
-                        then=F("container_cars__car__transport"),
+                        client__atWhatPrice="by_fact",
+                        then=Sum("container_cars__car__total"),
+                    ),
+                    When(
+                        client__atWhatPrice="by_fob",
+                        then=Sum("container_cars__car__total_FOB"),
+                    ),
+                    When(
+                        client__atWhatPrice="by_fob2",
+                        then=Sum("container_cars__car__total_FOB2"),
                     ),
                     default=Value(0),
-                )
-            ),
-            price10Total=Sum(F("container_cars__car__price") * 0.1),
-            recycleTotal=Sum("container_cars__car__recycle"),
-            amountTotal=Sum("container_cars__car__amount"),
-            fobTotal=Sum("container_cars__car__client__sizeFOB"),
-            income=Case(
-                When(
-                    client__atWhatPrice="by_fact",
-                    then=F("total")
-                    + F("commission")
-                    + F("containerTransportation")
-                    + F("packagingMaterials")
-                    + F("wheel_recycling__sum")
-                    - F("wheel_sales__sum"),
                 ),
-                When(
-                    Q(client__atWhatPrice="by_fob")
-                    | Q(client__atWhatPrice="by_fob2"),
-                    then=F("price10Total")
-                    + F("recycleTotal")
-                    + F("amountTotal")
-                    + F("fobTotal")
-                    - F("loading")
-                    - F("auctionFeesTotal")
-                    - F("transportationTotal"),
+                auctionFeesTotal=Sum("container_cars__car__auctionFees"),
+                transportationTotal=Sum(
+                    Case(
+                        When(
+                            container_cars__car__transport__gt=6000,
+                            then=F("container_cars__car__transport"),
+                        ),
+                        default=Value(0),
+                    )
                 ),
-                default=0,
-                output_field=DecimalField(max_digits=100, decimal_places=2),
-            ),
-        )
-        if from_:
-            shipped_containers = shipped_containers.filter(
-                created_at__gte=from_
+                price10Total=Sum(F("container_cars__car__price") * 0.1),
+                recycleTotal=Sum("container_cars__car__recycle"),
+                amountTotal=Sum("container_cars__car__amount"),
+                fobTotal=Sum("container_cars__car__client__sizeFOB"),
+                income=Case(
+                    When(
+                        client__atWhatPrice="by_fact",
+                        then=F("total")
+                        + F("commission")
+                        + F("containerTransportation")
+                        + F("packagingMaterials")
+                        + F("wheel_recycling__sum")
+                        - F("wheel_sales__sum"),
+                    ),
+                    When(
+                        Q(client__atWhatPrice="by_fob")
+                        | Q(client__atWhatPrice="by_fob2"),
+                        then=F("price10Total")
+                        + F("recycleTotal")
+                        + F("amountTotal")
+                        + F("fobTotal")
+                        - F("loading")
+                        - F("auctionFeesTotal")
+                        - F("transportationTotal"),
+                    ),
+                    default=0,
+                    output_field=DecimalField(
+                        max_digits=100, decimal_places=2
+                    ),
+                ),
             )
-        if to_:
-            shipped_containers = shipped_containers.filter(created_at__lte=to_)
-
-        shipped_containers = shipped_containers.aggregate(sum=Sum("income"), count=Count("id"))
-        shipped_containers_number = shipped_containers["count"]
-        shipped_containers_sum = shipped_containers["sum"]
+            .aggregate(sum=Sum("income"), count=Count(1))
+        )
 
         # Количество загруженных машин в контейнеры
-        loaded_cars = ContainerCar.objects.all()
-        if from_:
-            loaded_cars = loaded_cars.filter(created_at__gte=from_)
-        if to_:
-            loaded_cars = loaded_cars.filter(created_at__lte=to_)
-        loaded_cars_number = loaded_cars.count()
-        loaded_cars_sum = sum(car.car.total for car in loaded_cars)
+        loaded_cars = ContainerCar.objects.filter(
+            created_at_from, created_at_to
+        ).aggregate(count=Count(1), sum=Sum("car__total"))
 
         # Количество проданных машин на аукционах
-        sold_cars = CarSale.objects.filter(status=True)
-        if from_:
-            sold_cars = sold_cars.filter(created_at__gte=from_)
-        if to_:
-            sold_cars = sold_cars.filter(created_at__lte=to_)
-        sold_cars_number = sold_cars.count()
-        sold_cars_sum = sum(car.total for car in sold_cars)
+        sold_cars = CarSale.objects.filter(
+            created_at_from, created_at_to, status=True
+        ).aggregate(count=Count(1), sum=Sum("total"))
 
         # Количество перепроданных машин
-        car_resale = CarResale.objects.all()
-        if from_:
-            car_resale = car_resale.filter(created_at__gte=from_)
-        if to_:
-            car_resale = car_resale.filter(created_at__lte=to_)
-        car_resale_number = car_resale.count()
-        car_resale_sum = sum(car.salePrice for car in car_resale)
+        car_resale = CarResale.objects.filter(
+            created_at_from, created_at_to
+        ).aggregate(count=Count(1), sum=Sum("salePrice"))
 
         # Количество припаркованных машин на стоянках
-        loaded_cars = [
-            el["car__id"]
-            for el in ContainerCar.objects.all().values("car__id")
-        ]
-        parked_cars = CarOrder.objects.exclude(id__in=loaded_cars)
-        parked_cars_number = parked_cars.count()
-        parked_cars_sum = sum(car.total for car in parked_cars)
+        parked_cars = CarOrder.objects.exclude(
+            id__in=Subquery(ContainerCar.objects.all().values("car__id"))
+        ).aggregate(count=Count(1), sum=Sum("total"))
 
         # Количество всех доходов
-        incomes = Income.objects.all()
-        if from_:
-            incomes = incomes.filter(created_at__gte=from_)
-        if to_:
-            incomes = incomes.filter(created_at__lte=to_)
-        incomes_number = incomes.count()
-        incomes_sum = sum(income.amount for income in incomes)
+        incomes = Income.objects.filter(
+            created_at_from, created_at_to
+        ).aggregate(count=Count(1), sum=Sum("amount"))
+
+        monthly_payments = MonthlyPayment.objects.filter(
+            date_from, date_to
+        ).aggregate(sum=Sum("amount"), number=Count(1))
+
+        staff_expenses = StaffExpense.objects.filter(
+            date_from, date_to
+        ).aggregate(sum=Sum("amount"), number=Count(1))
 
         # Data to return
         data = {
             "car_orders": {
-                "number": car_orders_number,
-                "sum": car_orders_sum,
+                "number": car_orders["count"],
+                "sum": car_orders["sum"],
             },
             "cashless_payments": {
-                "number": cashless_payments_number,
-                "sum": cashless_payments_sum,
+                "number": (cashless_payments["count"]),
+                "sum": (cashless_payments["sum"]),
             },
             "shipped_containers": {
-                "number": shipped_containers_number,
-                "sum": shipped_containers_sum,
+                "number": (shipped_containers["count"]),
+                "sum": (shipped_containers["sum"]),
             },
             "loaded_cars": {
-                "number": loaded_cars_number,
-                "sum": loaded_cars_sum,
+                "number": (loaded_cars["count"]),
+                "sum": (loaded_cars["sum"]),
             },
             "sold_cars": {
-                "number": sold_cars_number,
-                "sum": sold_cars_sum,
+                "number": (sold_cars["count"]),
+                "sum": (sold_cars["sum"]),
             },
             "car_resale": {
-                "number": car_resale_number,
-                "sum": car_resale_sum,
+                "number": (car_resale["count"]),
+                "sum": (car_resale["sum"]),
             },
             "parked_cars": {
-                "number": parked_cars_number,
-                "sum": parked_cars_sum,
+                "number": (parked_cars["count"]),
+                "sum": (parked_cars["sum"]),
             },
             "incomes": {
-                "number": incomes_number,
-                "sum": incomes_sum,
+                "number": (incomes["count"]),
+                "sum": (incomes["sum"]),
+            },
+            "outcomes": {
+                "sum": monthly_payments["sum"] + staff_expenses["sum"],
+                "number": monthly_payments["number"]
+                + staff_expenses["number"],
+            },
+            "overall": {
+                "sum": incomes["sum"]
+                - (monthly_payments["sum"] + staff_expenses["sum"])
             },
         }
         return Response(data=data)

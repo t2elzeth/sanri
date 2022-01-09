@@ -1,8 +1,8 @@
 import factory
 
-from . import models
-from car_model.tests.factory import CarModelFactory
 from authorization.tests.factory import ClientFactory
+from car_model.tests.factory import CarModelFactory
+from . import models
 
 
 class CarFactory(factory.django.DjangoModelFactory):

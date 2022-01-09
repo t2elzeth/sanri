@@ -1,13 +1,14 @@
-from auction.models import Auction
-from authorization.models import Balance, User
-from car_model.models import CarMark
-from car_order.models import CarOrder, BalanceWithdrawal as CarOrderWithdrawal
-from car_sale.models import CarSale
 from rest_framework import status
 from rest_framework.reverse import reverse
 from rest_framework.test import APITestCase
-from transport_companies.models import TransportCompany
 
+from auction.models import Auction
+from authorization.models import Balance, User
+from car_model.models import CarMark
+from car_order.models import BalanceWithdrawal as CarOrderWithdrawal
+from car_order.models import CarOrder
+from car_sale.models import CarSale
+from transport_companies.models import TransportCompany
 from utils.tests import Authenticate
 
 

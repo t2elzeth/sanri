@@ -1,9 +1,7 @@
 from django.test import TestCase
 
-from shop.serializers import GetCarSerializer
-from shop.models import Car
 from shop.models_factory import CarFactory
-from car_model.serializers import CarModelSerializer
+from shop.serializers import GetCarSerializer
 
 
 class TestGetCarSerializer(TestCase):
@@ -22,7 +20,7 @@ class TestGetCarSerializer(TestCase):
             "condition",
             "price",
             "description",
-            "images"
+            "images",
         )
         received_keys = tuple(self.serialized_data.keys())
 

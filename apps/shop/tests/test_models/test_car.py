@@ -1,7 +1,8 @@
-from django.test import TestCase
 from django.db import models
-from shop.models import Car
+from django.test import TestCase
+
 from car_model.models import CarModel
+from shop.models import Car
 from shop.models_factory import CarFactory
 
 

@@ -1,17 +1,31 @@
-from rest_framework import status
+from django.db.models import Subquery
+from rest_framework import generics, status
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework import generics
-from .dto.car import AddCarDTO
-from .dto.buy_request import AddBuyRequestDTO, ApproveBuyRequestDTO, DeclineBuyRequestDTO
-from .serializers import AddCarSerializer, GetCarSerializer, AddBuyRequestSerializer, GetBuyRequestSerializer, \
-    ApproveBuyRequestSerializer, DeclineBuyRequestSerializer
-from .services.car import AddCarService
-from .services.buy_request import AddBuyRequestService, ApproveBuyRequestService, DeclineBuyRequestService
-from .models import Car, BuyRequest
-from rest_framework.permissions import IsAuthenticated
+
 from authorization.models import User
-from django.db.models import Subquery
+from .dto.buy_request import (
+    AddBuyRequestDTO,
+    ApproveBuyRequestDTO,
+    DeclineBuyRequestDTO,
+)
+from .dto.car import AddCarDTO
+from .models import BuyRequest, Car
+from .serializers import (
+    AddBuyRequestSerializer,
+    AddCarSerializer,
+    ApproveBuyRequestSerializer,
+    DeclineBuyRequestSerializer,
+    GetBuyRequestSerializer,
+    GetCarSerializer,
+)
+from .services.buy_request import (
+    AddBuyRequestService,
+    ApproveBuyRequestService,
+    DeclineBuyRequestService,
+)
+from .services.car import AddCarService
 
 
 class ListCarsView(generics.ListAPIView):
@@ -57,24 +71,26 @@ class AddBuyRequestView(APIView):
 class ListBuyRequestsView(generics.ListAPIView):
     serializer_class = GetBuyRequestSerializer
     queryset = BuyRequest.objects.all()
-    permission_classes = (
-        IsAuthenticated,
-    )
+    permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
         if self.request.user.user_type == User.USER_TYPE_CLIENT:
-            self.queryset = self.queryset.filter(from_client__id=self.request.user.id)
+            self.queryset = self.queryset.filter(
+                from_client__id=self.request.user.id
+            )
         elif self.request.user.user_type in (
-                User.USER_TYPE_YARD_MANAGER,
-                User.USER_TYPE_SALES_MANAGER
+            User.USER_TYPE_YARD_MANAGER,
+            User.USER_TYPE_SALES_MANAGER,
         ):
             new_managed = Subquery(
                 self.request.user.managed_users_as_manager.all()
-                    .select_related("user")
-                    .only("user")
-                    .values("user")
+                .select_related("user")
+                .only("user")
+                .values("user")
             )
-            new_queryset = self.queryset.filter(from_client__id__in=new_managed)
+            new_queryset = self.queryset.filter(
+                from_client__id__in=new_managed
+            )
             self.queryset = new_queryset
 
         return super().get_queryset()
@@ -82,9 +98,7 @@ class ListBuyRequestsView(generics.ListAPIView):
 
 class ApproveBuyRequestView(APIView):
     def post(self, request, pk):
-        serializer = ApproveBuyRequestSerializer(data={
-            "request_id": pk
-        })
+        serializer = ApproveBuyRequestSerializer(data={"request_id": pk})
         serializer.is_valid(raise_exception=True)
         data = serializer.validated_data
 
@@ -98,9 +112,7 @@ class ApproveBuyRequestView(APIView):
 
 class DeclineBuyRequestView(APIView):
     def post(self, request, pk):
-        serializer = DeclineBuyRequestSerializer(data={
-            "request_id": pk
-        })
+        serializer = DeclineBuyRequestSerializer(data={"request_id": pk})
         serializer.is_valid(raise_exception=True)
         data = serializer.validated_data
 

@@ -1,10 +1,10 @@
-from auction.models import Auction
-from car_model.models import CarModel
-
 from django.db import models
 from django.utils import timezone
-from transport_companies.models import TransportCompany
+
+from auction.models import Auction
 from authorization.models import User
+from car_model.models import CarModel
+from transport_companies.models import TransportCompany
 from .formulas import (
     calculate_total,
     calculate_total_fob,
@@ -91,11 +91,19 @@ class CarOrder(models.Model):
 
         if self.client.atWhatPrice == User.AT_WHAT_PRICE_BY_FOB:
             self.total_FOB = calculate_total_fob(
-                self.price, self.amount, self.transport, self.fob, self.client.transportation_limit
+                self.price,
+                self.amount,
+                self.transport,
+                self.fob,
+                self.client.transportation_limit,
             )
         elif self.client.atWhatPrice == User.AT_WHAT_PRICE_BY_FOB2:
             self.total_FOB2 = calculate_total_fob2(
-                self.price, self.auctionFees, self.transport, self.fob, self.client.transportation_limit
+                self.price,
+                self.auctionFees,
+                self.transport,
+                self.fob,
+                self.client.transportation_limit,
             )
 
     def __str__(self):

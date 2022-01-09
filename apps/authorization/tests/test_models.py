@@ -1,5 +1,6 @@
-from authorization.models import User
 from django.test import TestCase
+
+from authorization.models import User
 from authorization.tests.factory import ClientFactory
 
 

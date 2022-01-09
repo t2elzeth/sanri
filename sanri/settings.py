@@ -1,6 +1,7 @@
 import os
 import sys
 from pathlib import Path
+
 from decouple import config
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -152,9 +153,9 @@ CACHES = {
         "LOCATION": f"redis://{REDIS_HOST}:6379/1",
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
-            "PASSWORD": REDIS_PASSWORD
+            "PASSWORD": REDIS_PASSWORD,
         },
-        "KEY_PREFIX": "SanriAPI"
+        "KEY_PREFIX": "SanriAPI",
     }
 }
 

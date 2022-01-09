@@ -1,10 +1,10 @@
-from django.dispatch.dispatcher import receiver
-from django.db.models.signals import post_save
 from django.core.cache import cache
-from .models import User
+from django.db.models.signals import post_save
+from django.dispatch.dispatcher import receiver
 from rest_framework.authtoken.models import Token
 
 from utils.cache import generate_cache_key
+from .models import User
 
 
 @receiver(post_save, sender=User)

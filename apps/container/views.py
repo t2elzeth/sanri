@@ -1,21 +1,20 @@
-from authorization.models import User
+from django.db.models import (
+    Case,
+    DecimalField,
+    F,
+    Q,
+    Subquery,
+    Sum,
+    Value,
+    When,
+)
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 
+from authorization.models import User
 from utils.mixins import DetailAPIViewMixin
-
 from .models import Container
 from .serializers import ContainerSerializer
-from django.db.models import (
-    Case,
-    When,
-    Sum,
-    Value,
-    F,
-    Subquery,
-    DecimalField,
-    Q,
-)
 
 
 class ContainerAPIView(generics.ListCreateAPIView):

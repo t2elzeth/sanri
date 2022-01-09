@@ -1,11 +1,12 @@
-from django.test import TestCase
 from django.conf import settings
+from django.test import TestCase
+
 from authorization.models import Balance
 from car_model.tests.factory import CarMarkFactory
 from .factory import (
+    AuctionFactory,
     CarOrderFactory,
     ClientFactory,
-    AuctionFactory,
     TransportCompanyFactory,
 )
 

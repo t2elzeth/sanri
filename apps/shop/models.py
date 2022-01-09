@@ -1,6 +1,7 @@
 from django.db import models
-from car_model.models import CarModel
+
 from authorization.models import User
+from car_model.models import CarModel
 
 
 class Car(models.Model):
@@ -18,18 +19,26 @@ class Car(models.Model):
 
 
 class CarImage(models.Model):
-    car = models.ForeignKey(Car, on_delete=models.CASCADE, related_name="images")
+    car = models.ForeignKey(
+        Car, on_delete=models.CASCADE, related_name="images"
+    )
     image = models.ImageField()
 
 
 class BuyRequest(models.Model):
     from_client = models.ForeignKey(User, on_delete=models.CASCADE)
-    car = models.ForeignKey(Car, on_delete=models.CASCADE, related_name="buy_requests")
+    car = models.ForeignKey(
+        Car, on_delete=models.CASCADE, related_name="buy_requests"
+    )
 
     STATUS_PENDING = "pending"
     STATUS_APPROVED = "approved"
     STATUS_DECLINED = "declined"
-    STATUS_CHOICES = ((STATUS_PENDING, STATUS_PENDING),
-                      (STATUS_APPROVED, STATUS_APPROVED),
-                      (STATUS_DECLINED, STATUS_DECLINED))
-    status = models.CharField(max_length=25, choices=STATUS_CHOICES, default=STATUS_PENDING)
+    STATUS_CHOICES = (
+        (STATUS_PENDING, STATUS_PENDING),
+        (STATUS_APPROVED, STATUS_APPROVED),
+        (STATUS_DECLINED, STATUS_DECLINED),
+    )
+    status = models.CharField(
+        max_length=25, choices=STATUS_CHOICES, default=STATUS_PENDING
+    )

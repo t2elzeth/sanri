@@ -1,9 +1,9 @@
 import factory
 
 from auction.tests.factory import AuctionFactory
+from authorization.tests.factory import ClientFactory
 from car_model.tests.factory import CarModelFactory
 from car_order.models import CarOrder
-from authorization.tests.factory import ClientFactory
 from transport_companies.tests.factory import TransportCompanyFactory
 
 

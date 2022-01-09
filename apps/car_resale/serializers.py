@@ -1,8 +1,8 @@
+from rest_framework import serializers
+
 from authorization.models import User
 from car_model.models import CarMark, CarModel
 from car_order.models import CarOrder
-from rest_framework import serializers
-
 from .models import CarResale
 
 

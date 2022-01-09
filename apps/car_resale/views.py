@@ -1,9 +1,8 @@
-from authorization.models import User
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 
+from authorization.models import User
 from utils.mixins import DetailAPIViewMixin
-
 from .filters import CarResaleFilter
 from .models import CarResale
 from .serializers import CarResaleSerializer

@@ -1,7 +1,7 @@
 from django.test import TestCase
 
-from authorization.tests.factory import ClientFactory
 from authorization.models import User
+from authorization.tests.factory import ClientFactory
 
 
 class TestClientWorksBy(TestCase):

@@ -17,6 +17,13 @@ def calculate_total_fob(price, amount, transport, fob, transportation_limit):
     return sum(included)
 
 
-def calculate_total_fob2(price, auctionFees, transport, fob, transportation_limit):
-    included = (price, auctionFees, get_transport(transport, transportation_limit), fob)
+def calculate_total_fob2(
+    price, auctionFees, transport, fob, transportation_limit
+):
+    included = (
+        price,
+        auctionFees,
+        get_transport(transport, transportation_limit),
+        fob,
+    )
     return sum(included)

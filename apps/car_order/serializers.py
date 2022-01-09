@@ -1,13 +1,13 @@
 from datetime import timedelta
 
-from auction.models import Auction
-from authorization.models import User
-from car_model.models import CarMark, CarModel
-from car_model.serializers import CarModelSerializer
 from django.utils import timezone
 from rest_framework import serializers
-from transport_companies.models import TransportCompany
 
+from auction.models import Auction
+from authorization.models import User
+from car_model.models import CarModel
+from car_model.serializers import CarModelSerializer
+from transport_companies.models import TransportCompany
 from .models import CarOrder
 
 
@@ -100,7 +100,6 @@ class CarOrderSerializer(serializers.ModelSerializer):
             "comment",
             "is_sold",
             "is_shipped",
-
             "parked_until",
             "parked_for",
         ]

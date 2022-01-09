@@ -36,7 +36,11 @@ class TestApproveBuyRequestService(TestCase):
         res = self.service._decline_other_requests(self.req)
 
         self.assertIsNone(res)
-        for req in BuyRequest.objects.exclude(id=self.req.id).filter(car__id=self.req.car.id).values("status"):
+        for req in (
+            BuyRequest.objects.exclude(id=self.req.id)
+            .filter(car__id=self.req.car.id)
+            .values("status")
+        ):
             self.assertEqual(req["status"], BuyRequest.STATUS_DECLINED)
 
     def test_set_car_sold_status(self):

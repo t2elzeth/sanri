@@ -1,10 +1,11 @@
-from rest_framework.test import APITestCase
-from rest_framework.reverse import reverse
-from authorization.tests.factory import ClientFactory
-from authorization.models import User
-from utils.tests import Authenticate
-from car_model.tests.factory import CarModelFactory
 from rest_framework import status
+from rest_framework.reverse import reverse
+from rest_framework.test import APITestCase
+
+from authorization.models import User
+from authorization.tests.factory import ClientFactory
+from car_model.tests.factory import CarModelFactory
+from utils.tests import Authenticate
 
 
 class TestAddCarView(APITestCase, Authenticate):

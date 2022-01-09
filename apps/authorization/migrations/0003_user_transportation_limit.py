@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('authorization', '0002_alter_balance_rate'),
+        ("authorization", "0002_alter_balance_rate"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='user',
-            name='transportation_limit',
+            model_name="user",
+            name="transportation_limit",
             field=models.IntegerField(default=6000),
         ),
     ]

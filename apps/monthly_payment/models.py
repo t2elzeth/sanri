@@ -1,5 +1,6 @@
-from container.models import Container
 from django.db import models
+
+from container.models import Container
 
 
 class MonthlyPaymentType(models.Model):
@@ -26,7 +27,7 @@ class MonthlyPayment(models.Model):
         null=True,
         blank=True,
     )
-    amount = models.CharField(max_length=255)
+    amount = models.DecimalField(decimal_places=2, max_digits=10)
     comment = models.TextField()
 
     def __str__(self):

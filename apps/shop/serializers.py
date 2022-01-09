@@ -1,9 +1,8 @@
 from rest_framework import serializers
 
-from authorization.models import User
 from authorization.serializers import ClientSerializer
 from car_model.serializers import CarModelSerializer
-from shop.models import Car, CarImage, BuyRequest
+from shop.models import BuyRequest, Car, CarImage
 
 
 class AddCarSerializer(serializers.Serializer):
@@ -14,15 +13,15 @@ class AddCarSerializer(serializers.Serializer):
     condition = serializers.IntegerField()
     price = serializers.DecimalField(max_digits=20, decimal_places=2)
     description = serializers.CharField()
-    images = serializers.ListSerializer(child=serializers.FileField(), required=False, allow_null=True)
+    images = serializers.ListSerializer(
+        child=serializers.FileField(), required=False, allow_null=True
+    )
 
 
 class CarImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = CarImage
-        fields = (
-            "image",
-        )
+        fields = ("image",)
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
@@ -47,7 +46,7 @@ class GetCarSerializer(serializers.ModelSerializer):
             "description",
             "images",
             "sold",
-            "requests"
+            "requests",
         )
 
 
@@ -68,12 +67,7 @@ class GetBuyRequestSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = BuyRequest
-        fields = (
-            "id",
-            "car",
-            "from_client",
-            "status"
-        )
+        fields = ("id", "car", "from_client", "status")
 
 
 class ApproveBuyRequestSerializer(serializers.Serializer):
@@ -85,9 +79,7 @@ class ApproveBuyRequestSerializer(serializers.Serializer):
     def validated_data(self):
         validated_data = super().validated_data
         request = validated_data.pop("request_id")
-        validated_data.update({
-            "request": request
-        })
+        validated_data.update({"request": request})
 
         return validated_data
 
@@ -101,8 +93,6 @@ class DeclineBuyRequestSerializer(serializers.Serializer):
     def validated_data(self):
         validated_data = super().validated_data
         request = validated_data.pop("request_id")
-        validated_data.update({
-            "request": request
-        })
+        validated_data.update({"request": request})
 
         return validated_data

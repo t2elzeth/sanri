@@ -1,6 +1,6 @@
 from car_model.models import CarModel
-from shop.models import Car
 from shop.dto.car import AddCarDTO
+from shop.models import Car
 
 
 class AddCarService:

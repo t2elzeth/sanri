@@ -1,5 +1,5 @@
-from shop.models import BuyRequest
 from shop.dto.buy_request import DeclineBuyRequestDTO
+from shop.models import BuyRequest
 
 
 class DeclineBuyRequestService:

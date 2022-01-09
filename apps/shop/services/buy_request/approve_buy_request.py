@@ -1,5 +1,5 @@
-from shop.models import BuyRequest
 from shop.dto.buy_request import ApproveBuyRequestDTO
+from shop.models import BuyRequest
 
 
 class ApproveBuyRequestService:
@@ -14,7 +14,9 @@ class ApproveBuyRequestService:
         req.save()
 
     def _decline_other_requests(self, req: BuyRequest):
-        BuyRequest.objects.exclude(id=req.id).filter(car__id=req.car.id).update(status=BuyRequest.STATUS_DECLINED)
+        BuyRequest.objects.exclude(id=req.id).filter(
+            car__id=req.car.id
+        ).update(status=BuyRequest.STATUS_DECLINED)
 
     def _set_car_sold_status(self, req: BuyRequest):
         req.car.sold = True
