@@ -1,10 +1,9 @@
-from django.conf import settings
-from django.test import TestCase
-
 from authorization.models import User
 from car_order import formulas
 from car_order.models import CarOrder
 from car_order.tests.factory import CarOrderFactory, ClientFactory
+from django.conf import settings
+from django.test import TestCase
 
 
 class TestCalculateTotalFactClient(TestCase):

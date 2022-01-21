@@ -1,15 +1,12 @@
-from django.conf import settings
-from django.db.models.signals import post_save, pre_save
-from django.dispatch import receiver
-
 from authorization.models import Balance
 from car_order.models import CarOrder
 from car_sale.models import CarSale
+from django.conf import settings
+from django.db.models.signals import post_save, pre_save
+from django.dispatch import receiver
 from income.models import IncomeType
-from .models import (
-    CarResale,
-    CarResaleOldClientReplenishment,
-)
+
+from .models import CarResale, CarResaleOldClientReplenishment
 
 
 @receiver(pre_save, sender=CarResale)

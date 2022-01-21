@@ -1,5 +1,4 @@
 from django.test import TestCase
-
 from shop.models_factory import CarFactory
 from shop.serializers import GetCarSerializer
 

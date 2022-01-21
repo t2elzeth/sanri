@@ -1,10 +1,10 @@
-from django.db import models
-from django.utils import timezone
-
 from auction.models import Auction
 from authorization.models import User
 from car_model.models import CarModel
+from django.db import models
+from django.utils import timezone
 from transport_companies.models import TransportCompany
+
 from .formulas import (
     calculate_total,
     calculate_total_fob,

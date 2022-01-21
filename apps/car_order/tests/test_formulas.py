@@ -1,6 +1,3 @@
-from django.test import TestCase
-from django_redis import get_redis_connection
-
 from car_order.formulas import (
     MIN_TRANSPORT_TO_INCLUDE,
     calculate_total,
@@ -8,6 +5,8 @@ from car_order.formulas import (
     calculate_total_fob2,
     get_transport,
 )
+from django.test import TestCase
+from django_redis import get_redis_connection
 
 
 class TestGetTransportFormula(TestCase):

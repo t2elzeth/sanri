@@ -1,7 +1,7 @@
+from authorization.models import Balance
 from django.db.models.signals import post_delete, post_save, pre_save
 from django.dispatch import receiver
 
-from authorization.models import Balance
 from .models import (
     Container,
     ContainerBalanceWithdrawal,

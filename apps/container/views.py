@@ -1,3 +1,4 @@
+from authorization.models import User
 from django.db.models import (
     Case,
     DecimalField,
@@ -11,8 +12,8 @@ from django.db.models import (
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 
-from authorization.models import User
 from utils.mixins import DetailAPIViewMixin
+
 from .models import Container
 from .serializers import ContainerSerializer
 

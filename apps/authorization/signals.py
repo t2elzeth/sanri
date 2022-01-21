@@ -4,6 +4,7 @@ from django.dispatch.dispatcher import receiver
 from rest_framework.authtoken.models import Token
 
 from utils.cache import generate_cache_key
+
 from .models import User
 
 

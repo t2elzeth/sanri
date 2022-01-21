@@ -1,6 +1,6 @@
+from car_order.serializers import CarOrderSerializer
 from rest_framework import serializers
 
-from car_order.serializers import CarOrderSerializer
 from .models import TransportCompany
 
 

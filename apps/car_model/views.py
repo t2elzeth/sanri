@@ -1,6 +1,7 @@
 from rest_framework import generics
 
 from utils.mixins import DetailAPIViewMixin
+
 from .filters import CarModelFilter
 from .models import CarMark, CarModel
 from .serializers import CarMarkSerializer, CarModelSerializer

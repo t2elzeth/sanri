@@ -1,5 +1,4 @@
 import factory
-
 from car_model.models import CarMark, CarModel
 
 

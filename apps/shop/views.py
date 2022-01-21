@@ -1,10 +1,10 @@
+from authorization.models import User
 from django.db.models import Subquery
 from rest_framework import generics, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from authorization.models import User
 from .dto.buy_request import (
     AddBuyRequestDTO,
     ApproveBuyRequestDTO,

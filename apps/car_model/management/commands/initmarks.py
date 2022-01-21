@@ -1,6 +1,5 @@
-from django.core.management.base import BaseCommand
-
 from car_model.models import CarMark
+from django.core.management.base import BaseCommand
 
 marks = {
     "TOYOTA": (

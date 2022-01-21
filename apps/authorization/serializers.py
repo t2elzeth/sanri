@@ -1,12 +1,9 @@
-from django.contrib.auth import authenticate
-from rest_framework import serializers
-from rest_framework.exceptions import (
-    NotAuthenticated,
-    ValidationError,
-)
-
 from container.models import Container, ContainerCar
+from django.contrib.auth import authenticate
 from income.models import Income
+from rest_framework import serializers
+from rest_framework.exceptions import NotAuthenticated, ValidationError
+
 from .models import Balance, ManagedUser, User
 
 

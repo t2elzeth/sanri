@@ -1,6 +1,7 @@
 from rest_framework import generics
 
 from utils.mixins import DetailAPIViewMixin
+
 from .models import TransportCompany
 from .serializers import TransportCompanySerializer
 

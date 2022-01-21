@@ -1,5 +1,4 @@
 import factory
-
 from authorization.models import User
 
 

@@ -1,7 +1,6 @@
+from car_model.models import CarModel
 from django.db import models
 from django.test import TestCase
-
-from car_model.models import CarModel
 from shop.models import Car
 from shop.models_factory import CarFactory
 

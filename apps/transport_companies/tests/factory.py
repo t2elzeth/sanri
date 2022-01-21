@@ -1,5 +1,4 @@
 import factory
-
 from transport_companies.models import TransportCompany
 
 

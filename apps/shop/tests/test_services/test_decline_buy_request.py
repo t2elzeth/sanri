@@ -1,5 +1,4 @@
 from django.test import TestCase
-
 from shop.dto.buy_request import DeclineBuyRequestDTO
 from shop.models import BuyRequest
 from shop.models_factory import BuyRequestFactory

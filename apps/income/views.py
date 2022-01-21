@@ -1,6 +1,7 @@
 from rest_framework import generics
 
 from utils.mixins import DetailAPIViewMixin
+
 from .models import Income, IncomeType
 from .serializers import IncomeSerializer, IncomeTypeSerializer
 

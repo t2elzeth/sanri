@@ -1,10 +1,10 @@
+from authorization.models import User
+from authorization.tests.factory import ClientFactory
 from rest_framework import status
 from rest_framework.reverse import reverse
 from rest_framework.test import APITestCase
-
-from authorization.models import User
-from authorization.tests.factory import ClientFactory
 from shop.models_factory import CarFactory
+
 from utils.tests import Authenticate
 
 

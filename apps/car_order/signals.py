@@ -1,8 +1,8 @@
+from authorization.models import Balance, User
 from django.conf import settings
 from django.db.models.signals import post_delete, post_save
 from django.dispatch import receiver
 
-from authorization.models import Balance, User
 from .models import BalanceWithdrawal, CarOrder
 
 

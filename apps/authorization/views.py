@@ -8,6 +8,7 @@ from rest_framework.response import Response
 
 from utils.cache import cache_action
 from utils.mixins import DetailAPIViewMixin
+
 from .filters import BalanceFilter
 from .models import Balance, User
 from .serializers import (

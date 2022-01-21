@@ -1,7 +1,7 @@
 import factory
-
 from authorization.tests.factory import ClientFactory
 from car_model.tests.factory import CarModelFactory
+
 from . import models
 
 
