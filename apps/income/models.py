@@ -16,7 +16,7 @@ class Income(models.Model):
     date = models.DateField(default=timezone.now)
     amount = models.DecimalField(decimal_places=2, max_digits=10)
     comment = models.TextField(default="")
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateField(auto_now_add=True)
 
     def __str__(self):
         return f"{self.amount}"

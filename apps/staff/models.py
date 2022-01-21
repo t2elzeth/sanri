@@ -30,7 +30,7 @@ class StaffExpense(models.Model):
         on_delete=models.CASCADE,
         related_name="staff_expenses",
     )
-    date = models.DateField()
+    created_at = models.DateField()
     amount = models.DecimalField(decimal_places=2, max_digits=10)
     comment = models.TextField()
 

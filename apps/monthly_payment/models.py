@@ -19,7 +19,7 @@ class MonthlyPayment(models.Model):
         on_delete=models.CASCADE,
         related_name="monthly_payments",
     )
-    date = models.DateField()
+    created_at = models.DateField()
     from_container = models.ForeignKey(
         Container,
         on_delete=models.CASCADE,

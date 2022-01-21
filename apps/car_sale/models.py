@@ -28,7 +28,7 @@ class CarSale(models.Model):
     salesFees = models.IntegerField()
     status = models.BooleanField(default=False)
     total = models.IntegerField(default=0)
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateField(auto_now_add=True)
 
     def calculate_total(self):
         self.total = calculate_total(

@@ -135,7 +135,7 @@ class Balance(models.Model):
     balance_action = models.CharField(
         max_length=255, choices=BALANCE_ACTION_CHOICES
     )
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateField(auto_now_add=True)
 
     def __str__(self):
         return (
