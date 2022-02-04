@@ -10,6 +10,8 @@ class StaffExpenseTypeSerializer(serializers.ModelSerializer):
 
 
 class WriteStaffExpenseSerializer(serializers.ModelSerializer):
+    date = serializers.DateField(source="created_at")
+
     class Meta:
         model = StaffExpense
         fields = [
@@ -37,6 +39,7 @@ class StaffMemberSerializer(serializers.ModelSerializer):
 class ReadStaffExpenseSerializer(serializers.ModelSerializer):
     type = StaffExpenseTypeSerializer()
     staff_member = StaffMemberSerializer()
+    date = serializers.DateField(source="created_at")
 
     class Meta:
         model = StaffExpense

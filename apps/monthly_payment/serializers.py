@@ -10,6 +10,8 @@ class MonthlyPaymentTypeSerializer(serializers.ModelSerializer):
 
 
 class WriteMonthlyPaymentSerializer(serializers.ModelSerializer):
+    date = serializers.DateField(source="created_at")
+
     class Meta:
         model = MonthlyPayment
         fields = [
@@ -23,6 +25,7 @@ class WriteMonthlyPaymentSerializer(serializers.ModelSerializer):
 
 
 class ReadMonthlyPaymentSerializer(serializers.ModelSerializer):
+    date = serializers.DateField(source="created_at")
     type = MonthlyPaymentTypeSerializer()
 
     class Meta:
